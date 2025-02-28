@@ -4,7 +4,7 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-type Post = {
+export type Post = {
     title: string,
     publishDate: string,
     image: string,
