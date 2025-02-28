@@ -4,9 +4,10 @@ import CardHeader from "@mui/material/CardHeader/CardHeader"
 import CardMedia from "@mui/material/CardMedia/CardMedia"
 import CardContent from "@mui/material/CardContent/CardContent"
 import { useForm } from 'react-hook-form';
-import { Button, TextField} from '@mui/material';
+import { Button, IconButton, TextField} from '@mui/material';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import ImageIcon from '@mui/icons-material/Image';
 
 type PostCardForm = {
     post?: Post,
@@ -53,6 +54,9 @@ export default function PostCardForm(props: PostCardForm) {
                 image={props.post?.image}
                 // alt={props.post.title}
             />
+            <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={() => console.log("button to change image")}>
+                <ImageIcon/>
+            </IconButton>
             <CardContent>
                 <TextField
                           label="Description"
