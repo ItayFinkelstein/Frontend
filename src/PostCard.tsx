@@ -3,7 +3,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardActions, IconButton } from '@mui/material';
+import { CardActions, IconButton} from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteSelectedIcon from '@mui/icons-material/Favorite';
 import FavoriteUnselectedIcon from '@mui/icons-material/FavoriteBorder';
@@ -29,6 +29,7 @@ export type Comment = {
 type PostCardProps = {
     post: Post,
     showPostComments: () => void,
+    editPost: () => void
     isUser: boolean
 }
 
@@ -61,7 +62,7 @@ export default function PostCard(props: PostCardProps) {
                 </IconButton>
                 {props.isUser &&
                 <>
-                <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={() => console.log("post " + props.post.title + "  was updated")}>
+                <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={props.editPost}>
                     <EditIcon/>
                 </IconButton>
                 <IconButton aria-label="delete post" style={{outline: 'none'}} onClick={() => console.log("post " + props.post.title + "  was deleted")}>

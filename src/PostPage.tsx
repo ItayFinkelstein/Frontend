@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import PostCard, { Post } from './PostCard';
 import CommentsPage from './CommentsPage';
+import PostCardForm from './PostCardForm';
 
 export default function PostPage() {
     const posts: Post[] = [
@@ -11,15 +12,20 @@ export default function PostPage() {
                 comments: [{writer: "Itay", message: "Mario is better"}]}
     ];
     const [postToShowComments, setPostToShowComments] = useState<Post | null>(null)
+    const [postToEdit, setPostToEdit] = useState<Post | null>(null);
     return (
-        postToShowComments === null ?
+        postToShowComments === null && postToEdit === null ?
         <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
             {posts.map((post) => {
-                return <PostCard post={post} showPostComments={() => setPostToShowComments(post)} isUser={post.user === "Gil"}/> /** Obviously user check is stub for now */
+                return <PostCard post={post} showPostComments={() => setPostToShowComments(post)} editPost={() => setPostToEdit(post)} isUser={post.user === "Gil"}/> /** Obviously user check is stub for now */
             })}
         </div>
         : 
-        <CommentsPage post={postToShowComments}/>
+        ( postToShowComments !== null ?
+            <CommentsPage post={postToShowComments}/>
+            : 
+            postToEdit && <PostCardForm post={postToEdit} hideForm={() => setPostToEdit(null)}/>
+        )
         
     )
 }
