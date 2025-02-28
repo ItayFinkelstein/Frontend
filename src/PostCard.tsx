@@ -4,23 +4,33 @@ import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-export default function Post() {
+type Post = {
+    title: string,
+    publishDate: string,
+    image: string,
+    description: string
+}
+
+type PostCardProps = {
+    post: Post
+}
+
+export default function PostCard(props: PostCardProps) {
     return (
         <Card sx={{maxWidth: 445}}>
             <CardHeader
-                title="Gil tries Minecraft"
-                subheader="February 28, 2025"
+                title={props.post.title}
+                subheader={props.post.publishDate}
             />
             <CardMedia
                 component="img"
                 height="194"
-                image="\src\assets\minecraft.jpg"
+                image={props.post.image}
                 alt="Paella dish"
             />
             <CardContent>
                 <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                The best game in the world of 2010. The game taught us important life lessons about 
-                building a better world through hard work, resources and friendship.
+                    {props.post.description}
                 </Typography>
             </CardContent>
         </Card>
