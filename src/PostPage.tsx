@@ -22,7 +22,7 @@ export default function PostPage() {
         </div>
         : 
         ( postToShowComments !== null ?
-            <CommentsPage post={postToShowComments}/>
+            <CommentsPage post={postToShowComments} closeCommentsForm={() => setPostToShowComments(null)}/>
             : 
             postToEdit && <PostCardForm post={postToEdit} hideForm={() => setPostToEdit(null)}/>
         )

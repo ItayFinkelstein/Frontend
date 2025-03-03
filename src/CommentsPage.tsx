@@ -4,12 +4,39 @@ import CardHeader from "@mui/material/CardHeader/CardHeader"
 import CardContent from "@mui/material/CardContent/CardContent"
 import Typography from "@mui/material/Typography/Typography"
 import Box from "@mui/material/Box/Box"
+import { useForm } from "react-hook-form"
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import TextField from "@mui/material/TextField/TextField"
+import Button from "@mui/material/Button/Button"
+import KeyboardReturnIcon from '@mui/icons-material/KeyboardReturn';
+import IconButton from "@mui/material/IconButton/IconButton"
 
 type CommentsPageProps = {
-    post: Post
+    post: Post,
+    closeCommentsForm: () => void
 }
 
 export default function CommentsPage(props: CommentsPageProps) {
+    const schema = z.object({
+        description: z
+          .string()
+          .min(3, { message: 'Comment must be at least 3 characters' })
+          .max(200, { message: 'Comment must be no more than 200 letters' }),
+      });
+          const {
+            register,
+            handleSubmit,
+            formState: { errors },
+          } = useForm({
+            resolver: zodResolver(schema),
+          });
+        
+          // Form submission handler
+          const onSubmit = (data: any) => {
+            console.log(data)
+            props.post.comments.push({writer: "Itay", message: data.description})
+          };
     return (
     <Box
       sx={{
@@ -21,7 +48,28 @@ export default function CommentsPage(props: CommentsPageProps) {
     >
         <Typography variant="body2" sx={{fontSize: '2rem', paddingTop: '5vh'}}>Comments of post: {props.post.title}</Typography>
         <Typography variant="body2" sx={{fontSize: '2rem', paddingTop: '5vh'}}>Comment Amount: {props.post.comments.length}</Typography>
+        <IconButton aria-label="comments" style={{outline: 'none'}} onClick={() => props.closeCommentsForm()}>
+                    <KeyboardReturnIcon style={{marginRight: '5px'}}/>
+                </IconButton>
         <Box sx={{alignItems: 'center', padding: '10vw', display: 'flex', flexDirection: 'column', gap: '10px'}}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+        <Card sx={{minWidth: 500, maxWidth: 545}}>
+            <CardContent>
+                <TextField
+                label="Description"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                {...register('description')}
+                error={!!errors.description}
+                helperText={errors.description?.message}
+                />
+                <Button type="submit" variant="contained" fullWidth>
+                    Submit
+                </Button>
+            </CardContent>
+        </Card>
+        </form>
         {props.post.comments.map((comment) => {
         return <Card sx={{minWidth: 500, maxWidth: 545}}>
             <CardHeader
@@ -36,6 +84,6 @@ export default function CommentsPage(props: CommentsPageProps) {
         </Card>
         })}
         </Box>
-        </Box>
+    </Box>
     )
 }
