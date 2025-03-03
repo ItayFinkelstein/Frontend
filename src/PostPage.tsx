@@ -11,13 +11,14 @@ export default function PostPage() {
             {title: "Super Sonic", publishDate: "February 28, 2025", user: "Ofir", image: "/src/assets/Sonic.jpg", description: "Sonic sonic, super sonic", 
                 comments: [{writer: "Itay", message: "Mario is better"}]}
     ];
+    const [userPosts, setUserPosts] = useState<string | undefined>(undefined);
     const [postToShowComments, setPostToShowComments] = useState<Post | null>(null)
     const [postToEdit, setPostToEdit] = useState<Post | null>(null);
     return (
         postToShowComments === null && postToEdit === null ?
         <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-            {posts.map((post) => {
-                return <PostCard post={post} showPostComments={() => setPostToShowComments(post)} editPost={() => setPostToEdit(post)} isUser={post.user === "Gil"}/> /** Obviously user check is stub for now */
+            {posts.filter((post) => userPosts === undefined || post.user === userPosts).map((post) => {
+                return <PostCard post={post} showPostComments={() => setPostToShowComments(post)} editPost={() => setPostToEdit(post)} isUser={post.user === userPosts} setUser={(newUser: string) => setUserPosts(newUser)}/>
             })}
         </div>
         : 

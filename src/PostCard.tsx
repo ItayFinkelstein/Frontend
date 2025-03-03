@@ -3,13 +3,14 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CardActions, IconButton} from '@mui/material';
+import { Avatar, CardActions, IconButton} from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
 import FavoriteSelectedIcon from '@mui/icons-material/Favorite';
 import FavoriteUnselectedIcon from '@mui/icons-material/FavoriteBorder';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
+import red from '@mui/material/colors/red';
 
 export type Post = {
     title: string,
@@ -30,7 +31,8 @@ type PostCardProps = {
     post: Post,
     showPostComments: () => void,
     editPost: () => void
-    isUser: boolean
+    isUser: boolean,
+    setUser: (newUser: string) => void
 }
 
 export default function PostCard(props: PostCardProps) {
@@ -40,6 +42,11 @@ export default function PostCard(props: PostCardProps) {
             <CardHeader
                 title={props.post.title}
                 subheader={props.post.publishDate}
+                avatar={
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" onClick={() => props.setUser(props.post.user)}>
+                      {props.post.user[0]}
+                    </Avatar>
+                  }
             />
             <CardMedia
                 component="img"
