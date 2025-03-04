@@ -13,6 +13,7 @@ import { useState } from 'react';
 import red from '@mui/material/colors/red';
 
 export type User = {
+    iconImage?: string | undefined;
     id: number,
     name: string
 };
@@ -47,7 +48,7 @@ export default function PostCard(props: PostCardProps) {
                 title={props.post.title}
                 subheader={props.post.publishDate}
                 avatar={
-                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" onClick={() => props.setUser(props.post.user)}>
+                    <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" src={props.post.user.iconImage} onClick={() => props.setUser(props.post.user)}>
                       {props.post.user.name[0]}
                     </Avatar>
                   }

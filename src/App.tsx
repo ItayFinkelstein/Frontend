@@ -1,11 +1,11 @@
 import './App.css'
-import PostPage from './PostPage';
+import MainPage from './MainPage';
 
 
 function App() {
   return (
     <>
-      <PostPage/>
+      <MainPage/>
     </>
   )
 }
