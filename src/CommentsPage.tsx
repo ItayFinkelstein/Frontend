@@ -14,7 +14,8 @@ import IconButton from "@mui/material/IconButton/IconButton"
 
 type CommentsPageProps = {
     post: Post,
-    closeCommentsForm: () => void
+    closeCommentsForm: () => void,
+    isCurrentUserPost: boolean
 }
 
 export default function CommentsPage(props: CommentsPageProps) {
@@ -52,7 +53,7 @@ export default function CommentsPage(props: CommentsPageProps) {
                     <KeyboardReturnIcon style={{marginRight: '5px'}}/>
                 </IconButton>
         <Box sx={{alignItems: 'center', padding: '10vw', display: 'flex', flexDirection: 'column', gap: '10px'}}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        {!props.isCurrentUserPost && <form onSubmit={handleSubmit(onSubmit)}>
         <Card sx={{minWidth: 500, maxWidth: 545}}>
             <CardContent>
                 <TextField
@@ -69,7 +70,7 @@ export default function CommentsPage(props: CommentsPageProps) {
                 </Button>
             </CardContent>
         </Card>
-        </form>
+        </form>}
         {props.post.comments.map((comment) => {
         return <Card sx={{minWidth: 500, maxWidth: 545}}>
             <CardHeader

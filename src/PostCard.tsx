@@ -12,10 +12,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import red from '@mui/material/colors/red';
 
+export type User = {
+    id: number,
+    name: string
+};
 export type Post = {
     title: string,
     publishDate: string,
-    user: string,
+    user: User,
     image: string,
     description: string,
     comments: Comment[]
@@ -31,20 +35,20 @@ type PostCardProps = {
     post: Post,
     showPostComments: () => void,
     editPost: () => void
-    isUser: boolean,
-    setUser: (newUser: string) => void
+    isActualUser: boolean,
+    setUser: (newUser: User) => void
 }
 
 export default function PostCard(props: PostCardProps) {
     const [isLiked, setIsLiked] = useState(false)
     return (
-        <Card sx={{maxWidth: 445}}>
+        <Card sx={{minWidth: 400, maxWidth: 445}}>
             <CardHeader
                 title={props.post.title}
                 subheader={props.post.publishDate}
                 avatar={
                     <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe" onClick={() => props.setUser(props.post.user)}>
-                      {props.post.user[0]}
+                      {props.post.user.name[0]}
                     </Avatar>
                   }
             />
@@ -61,13 +65,13 @@ export default function PostCard(props: PostCardProps) {
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton aria-label="add to favorites" style={{outline: 'none'}} onClick={() => setIsLiked((curr) => !curr)}>
-                    {!props.isUser && (isLiked ? <FavoriteSelectedIcon style={{color: 'red'}}/> : <FavoriteUnselectedIcon />)}
+                    {!props.isActualUser && (isLiked ? <FavoriteSelectedIcon style={{color: 'red'}}/> : <FavoriteUnselectedIcon />)}
                 </IconButton>
                 <IconButton aria-label="comments" style={{outline: 'none'}} onClick={() => props.showPostComments()}>
                     <CommentIcon style={{marginRight: '5px'}}/>
                     {props.post.comments.length}
                 </IconButton>
-                {props.isUser &&
+                {props.isActualUser &&
                 <>
                 <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={props.editPost}>
                     <EditIcon/>
