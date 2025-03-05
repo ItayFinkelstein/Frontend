@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import PostCard, { Post, User } from './PostCard';
+import PostCard, { User } from './PostCard';
+import { Post } from './types/Post';
 import CommentsPage from './CommentsPage';
 import PostCardForm from './PostCardForm';
 import Card from '@mui/material/Card/Card';

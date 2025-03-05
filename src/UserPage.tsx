@@ -1,6 +1,5 @@
-import Card from "@mui/material/Card/Card";
-import { User } from "./PostCard";
 import PostPage from "./PostPage";
+import { User } from "./types/User";
 
 type UserPageProps = {
     actualUser: User

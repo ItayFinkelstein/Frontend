@@ -11,26 +11,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useState } from 'react';
 import red from '@mui/material/colors/red';
+import { User } from './types/User';
+import { Post } from './types/Post';
 
-export type User = {
-    iconImage?: string | undefined;
-    id: number,
-    name: string
-};
-export type Post = {
-    title: string,
-    publishDate: string,
-    user: User,
-    image: string,
-    description: string,
-    comments: Comment[]
-}
-
-export type Comment = {
-    writer: string,
-    publishDate?: string,
-    message: string
-}
 
 type PostCardProps = {
     post: Post,

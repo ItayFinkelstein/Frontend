@@ -1,5 +1,5 @@
 import Card from "@mui/material/Card/Card"
-import { Post } from "./PostCard"
+import { Post } from './types/Post'
 import CardHeader from "@mui/material/CardHeader/CardHeader"
 import CardContent from "@mui/material/CardContent/CardContent"
 import Typography from "@mui/material/Typography/Typography"
