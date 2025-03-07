@@ -22,6 +22,7 @@ type PostCardProps = {
   editPost: () => void;
   isActualUser: boolean;
   setUser: (newUser: User) => void;
+  isClickableIcon?: boolean;
 };
 
 export default function PostCard(props: PostCardProps) {
@@ -34,7 +35,16 @@ export default function PostCard(props: PostCardProps) {
       <CardHeader
         title={props.post.title}
         subheader={props.post.publishDate}
-        avatar={<UserIcon user={user} onclick={() => props.setUser(user)} />}
+        avatar={
+          <UserIcon
+            user={user}
+            onClick={
+              props.isClickableIcon !== false
+                ? () => props.setUser(user)
+                : undefined
+            }
+          />
+        }
       />
       <CardMedia
         component="img"

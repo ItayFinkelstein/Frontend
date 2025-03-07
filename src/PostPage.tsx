@@ -50,6 +50,7 @@ export default function PostPage(props: PostPageProps) {
         <Card sx={{ width: 440 }}>
           <CardHeader
             title={props.userToDisplay.name}
+            subheader={"mail: " + props.userToDisplay.email}
             avatar={<UserIcon user={props.userToDisplay} />}
           />
           <CardContent>
@@ -80,6 +81,7 @@ export default function PostPage(props: PostPageProps) {
                 post.userId === props.actualUser.id
               }
               setUser={(newUser: User) => props.setUserToDisplay(newUser)}
+              isClickableIcon={props.userToDisplay === undefined}
             />
           );
         })}

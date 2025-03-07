@@ -14,8 +14,8 @@ export default function UserPage() {
     <Box>
       <UserIcon
         user={actualUser}
-        onclick={() => setUserToFilterBy(actualUser)}
-        style={{ position: "absolute", top: "1vh", right: "1vw" }}
+        onClick={() => setUserToFilterBy(actualUser)}
+        style={{ position: "fixed", top: "1vh", right: "1vw" }}
       />
       <PostPage
         actualUser={actualUser}
