@@ -38,7 +38,14 @@ export default function UserMenu({
         }}
       >
         {actions.map((action, index) => (
-          <MenuItem key={index} onClick={action.action} autoFocus={false}>
+          <MenuItem
+            key={index}
+            onClick={() => {
+              action.action();
+              handleMenuClose();
+            }}
+            autoFocus={false}
+          >
             {action.type}
           </MenuItem>
         ))}
