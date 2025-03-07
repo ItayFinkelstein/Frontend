@@ -8,6 +8,7 @@ import { Button, IconButton, TextField} from '@mui/material';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import ImageIcon from '@mui/icons-material/Image';
+import { useState } from "react"
 
 type PostCardForm = {
     post?: Post,
@@ -41,6 +42,8 @@ export default function PostCardForm(props: PostCardForm) {
         console.log(data);
         props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
       };
+
+      const [image, setImage] = useState(props.post?.image);
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
         <Card sx={{minWidth: 400, maxWidth: 445}}>
@@ -51,10 +54,10 @@ export default function PostCardForm(props: PostCardForm) {
             <CardMedia
                 component="img"
                 height="194"
-                image={props.post?.image}
+                image={image}
                 // alt={props.post.title}
             />
-            <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={() => console.log("button to change image")}>
+            <IconButton aria-label="edit post" style={{outline: 'none'}} onClick={() => {console.log("button to change image"); setImage(undefined)}}>
                 <ImageIcon/>
             </IconButton>
             <CardContent>
