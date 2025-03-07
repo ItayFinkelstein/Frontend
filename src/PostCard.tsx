@@ -13,6 +13,7 @@ import { useState } from "react";
 import red from "@mui/material/colors/red";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
+import UserIcon from "./UserIcon";
 
 type PostCardProps = {
   post: Post;
@@ -30,14 +31,10 @@ export default function PostCard(props: PostCardProps) {
         title={props.post.title}
         subheader={props.post.publishDate}
         avatar={
-          <Avatar
-            sx={{ bgcolor: red[500] }}
-            aria-label="recipe"
-            src={props.post.user.iconImage}
-            onClick={() => props.setUser(props.post.user)}
-          >
-            {props.post.user.name[0]}
-          </Avatar>
+          <UserIcon
+            user={props.post.user}
+            onclick={() => props.setUser(props.post.user)}
+          />
         }
       />
       <CardMedia
