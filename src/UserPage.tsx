@@ -5,7 +5,6 @@ import { useState } from "react";
 import UserIcon from "./UserIcon";
 import { users } from "./SharedData";
 
-type UserPageProps = {};
 export default function UserPage() {
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined

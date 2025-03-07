@@ -14,6 +14,7 @@ import red from "@mui/material/colors/red";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
+import { users } from "./SharedData";
 
 type PostCardProps = {
   post: Post;
@@ -25,17 +26,15 @@ type PostCardProps = {
 
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+  const user = users.find(
+    (userToCheck) => userToCheck.id === props.post.userId
+  )!;
   return (
-    <Card sx={{ minWidth: 400, maxWidth: 445 }}>
+    <Card sx={{ width: 440 }}>
       <CardHeader
         title={props.post.title}
         subheader={props.post.publishDate}
-        avatar={
-          <UserIcon
-            user={props.post.user}
-            onclick={() => props.setUser(props.post.user)}
-          />
-        }
+        avatar={<UserIcon user={user} onclick={() => props.setUser(user)} />}
       />
       <CardMedia
         component="img"

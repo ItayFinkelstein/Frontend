@@ -20,7 +20,7 @@ export default function PostPage(props: PostPageProps) {
     {
       title: "Gil tries Minecraft",
       publishDate: "February 28, 2025",
-      user: { id: 2, name: "Gil", iconImage: "/src/assets/minecraft.jpg" },
+      userId: 2,
       image: "/src/assets/minecraft.jpg",
       description:
         "The best game in the world of 2010. The game taught us important life lessons about " +
@@ -33,7 +33,7 @@ export default function PostPage(props: PostPageProps) {
     {
       title: "Super Sonic",
       publishDate: "February 28, 2025",
-      user: { id: 3, name: "Ofir" },
+      userId: 3,
       image: "/src/assets/Sonic.jpg",
       description: "Sonic sonic, super sonic",
       comments: [{ writer: "Itay", message: "Mario is better" }],
@@ -47,7 +47,7 @@ export default function PostPage(props: PostPageProps) {
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {props.userToDisplay && (
-        <Card sx={{ minWidth: 400, maxWidth: 445 }}>
+        <Card sx={{ width: 440 }}>
           <CardHeader
             title={props.userToDisplay.name}
             avatar={<UserIcon user={props.userToDisplay} />}
@@ -67,7 +67,7 @@ export default function PostPage(props: PostPageProps) {
         .filter(
           (post) =>
             props.userToDisplay === undefined ||
-            post.user.id === props.userToDisplay.id
+            post.userId === props.userToDisplay.id
         )
         .map((post) => {
           return (
@@ -75,7 +75,10 @@ export default function PostPage(props: PostPageProps) {
               post={post}
               showPostComments={() => setPostToShowComments(post)}
               editPost={() => setPostToEdit(post)}
-              isActualUser={post.user === props.actualUser}
+              isActualUser={
+                props.actualUser !== undefined &&
+                post.userId === props.actualUser.id
+              }
               setUser={(newUser: User) => props.setUserToDisplay(newUser)}
             />
           );
@@ -85,7 +88,7 @@ export default function PostPage(props: PostPageProps) {
     <CommentsPage
       post={postToShowComments}
       closeCommentsForm={() => setPostToShowComments(null)}
-      isCurrentUserPost={props.actualUser?.id === postToShowComments.user.id}
+      isCurrentUserPost={props.actualUser?.id === postToShowComments.userId}
     />
   ) : (
     postToEdit && (
