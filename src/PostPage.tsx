@@ -3,15 +3,14 @@ import PostCard from "./PostCard";
 import { Post } from "./types/Post";
 import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
-import Card from "@mui/material/Card/Card";
-import CardHeader from "@mui/material/CardHeader/CardHeader";
-import { CardContent, IconButton } from "@mui/material";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import UserIcon from "./UserIcon";
 import { User } from "./types/User";
+import UserData from "./UserData";
 
 type PostPageProps = {
   actualUser?: User;
+} & UserToDisplayProps;
+
+export type UserToDisplayProps = {
   userToDisplay?: User | undefined;
   setUserToDisplay: (user: User | undefined) => void;
 };
@@ -44,25 +43,18 @@ export default function PostPage(props: PostPageProps) {
     null
   );
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
+
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {props.userToDisplay && (
-        <Card sx={{ width: 440 }}>
-          <CardHeader
-            title={props.userToDisplay.name}
-            subheader={"mail: " + props.userToDisplay.email}
-            avatar={<UserIcon user={props.userToDisplay} />}
-          />
-          <CardContent>
-            <IconButton
-              aria-label="comments"
-              style={{ outline: "none" }}
-              onClick={() => props.setUserToDisplay(undefined)}
-            >
-              <KeyboardReturnIcon style={{ marginRight: "5px" }} />
-            </IconButton>
-          </CardContent>
-        </Card>
+        <UserData
+          userToDisplay={props.userToDisplay}
+          setUserToDisplay={props.setUserToDisplay}
+          isActualUser={
+            props.actualUser !== undefined &&
+            props.actualUser.id === props.userToDisplay.id
+          }
+        />
       )}
       {posts
         .filter(

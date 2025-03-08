@@ -10,7 +10,11 @@ import UserMenu from "./UserMenu";
 
 type UserIconMenuProps =
   | {
-      onClick: () => void;
+      onClick?: never;
+      actions?: never;
+    }
+  | {
+      onClick?: () => void;
       actions?: never;
     }
   | {
