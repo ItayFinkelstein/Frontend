@@ -7,10 +7,10 @@ import Box from "@mui/material/Box/Box";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import TextField from "@mui/material/TextField/TextField";
 import Button from "@mui/material/Button/Button";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import IconButton from "@mui/material/IconButton/IconButton";
+import ValidatedTextField from "./ValidatedTextField";
 
 type CommentsPageProps = {
   post: Post;
@@ -35,7 +35,6 @@ export default function CommentsPage(props: CommentsPageProps) {
 
   // Form submission handler
   const onSubmit = (data: any) => {
-    console.log(data);
     props.post.comments.push({ writer: "Itay", message: data.description });
   };
   return (
@@ -73,14 +72,11 @@ export default function CommentsPage(props: CommentsPageProps) {
           <form onSubmit={handleSubmit(onSubmit)}>
             <Card sx={{ minWidth: 500, maxWidth: 545 }}>
               <CardContent>
-                <TextField
-                  label="Description"
-                  variant="outlined"
-                  fullWidth
-                  margin="normal"
-                  {...register("description")}
-                  error={!!errors.description}
-                  helperText={errors.description?.message}
+                <ValidatedTextField
+                  name="description"
+                  label="Comment"
+                  register={register}
+                  error={errors.description}
                 />
                 <Button type="submit" variant="contained" fullWidth>
                   Submit
