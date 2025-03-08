@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  IconButton,
-  Box,
-  Typography,
-} from "@mui/material";
+import { Card, CardHeader, CardContent, Box, Typography } from "@mui/material";
 import UserIcon from "./UserIcon";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import EditIcon from "@mui/icons-material/Edit";
@@ -16,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { useState } from "react";
+import { GenericIconButton } from "./GenericIconButton";
 
 export default function UserData(
   props: Required<UserToDisplayProps> & { isActualUser: boolean }
@@ -49,13 +43,11 @@ export default function UserData(
           <Box display="flex" alignItems="center">
             {isEditing ? (
               <>
-                <IconButton
-                  aria-label="send"
-                  style={{ outline: "none", marginRight: "8px" }}
+                <GenericIconButton
+                  title="Send"
+                  icon={<SendIcon />}
                   onClick={handleSubmit(onSubmit)}
-                >
-                  <SendIcon />
-                </IconButton>
+                />
                 <ValidatedTextField
                   name="name"
                   register={register}
@@ -66,18 +58,16 @@ export default function UserData(
               </>
             ) : (
               <>
-                {props.isActualUser && (
-                  <IconButton
-                    aria-label="edit"
-                    style={{ outline: "none", marginLeft: "8px" }}
-                    onClick={() => setIsEditing(true)}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                )}
-                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                   {props.userToDisplay.name}
                 </Typography>
+                {props.isActualUser && (
+                  <GenericIconButton
+                    title="Edit"
+                    icon={<EditIcon />}
+                    onClick={() => setIsEditing(true)}
+                  />
+                )}
               </>
             )}
           </Box>
@@ -86,13 +76,11 @@ export default function UserData(
         avatar={<UserIcon user={props.userToDisplay} />}
       />
       <CardContent>
-        <IconButton
-          aria-label="comments"
-          style={{ outline: "none" }}
+        <GenericIconButton
+          title="Return"
+          icon={<KeyboardReturnIcon style={{ marginRight: "5px" }} />}
           onClick={() => props.setUserToDisplay(undefined)}
-        >
-          <KeyboardReturnIcon style={{ marginRight: "5px" }} />
-        </IconButton>
+        />
       </CardContent>
     </Card>
   );

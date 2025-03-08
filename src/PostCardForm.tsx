@@ -4,12 +4,13 @@ import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
 import { useForm } from "react-hook-form";
-import { Button, IconButton } from "@mui/material";
+import { Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageIcon from "@mui/icons-material/Image";
 import { useState } from "react";
 import ValidatedTextField from "./ValidatedTextField";
+import { GenericIconButton } from "./GenericIconButton";
 
 type PostCardForm = {
   post?: Post;
@@ -32,7 +33,6 @@ export default function PostCardForm(props: PostCardForm) {
     resolver: zodResolver(schema),
   });
 
-  // Form submission handler
   const onSubmit = (data: any) => {
     console.log(data);
     props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
@@ -52,16 +52,14 @@ export default function PostCardForm(props: PostCardForm) {
           image={image}
           // alt={props.post.title}
         />
-        <IconButton
-          aria-label="edit post"
-          style={{ outline: "none" }}
+        <GenericIconButton
+          title="Edit post"
+          icon={<ImageIcon />}
           onClick={() => {
             console.log("button to change image");
             setImage(undefined);
           }}
-        >
-          <ImageIcon />
-        </IconButton>
+        />
         <CardContent>
           <ValidatedTextField
             name="description"

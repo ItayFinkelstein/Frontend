@@ -9,8 +9,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@mui/material/Button/Button";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import IconButton from "@mui/material/IconButton/IconButton";
 import ValidatedTextField from "./ValidatedTextField";
+import { GenericIconButton } from "./GenericIconButton";
 
 type CommentsPageProps = {
   post: Post;
@@ -37,6 +37,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   const onSubmit = (data: any) => {
     props.post.comments.push({ writer: "Itay", message: data.description });
   };
+
   return (
     <Box
       sx={{
@@ -52,13 +53,11 @@ export default function CommentsPage(props: CommentsPageProps) {
       <Typography variant="body2" sx={{ fontSize: "2rem", paddingTop: "5vh" }}>
         Comment Amount: {props.post.comments.length}
       </Typography>
-      <IconButton
-        aria-label="comments"
-        style={{ outline: "none" }}
-        onClick={() => props.closeCommentsForm()}
-      >
-        <KeyboardReturnIcon style={{ marginRight: "5px" }} />
-      </IconButton>
+      <GenericIconButton
+        title="Close comments"
+        icon={<KeyboardReturnIcon style={{ marginRight: "5px" }} />}
+        onClick={props.closeCommentsForm}
+      />
       <Box
         sx={{
           alignItems: "center",
@@ -87,7 +86,7 @@ export default function CommentsPage(props: CommentsPageProps) {
         )}
         {props.post.comments.map((comment) => {
           return (
-            <Card sx={{ minWidth: 500, maxWidth: 545 }}>
+            <Card sx={{ minWidth: 500, maxWidth: 545 }} key={comment.message}>
               <CardHeader
                 title={comment.writer}
                 subheader={comment.publishDate}
