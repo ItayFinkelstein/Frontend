@@ -17,6 +17,7 @@ export type UserToDisplayProps = {
 export default function PostPage(props: PostPageProps) {
   const posts: Post[] = [
     {
+      id: 1,
       title: "Gil tries Minecraft",
       publishDate: "February 28, 2025",
       userId: 2,
@@ -25,17 +26,22 @@ export default function PostPage(props: PostPageProps) {
         "The best game in the world of 2010. The game taught us important life lessons about " +
         "building a better world through hard work, resources and friendship.",
       comments: [
-        { writer: "Itay", message: "Awesome :)" },
-        { writer: "Minecraft player", message: "Creative mode for the win" },
+        { id: 1, writer: "Itay", message: "Awesome :)" },
+        {
+          id: 2,
+          writer: "Minecraft player",
+          message: "Creative mode for the win",
+        },
       ],
     },
     {
+      id: 2,
       title: "Super Sonic",
       publishDate: "February 28, 2025",
       userId: 3,
       image: "/src/assets/Sonic.jpg",
       description: "Sonic sonic, super sonic",
-      comments: [{ writer: "Itay", message: "Mario is better" }],
+      comments: [{ id: 3, writer: "Itay", message: "Mario is better" }],
     },
   ];
 
@@ -65,6 +71,7 @@ export default function PostPage(props: PostPageProps) {
         .map((post) => {
           return (
             <PostCard
+              key={post.id}
               post={post}
               showPostComments={() => setPostToShowComments(post)}
               editPost={() => setPostToEdit(post)}
@@ -83,6 +90,7 @@ export default function PostPage(props: PostPageProps) {
       post={postToShowComments}
       closeCommentsForm={() => setPostToShowComments(null)}
       isCurrentUserPost={props.actualUser?.id === postToShowComments.userId}
+      actualUser={props.actualUser?.name}
     />
   ) : (
     postToEdit && (

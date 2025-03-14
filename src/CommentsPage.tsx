@@ -11,8 +11,10 @@ import Button from "@mui/material/Button/Button";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
+import classes from "./CommentsPage.module.css";
 
 type CommentsPageProps = {
+  actualUser: string | undefined;
   post: Post;
   closeCommentsForm: () => void;
   isCurrentUserPost: boolean;
@@ -33,9 +35,14 @@ export default function CommentsPage(props: CommentsPageProps) {
     resolver: zodResolver(schema),
   });
 
-  // Form submission handler
+  let commentIdSequence = 4; // stub, will be given from the DB.
   const onSubmit = (data: any) => {
-    props.post.comments.push({ writer: "Itay", message: data.description });
+    props.post.comments.push({
+      id: commentIdSequence,
+      writer: props.actualUser!,
+      message: data.description,
+    });
+    commentIdSequence++;
   };
 
   return (
@@ -47,29 +54,19 @@ export default function CommentsPage(props: CommentsPageProps) {
         borderRadius: 2,
       }}
     >
-      <Typography variant="body2" sx={{ fontSize: "2rem", paddingTop: "5vh" }}>
-        Comments of post: {props.post.title}
-      </Typography>
-      <Typography variant="body2" sx={{ fontSize: "2rem", paddingTop: "5vh" }}>
+      <h2 className={classes.header}>Comments of post: {props.post.title}</h2>
+      <h2 className={classes.header}>
         Comment Amount: {props.post.comments.length}
-      </Typography>
+      </h2>
       <GenericIconButton
         title="Close comments"
-        icon={<KeyboardReturnIcon style={{ marginRight: "5px" }} />}
+        icon={<KeyboardReturnIcon />}
         onClick={props.closeCommentsForm}
       />
-      <Box
-        sx={{
-          alignItems: "center",
-          padding: "10vw",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-        }}
-      >
-        {!props.isCurrentUserPost && (
+      <Box className={classes.commentsContainer}>
+        {!props.isCurrentUserPost && props.actualUser !== undefined && (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Card sx={{ minWidth: 500, maxWidth: 545 }}>
+            <Card sx={{ width: 500 }}>
               <CardContent>
                 <ValidatedTextField
                   name="description"
@@ -86,7 +83,7 @@ export default function CommentsPage(props: CommentsPageProps) {
         )}
         {props.post.comments.map((comment) => {
           return (
-            <Card sx={{ minWidth: 500, maxWidth: 545 }} key={comment.message}>
+            <Card sx={{ width: 500 }} key={comment.id}>
               <CardHeader
                 title={comment.writer}
                 subheader={comment.publishDate}

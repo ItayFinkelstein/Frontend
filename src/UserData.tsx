@@ -78,7 +78,7 @@ export default function UserData(
       <CardContent>
         <GenericIconButton
           title="Return"
-          icon={<KeyboardReturnIcon style={{ marginRight: "5px" }} />}
+          icon={<KeyboardReturnIcon />}
           onClick={() => props.setUserToDisplay(undefined)}
         />
       </CardContent>

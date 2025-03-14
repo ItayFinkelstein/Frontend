@@ -71,7 +71,7 @@ export default function PostCard(props: PostCardProps) {
         />
         <GenericIconButton
           title="comments"
-          icon={<CommentIcon style={{ marginRight: "5px" }} />}
+          icon={<CommentIcon />}
           onClick={props.showPostComments}
         />
         {props.isActualUser && (

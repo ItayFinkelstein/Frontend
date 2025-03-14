@@ -1,11 +1,7 @@
 import Avatar from "@mui/material/Avatar/Avatar";
 import { User } from "./types/User";
 import red from "@mui/material/colors/red";
-import { ContextMenuHandler } from "./useMenu";
 import Box from "@mui/material/Box/Box";
-import { MouseEvent, useState } from "react";
-import Menu from "@mui/material/Menu/Menu";
-import MenuItem from "@mui/material/MenuItem/MenuItem";
 import UserMenu from "./UserMenu";
 
 type UserIconMenuProps =
