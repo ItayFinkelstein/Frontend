@@ -27,8 +27,9 @@ type PostCardProps = {
 
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+
   const user = users.find(
-    (userToCheck) => userToCheck.id === props.post.userId
+    (userToCheck) => userToCheck._id === props.post.owner
   )!;
   return (
     <Card sx={{ width: 440 }}>
@@ -54,7 +55,7 @@ export default function PostCard(props: PostCardProps) {
       />
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {props.post.description}
+          {props.post.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

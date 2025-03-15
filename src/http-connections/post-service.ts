@@ -3,6 +3,6 @@ import createHttpService, { CanceledError } from "./http-service";
 
 export { CanceledError };
 
-const postService = createHttpService<Post>("/posts");
+const postService = createHttpService<Post>("/post");
 
 export default postService;

@@ -1,6 +1,6 @@
 export type User = {
+  _id: string;
   iconImage?: string | undefined;
-  id: number;
   name: string;
   email: string;
 };

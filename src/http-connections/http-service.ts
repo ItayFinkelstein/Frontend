@@ -12,33 +12,33 @@ class HttpService<T extends BaseEntity> {
     this.endpoint = endpoint;
   }
 
-  async getAll() {
+  getAll() {
     const controller = new AbortController();
-    const response = await apiClient.get(this.endpoint, {
+    const response = apiClient.get(this.endpoint, {
       signal: controller.signal,
     });
     return { response, cancel: () => controller.abort() };
   }
 
-  async add(entity: T) {
+  add(entity: T) {
     const controller = new AbortController();
-    const response = await apiClient.post(this.endpoint, entity, {
+    const response = apiClient.post(this.endpoint, entity, {
       signal: controller.signal,
     });
     return { response, cancel: () => controller.abort() };
   }
 
-  async update(entity: T) {
+  update(entity: T) {
     const controller = new AbortController();
-    const response = await apiClient.put(this.endpoint + entity._id, entity, {
+    const response = apiClient.put(this.endpoint + entity._id, entity, {
       signal: controller.signal,
     });
     return { response, cancel: () => controller.abort() };
   }
 
-  async delete(id: string) {
+  delete(id: string) {
     const controller = new AbortController();
-    const response = await apiClient.delete(this.endpoint + id, {
+    const response = apiClient.delete(this.endpoint + id, {
       signal: controller.signal,
     });
     return { response, cancel: () => controller.abort() };

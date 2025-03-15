@@ -4,8 +4,8 @@ export type Post = {
   _id: string;
   title: string;
   publishDate: string;
-  userId: number;
+  owner: string;
   image: string;
-  description: string;
+  message: string;
   comments: Comment[];
 };
