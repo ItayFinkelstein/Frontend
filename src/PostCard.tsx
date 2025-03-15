@@ -3,16 +3,18 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-import { Avatar, CardActions, IconButton } from "@mui/material";
+import { CardActions } from "@mui/material";
 import CommentIcon from "@mui/icons-material/Comment";
 import FavoriteSelectedIcon from "@mui/icons-material/Favorite";
 import FavoriteUnselectedIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
-import red from "@mui/material/colors/red";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
+import UserIcon from "./UserIcon";
+import { users } from "./SharedData";
+import { GenericIconButton } from "./GenericIconButton";
 
 type PostCardProps = {
   post: Post;
@@ -20,24 +22,28 @@ type PostCardProps = {
   editPost: () => void;
   isActualUser: boolean;
   setUser: (newUser: User) => void;
+  isClickableIcon?: boolean;
 };
 
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+  const user = users.find(
+    (userToCheck) => userToCheck.id === props.post.userId
+  )!;
   return (
-    <Card sx={{ minWidth: 400, maxWidth: 445 }}>
+    <Card sx={{ width: 440 }}>
       <CardHeader
         title={props.post.title}
         subheader={props.post.publishDate}
         avatar={
-          <Avatar
-            sx={{ bgcolor: red[500] }}
-            aria-label="recipe"
-            src={props.post.user.iconImage}
-            onClick={() => props.setUser(props.post.user)}
-          >
-            {props.post.user.name[0]}
-          </Avatar>
+          <UserIcon
+            user={user}
+            onClick={
+              props.isClickableIcon !== false
+                ? () => props.setUser(user)
+                : undefined
+            }
+          />
         }
       />
       <CardMedia
@@ -52,44 +58,36 @@ export default function PostCard(props: PostCardProps) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <IconButton
-          aria-label="add to favorites"
-          style={{ outline: "none" }}
-          onClick={() => setIsLiked((curr) => !curr)}
-        >
-          {!props.isActualUser &&
-            (isLiked ? (
+        <GenericIconButton
+          title="add to favorites"
+          icon={
+            isLiked ? (
               <FavoriteSelectedIcon style={{ color: "red" }} />
             ) : (
               <FavoriteUnselectedIcon />
-            ))}
-        </IconButton>
-        <IconButton
-          aria-label="comments"
-          style={{ outline: "none" }}
-          onClick={() => props.showPostComments()}
-        >
-          <CommentIcon style={{ marginRight: "5px" }} />
-          {props.post.comments.length}
-        </IconButton>
+            )
+          }
+          onClick={() => setIsLiked((curr) => !curr)}
+        />
+        <GenericIconButton
+          title="comments"
+          icon={<CommentIcon />}
+          onClick={props.showPostComments}
+        />
         {props.isActualUser && (
           <>
-            <IconButton
-              aria-label="edit post"
-              style={{ outline: "none" }}
+            <GenericIconButton
+              title="Edit post"
+              icon={<EditIcon />}
               onClick={props.editPost}
-            >
-              <EditIcon />
-            </IconButton>
-            <IconButton
-              aria-label="delete post"
-              style={{ outline: "none" }}
+            />
+            <GenericIconButton
+              title="Delete post"
+              icon={<DeleteIcon />}
               onClick={() =>
-                console.log("post " + props.post.title + "  was deleted")
+                console.log("post " + props.post.title + " was deleted")
               }
-            >
-              <DeleteIcon />
-            </IconButton>
+            />
           </>
         )}
       </CardActions>
