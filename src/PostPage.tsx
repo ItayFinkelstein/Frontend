@@ -17,7 +17,7 @@ export type UserToDisplayProps = {
 export default function PostPage(props: PostPageProps) {
   const posts: Post[] = [
     {
-      id: 1,
+      _id: "1",
       title: "Gil tries Minecraft",
       publishDate: "February 28, 2025",
       userId: 2,
@@ -35,7 +35,7 @@ export default function PostPage(props: PostPageProps) {
       ],
     },
     {
-      id: 2,
+      _id: "2",
       title: "Super Sonic",
       publishDate: "February 28, 2025",
       userId: 3,
@@ -71,7 +71,7 @@ export default function PostPage(props: PostPageProps) {
         .map((post) => {
           return (
             <PostCard
-              key={post.id}
+              key={post._id}
               post={post}
               showPostComments={() => setPostToShowComments(post)}
               editPost={() => setPostToEdit(post)}
