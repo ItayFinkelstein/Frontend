@@ -1,31 +1,19 @@
-import { useEffect, useState } from "react";
 import { Post } from "../types/Post";
-import postService, { CanceledError } from "../http-connections/post-service";
+import postService from "../http-connections/post-service";
+import useData from "./useData";
 
 const usePosts = () => {
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [error, setError] = useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const { data, setData, error, setError, isLoading, setIsLoading } =
+    useData<Post>(postService);
 
-  useEffect(() => {
-    setIsLoading(true);
-    const { response, cancel } = postService.getAll();
-    response
-      .then((res) => {
-        setPosts(res.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setIsLoading(false);
-        if (err instanceof CanceledError) return;
-        console.log(err);
-        setError(err);
-      });
-
-    return () => cancel();
-  }, []);
-
-  return { posts, setPosts, error, setError, isLoading, setIsLoading };
+  return {
+    posts: data,
+    setPosts: setData,
+    error,
+    setError,
+    isLoading,
+    setIsLoading,
+  };
 };
 
 export default usePosts;

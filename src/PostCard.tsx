@@ -13,8 +13,8 @@ import { useState } from "react";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
-import { users } from "./SharedData";
 import { GenericIconButton } from "./GenericIconButton";
+import useUsers from "./data_hooks/useUsers";
 
 type PostCardProps = {
   post: Post;
@@ -27,6 +27,7 @@ type PostCardProps = {
 
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+  const users = useUsers().users;
 
   const user = users.find(
     (userToCheck) => userToCheck._id === props.post.owner

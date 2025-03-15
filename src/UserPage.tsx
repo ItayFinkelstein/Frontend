@@ -3,7 +3,7 @@ import PostPage from "./PostPage";
 import { User } from "./types/User";
 import { useState } from "react";
 import UserIcon from "./UserIcon";
-import { users } from "./SharedData";
+import useUsers from "./data_hooks/useUsers";
 
 export default function UserPage() {
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
@@ -25,6 +25,7 @@ export default function UserPage() {
     },
   ];
 
+  const users = useUsers().users;
   const actualUser = users[1];
   return (
     <Box>
