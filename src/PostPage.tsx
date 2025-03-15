@@ -47,7 +47,6 @@ export default function PostPage(props: PostPageProps) {
   // ];
 
   const { posts, setPosts } = usePosts();
-  console.log(posts);
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null

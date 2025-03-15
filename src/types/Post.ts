@@ -5,7 +5,7 @@ export type Post = {
   title: string;
   publishDate: string;
   owner: string;
-  image: string;
+  image?: string;
   message: string;
   comments: Comment[];
 };

@@ -51,29 +51,33 @@ export default function PostCard(props: PostCardProps) {
           />
         }
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image={props.post.image}
-        // alt={props.post.title}
-      />
+      {props.post.image && (
+        <CardMedia
+          component="img"
+          height="194"
+          image={props.post.image}
+          // alt={props.post.title}
+        />
+      )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
           {props.post.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <GenericIconButton
-          title="add to favorites"
-          icon={
-            isLiked ? (
-              <FavoriteSelectedIcon style={{ color: "red" }} />
-            ) : (
-              <FavoriteUnselectedIcon />
-            )
-          }
-          onClick={() => setIsLiked((curr) => !curr)}
-        />
+        {!props.isActualUser && (
+          <GenericIconButton
+            title="add to favorites"
+            icon={
+              isLiked ? (
+                <FavoriteSelectedIcon style={{ color: "red" }} />
+              ) : (
+                <FavoriteUnselectedIcon />
+              )
+            }
+            onClick={() => setIsLiked((curr) => !curr)}
+          />
+        )}
         <GenericIconButton
           title="comments"
           icon={<CommentIcon />}
