@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box/Box";
-import PostPage from "../PostPage";
+import PostPage from "./PostPage";
 import { User } from "../types/User";
 import { useState } from "react";
 import UserIcon from "../UserIcon";

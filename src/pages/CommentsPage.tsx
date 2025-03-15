@@ -1,5 +1,5 @@
 import Card from "@mui/material/Card/Card";
-import { Post } from "./types/Post";
+import { Post } from "../types/Post";
 import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardContent from "@mui/material/CardContent/CardContent";
 import Typography from "@mui/material/Typography/Typography";
@@ -9,8 +9,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Button from "@mui/material/Button/Button";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import ValidatedTextField from "./ValidatedTextField";
-import { GenericIconButton } from "./GenericIconButton";
+import ValidatedTextField from "../ValidatedTextField";
+import { GenericIconButton } from "../GenericIconButton";
 import classes from "./CommentsPage.module.css";
 
 type CommentsPageProps = {
@@ -36,7 +36,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   });
 
   let commentIdSequence = 4; // stub, will be given from the DB.
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { description: string }) => {
     props.post.comments.push({
       id: commentIdSequence,
       writer: props.actualUser!,

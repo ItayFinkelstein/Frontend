@@ -1,10 +1,10 @@
 import { useState } from "react";
-import PostCard from "./PostCard";
-import { Post } from "./types/Post";
+import PostCard from "../PostCard";
+import { Post } from "../types/Post";
 import CommentsPage from "./CommentsPage";
-import PostCardForm from "./PostCardForm";
-import { User } from "./types/User";
-import UserData from "./UserData";
+import PostCardForm from "../PostCardForm";
+import { User } from "../types/User";
+import UserData from "../UserData";
 
 type PostPageProps = {
   actualUser?: User;
