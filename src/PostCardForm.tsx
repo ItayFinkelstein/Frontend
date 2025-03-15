@@ -24,6 +24,10 @@ export default function PostCardForm(props: PostCardForm) {
       .string()
       .min(3, { message: "Description must be at least 3 characters" })
       .max(200, { message: "Description must be no more than 200 letters" }),
+    title: z
+      .string()
+      .min(3, { message: "Title must be at least 3 characters" })
+      .max(200, { message: "Title must be no more than 200 letters" }),
   });
 
   const {
@@ -32,12 +36,17 @@ export default function PostCardForm(props: PostCardForm) {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      description: props.post?.message || "",
+      title: props.post?.title || "",
+    },
   });
 
   const onSubmit = (data: any) => {
     // todo: handle adding a new post
     const updatedPost = {
       ...props.post!,
+      title: data.title,
       message: data.description,
     };
     postService.update(updatedPost);
@@ -49,7 +58,14 @@ export default function PostCardForm(props: PostCardForm) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ minWidth: 400, maxWidth: 445 }}>
         <CardHeader
-          title={props.post?.title}
+          title={
+            <ValidatedTextField
+              name="title"
+              register={register}
+              error={errors.title}
+              defaultValue={props.post?.title}
+            />
+          }
           subheader={
             props.post !== undefined
               ? new Date(props.post.publishDate).toLocaleDateString()
@@ -75,6 +91,7 @@ export default function PostCardForm(props: PostCardForm) {
             name="description"
             register={register}
             error={errors.description}
+            defaultValue={props.post?.message}
           />
           <Button type="submit" variant="contained" fullWidth>
             Submit
