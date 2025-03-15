@@ -35,11 +35,11 @@ export default function PostCardForm(props: PostCardForm) {
   });
 
   const onSubmit = (data: any) => {
+    // todo: handle adding a new post
     const updatedPost = {
-      ...props.post,
-      ...data,
+      ...props.post!,
+      message: data.description,
     };
-    console.log("updatedPost", updatedPost);
     postService.update(updatedPost);
     props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
   };

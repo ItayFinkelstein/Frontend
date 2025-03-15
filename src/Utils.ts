@@ -10,10 +10,9 @@ export function getDateAsString(dateString: string | undefined) {
     today.getMonth() === date.getMonth() &&
     today.getDate() === date.getDate();
 
-  console.log("istoday", isToday);
   if (isToday) {
     return date.toLocaleTimeString();
   } else {
-    return date.toISOString().split("T")[0];
+    return date.toLocaleDateString("en-GB"); // Format as day/month/year
   }
 }

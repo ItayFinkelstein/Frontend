@@ -17,7 +17,7 @@ const useData = <T extends { _id: string }>(service: HttpService<T>) => {
       .catch((err) => {
         setIsLoading(false);
         if (err instanceof CanceledError) return;
-        console.log(err);
+        console.warn(err);
         setError(err);
       });
 
