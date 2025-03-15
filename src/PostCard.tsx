@@ -15,6 +15,8 @@ import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
 import { GenericIconButton } from "./GenericIconButton";
 import useUsers from "./data_hooks/useUsers";
+import { getDateAsString } from "./Utils";
+import postService from "./http-connections/post-service";
 
 type PostCardProps = {
   post: Post;
@@ -32,11 +34,12 @@ export default function PostCard(props: PostCardProps) {
   const user = users.find(
     (userToCheck) => userToCheck._id === props.post.owner
   )!;
+
   return (
     <Card sx={{ width: 440 }}>
       <CardHeader
         title={props.post.title}
-        subheader={props.post.publishDate}
+        subheader={getDateAsString(props.post.publishDate)}
         avatar={
           <UserIcon
             user={user}
@@ -86,9 +89,10 @@ export default function PostCard(props: PostCardProps) {
             <GenericIconButton
               title="Delete post"
               icon={<DeleteIcon />}
-              onClick={() =>
-                console.log("post " + props.post.title + " was deleted")
-              }
+              onClick={() => {
+                postService.delete(props.post._id);
+                console.log("post " + props.post.title + " was deleted");
+              }}
             />
           </>
         )}

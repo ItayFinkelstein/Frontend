@@ -11,6 +11,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { useState } from "react";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
+import postService from "./http-connections/post-service";
 
 type PostCardForm = {
   post?: Post;
@@ -34,7 +35,12 @@ export default function PostCardForm(props: PostCardForm) {
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    const updatedPost = {
+      ...props.post,
+      ...data,
+    };
+    console.log("updatedPost", updatedPost);
+    postService.update(updatedPost);
     props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
   };
 
@@ -44,7 +50,11 @@ export default function PostCardForm(props: PostCardForm) {
       <Card sx={{ minWidth: 400, maxWidth: 445 }}>
         <CardHeader
           title={props.post?.title}
-          subheader={props.post?.publishDate}
+          subheader={
+            props.post !== undefined
+              ? new Date(props.post.publishDate).toLocaleDateString()
+              : undefined
+          }
         />
         <CardMedia
           component="img"
