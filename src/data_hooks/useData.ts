@@ -1,14 +1,21 @@
 import { useEffect, useState } from "react";
 import { CanceledError, HttpService } from "../http-connections/http-service";
+import { AxiosResponse } from "axios";
 
-const useData = <T extends { _id: string }>(service: HttpService<T>) => {
+const useData = <T extends { _id: string }>(
+  service: HttpService<T>,
+  getfunction?: () => {
+    response: Promise<AxiosResponse<any, any>>;
+    cancel: () => void;
+  }
+) => {
   const [data, setData] = useState<T[]>([]);
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
-    const { response, cancel } = service.getAll();
+    const { response, cancel } = getfunction ? getfunction() : service.getAll();
     response
       .then((res) => {
         setData(res.data);

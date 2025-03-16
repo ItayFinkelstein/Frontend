@@ -12,6 +12,8 @@ import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
 import classes from "./CommentsPage.module.css";
+import commentService from "./http-connections/comment-service";
+import useComments from "./data_hooks/useComment";
 
 type CommentsPageProps = {
   actualUser: string | undefined;
@@ -21,6 +23,7 @@ type CommentsPageProps = {
 };
 
 export default function CommentsPage(props: CommentsPageProps) {
+  const comments = useComments(props.post._id).comments;
   const schema = z.object({
     description: z
       .string()
@@ -35,14 +38,12 @@ export default function CommentsPage(props: CommentsPageProps) {
     resolver: zodResolver(schema),
   });
 
-  let commentIdSequence = 4; // stub, will be given from the DB.
   const onSubmit = (data: any) => {
-    props.post.comments.push({
-      id: commentIdSequence,
-      writer: props.actualUser!,
+    commentService.add({
+      postId: props.post._id,
+      owner: props.actualUser!,
       message: data.description,
     });
-    commentIdSequence++;
   };
 
   return (
@@ -55,9 +56,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       }}
     >
       <h2 className={classes.header}>Comments of post: {props.post.title}</h2>
-      <h2 className={classes.header}>
-        Comment Amount: {props.post.comments.length}
-      </h2>
+      <h2 className={classes.header}>Comment Amount: {comments.length}</h2>
       <GenericIconButton
         title="Close comments"
         icon={<KeyboardReturnIcon />}
@@ -81,11 +80,11 @@ export default function CommentsPage(props: CommentsPageProps) {
             </Card>
           </form>
         )}
-        {props.post.comments.map((comment) => {
+        {comments.map((comment) => {
           return (
-            <Card sx={{ width: 500 }} key={comment.id}>
+            <Card sx={{ width: 500 }} key={comment._id}>
               <CardHeader
-                title={comment.writer}
+                title={comment.owner}
                 subheader={comment.publishDate}
               />
               <CardContent>
