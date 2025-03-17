@@ -1,14 +1,15 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Box, Button, Grid, TextField, Link } from "@mui/material";
+import { Box, Button, Grid, Link } from "@mui/material";
 import { Google as GoogleIcon } from "@mui/icons-material";
 import { Link as RouterLink } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ValidatedTextField from "./ValidatedTextField";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
-  password: z.string().min(4, "Password must be at least 6 characters"),
+  password: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 type Inputs = z.infer<typeof schema>;
@@ -30,29 +31,18 @@ const LoginForm: React.FC = () => {
       sx={{ mt: 1 }}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
+      <ValidatedTextField
+        name="email"
         label="Email Address"
-        {...register("email")}
-        error={!!errors.email}
-        helperText={errors.email ? errors.email.message : ""}
-        autoComplete="email"
-        autoFocus
+        register={register}
+        error={errors.email}
+        autoFocus={true}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
+      <ValidatedTextField
+        name="password"
         label="Password"
-        type="password"
-        id="password"
-        {...register("password")}
-        error={!!errors.password}
-        helperText={errors.password ? errors.password.message : ""}
-        autoComplete="current-password"
+        register={register}
+        error={errors.password}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login

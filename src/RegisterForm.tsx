@@ -1,9 +1,10 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Box, Button, Grid, TextField, Link } from "@mui/material";
+import { Box, Button, Grid, Link } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import ValidatedTextField from "./ValidatedTextField";
 
 const schema = z.object({
   name: z
@@ -33,39 +34,25 @@ const RegisterForm: React.FC = () => {
       sx={{ mt: 1 }}
       onSubmit={handleSubmit(onSubmit)}
     >
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="name"
+      <ValidatedTextField
+        name="name"
         label="Name"
-        {...register("name")}
-        error={!!errors.name}
-        helperText={errors.name ? errors.name.message : ""}
+        register={register}
+        error={errors.name}
         autoFocus
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
+      <ValidatedTextField
+        name="email"
         label="Email Address"
-        {...register("email")}
-        error={!!errors.email}
-        helperText={errors.email ? errors.email.message : ""}
-        autoComplete="email"
+        register={register}
+        error={errors.email}
       />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
+      <ValidatedTextField
+        name="password"
         label="Password"
         type="password"
-        id="password"
-        {...register("password")}
-        error={!!errors.password}
-        helperText={errors.password ? errors.password.message : ""}
-        autoComplete="new-password"
+        register={register}
+        error={errors.password}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Register
