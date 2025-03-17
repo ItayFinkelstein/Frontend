@@ -4,8 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { CssBaseline } from '@mui/material';
 import { lightTheme, darkTheme } from './theme';
 import Navbar from './Navbar';
-import Home from './pages/Home';
-import UserPage from './pages/UserPage';
+import UserPage from './UserPage';
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -29,10 +28,9 @@ const MainContent: React.FC<{ toggleTheme: () => void; isDarkMode: boolean }> = 
   return (
     <div style={{ height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column' }}>
       <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} />
-      <div style={{ flex: 1, height: '100%', width: '100%' }}>
+      <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/user" element={<UserPage />} />
+          <Route path="/" element={<UserPage />} />
         </Routes>
       </div>
     </div>

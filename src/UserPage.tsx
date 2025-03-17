@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box/Box";
 import PostPage from "./PostPage";
-import { User } from "../types/User";
+import { User } from "./types/User";
 import { useState } from "react";
-import UserIcon from "../UserIcon";
-import { users } from "../SharedData";
+import UserIcon from "./UserIcon";
+import { users } from "./SharedData";
 
 export default function UserPage() {
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
