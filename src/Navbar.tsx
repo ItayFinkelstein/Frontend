@@ -1,8 +1,9 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
-import LightModeIcon from '@mui/icons-material/LightMode';
+import { WbSunny, Brightness2 } from '@mui/icons-material';
+import UserIcon from './UserIcon';
+import { users } from './SharedData';
 
 interface NavbarProps {
   toggleTheme: () => void;
@@ -10,24 +11,36 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode }) => {
+  const actualUser = users[1]; // for now
+
+  const actions = [
+    {
+      type: 'login',
+      action: () => console.log('LOGIN'),
+    },
+    {
+      type: 'logout',
+      action: () => console.log('LOGOUT'),
+    },
+  ];
+
   return (
     <AppBar position="sticky" color="primary">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          MyApp
+          TastyTalks
         </Typography>
         <Button color="inherit" component={RouterLink} to="/">
           Home
         </Button>
-        <Button color="inherit" component={RouterLink} to="/login">
-          Login
-        </Button>
-        <Button color="inherit" component={RouterLink} to="/user">
-          User
-        </Button>
         <IconButton color="inherit" onClick={toggleTheme}>
-          {isDarkMode ? <LightModeIcon /> : <DarkModeIcon />}
+          {isDarkMode ? <WbSunny /> : <Brightness2 />}
         </IconButton>
+        <UserIcon
+          user={actualUser}
+          style={{ marginLeft: 'auto' }}
+          actions={actions}
+        />
       </Toolbar>
     </AppBar>
   );
