@@ -36,7 +36,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   });
 
   let commentIdSequence = 4; // stub, will be given from the DB.
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { description: string }) => {
     props.post.comments.push({
       id: commentIdSequence,
       writer: props.actualUser!,
