@@ -31,7 +31,7 @@ const App: React.FC = () => {
 const MainContent: React.FC<{ toggleTheme: () => void; isDarkMode: boolean; setActualUser: (user: User | undefined) => void; actualUser: User | undefined }> = ({ toggleTheme, isDarkMode, setActualUser, actualUser }) => {
   return (
     <div style={{ height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column' }}>
-      {location.pathname !== '/login' && location.pathname !== '/register' && <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} actualUser={actualUser} setActualUser={setActualUser} /> }
+      {!location.pathname.startsWith('/login') && !location.pathname.startsWith('/register') && <Navbar toggleTheme={toggleTheme} isDarkMode={isDarkMode} actualUser={actualUser} setActualUser={setActualUser} /> }
       <div style={{ flex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
         <Routes>
         <Route path="/" element={<UserPage actualUser={actualUser} setActualUser={setActualUser} />} />

@@ -20,7 +20,7 @@ export default function UserData(
     name: z
       .string()
       .min(1, { message: "Name is required" })
-      .max(100, { message: "Name must be no more than 100 characters" }),
+      .max(20, { message: "Name must be no more than 20 characters" }),
   });
 
   const {
