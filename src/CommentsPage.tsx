@@ -38,7 +38,7 @@ export default function CommentsPage(props: CommentsPageProps) {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: { description: string }) => {
     commentService.add({
       postId: props.post._id,
       owner: props.actualUser!,
