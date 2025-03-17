@@ -5,6 +5,7 @@ import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
 import { User } from "./types/User";
 import UserData from "./UserData";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 type PostPageProps = {
   actualUser?: User;
@@ -62,6 +63,7 @@ export default function PostPage(props: PostPageProps) {
           }
         />
       )}
+      <GoogleLoginButton />
       {posts
         .filter(
           (post) =>
