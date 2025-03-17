@@ -1,10 +1,12 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Box, Button, Grid, Link } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const schema = z.object({
   name: z
@@ -25,7 +27,31 @@ const RegisterForm: React.FC = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      //TODO: NEED TO CHANGE
+      await axios.post("http://localhost:3000/auth/register", data);
+
+      const loginResponse = await axios.post(
+        "http://localhost:3000/auth/login",
+        {
+          email: data.email,
+          password: data.password,
+        }
+      );
+      const { accessToken, refreshToken } = loginResponse.data;
+
+      Cookies.set("jwt", accessToken, { expires: 1 / 24 });
+
+      localStorage.setItem("refreshToken", refreshToken);
+
+      navigate("/");
+    } catch (error) {
+      console.error("There was an error registering or logging in!", error);
+    }
+  };
 
   return (
     <Box

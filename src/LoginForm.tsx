@@ -2,10 +2,12 @@ import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Box, Button, Grid, Link } from "@mui/material";
 import { Google as GoogleIcon } from "@mui/icons-material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
+import axios from "axios";
+import Cookies from "js-cookie";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -22,7 +24,28 @@ const LoginForm: React.FC = () => {
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const navigate = useNavigate();
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    try {
+      //TODO: NEED TO CHANGE TO DO IT ELSWHERE
+
+      const response = await axios.post(
+        "http://localhost:3000/auth/login",
+        data
+      );
+      const { accessToken, refreshToken } = response.data;
+
+      // Save the access token as a cookie
+      Cookies.set("jwt", accessToken, { expires: 1 / 24 });
+
+      // Store the refresh token in localStorage
+      localStorage.setItem("refreshToken", refreshToken);
+      navigate("/");
+    } catch (error) {
+      console.error("There was an error logging in!", error);
+    }
+  };
 
   return (
     <Box
