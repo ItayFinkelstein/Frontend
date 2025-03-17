@@ -31,7 +31,7 @@ export default function UserMenu({
           horizontal: "center",
         }}
         disableAutoFocusItem
-        aria-hidden={!open} // Accessibility- indicate to screen readers whether the menu is visible
+        aria-hidden={!open}
         transformOrigin={{
           vertical: "top",
           horizontal: "center",
@@ -44,7 +44,6 @@ export default function UserMenu({
               action.action();
               handleMenuClose();
             }}
-            autoFocus={false}
           >
             {action.type}
           </MenuItem>

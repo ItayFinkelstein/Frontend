@@ -4,19 +4,21 @@ import { Link as RouterLink } from 'react-router-dom';
 import { WbSunny, Brightness2 } from '@mui/icons-material';
 import UserIcon from './UserIcon';
 import { users } from './SharedData';
+import { User } from './types/User';
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
+  setUserToFilterBy: (user: User | undefined) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode }) => {
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, setUserToFilterBy }) => {
   const actualUser = users[1]; // for now
 
   const actions = [
     {
-      type: 'login',
-      action: () => console.log('LOGIN'),
+      type: 'view',
+      action: () => setUserToFilterBy(actualUser),
     },
     {
       type: 'logout',
@@ -31,9 +33,9 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode }) => {
           TastyTalks
         </Typography>
         <Button color="inherit" component={RouterLink} to="/">
-          Home
+          Feed
         </Button>
-        <IconButton color="inherit" onClick={toggleTheme}>
+        <IconButton color="inherit" onClick={toggleTheme} sx={{ marginRight: 2 }}>
           {isDarkMode ? <WbSunny /> : <Brightness2 />}
         </IconButton>
         <UserIcon
