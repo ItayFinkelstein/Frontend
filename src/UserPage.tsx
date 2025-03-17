@@ -3,19 +3,18 @@ import PostPage from './PostPage';
 import { User } from './types/User';
 
 interface UserPageProps {
-  userToFilterBy: User | undefined;
-  setUserToFilterBy: (user: User | undefined) => void;
+  actualUser: User | undefined;
+  setActualUser: (user: User | undefined) => void;
 }
 
-export default function UserPage({ userToFilterBy, setUserToFilterBy }: UserPageProps) {
-  const actualUser = userToFilterBy;
+export default function UserPage({ actualUser, setActualUser }: UserPageProps) {
 
   return (
     <Box>
       <PostPage
         actualUser={actualUser}
-        userToDisplay={userToFilterBy}
-        setUserToDisplay={setUserToFilterBy}
+        userToDisplay={actualUser}
+        setUserToDisplay={setActualUser}
       />
     </Box>
   );

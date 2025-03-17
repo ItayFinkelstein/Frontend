@@ -3,26 +3,25 @@ import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { WbSunny, Brightness2 } from '@mui/icons-material';
 import UserIcon from './UserIcon';
-import { users } from './SharedData';
 import { User } from './types/User';
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
-  setUserToFilterBy: (user: User | undefined) => void;
+  actualUser: User | undefined;
+  setActualUser: (user: User | undefined) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, setUserToFilterBy }) => {
-  const actualUser = users[1]; // for now
-
+const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, actualUser, setActualUser }) => {
+  
   const actions = [
     {
       type: 'view',
-      action: () => setUserToFilterBy(actualUser),
+      action: () => setActualUser(actualUser),
     },
     {
       type: 'logout',
-      action: () => console.log('LOGOUT'),
+      action: () => console.log(actualUser),
     },
   ];
 
