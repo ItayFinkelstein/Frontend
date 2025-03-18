@@ -1,11 +1,11 @@
 import { Comment } from "./Comment";
 
 export type Post = {
-  id: number;
+  _id: string;
   title: string;
   publishDate: string;
-  userId: number;
-  image: string;
-  description: string;
+  owner: string;
+  image?: string;
+  message: string;
   comments: Comment[];
 };
