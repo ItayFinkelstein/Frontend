@@ -23,7 +23,7 @@ type CommentsPageProps = {
 };
 
 export default function CommentsPage(props: CommentsPageProps) {
-  const comments = useComments(props.post._id).comments;
+  const { comments, fetchComments } = useComments(props.post._id);
   const schema = z.object({
     description: z
       .string()
@@ -38,12 +38,13 @@ export default function CommentsPage(props: CommentsPageProps) {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: { description: string }) => {
-    commentService.add({
+  const onSubmit = async (data: { description: string }) => {
+    await commentService.add({
       postId: props.post._id,
       owner: props.actualUser!,
       message: data.description,
     });
+    fetchComments();
   };
 
   return (

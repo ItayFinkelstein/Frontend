@@ -1,12 +1,21 @@
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./ProtectedRoute";
 import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme";
 import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
 import useUsers from "./data_hooks/useUsers";
+import { ENDPOINTS } from "./endpoints";
 
 const App: React.FC = () => {
   const users = useUsers().users;
@@ -45,9 +54,9 @@ const App: React.FC = () => {
 const MainContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  userToFilterBy: User | undefined;
-  setUserToFilterBy: (user: User | undefined) => void;
   actualUser: User | undefined;
+  setUserToFilterBy: (user: User | undefined) => void;
+  userToFilterBy: User | undefined;
 }> = ({
   toggleTheme,
   isDarkMode,
@@ -55,6 +64,7 @@ const MainContent: React.FC<{
   userToFilterBy,
   setUserToFilterBy,
 }) => {
+  const locationRoute = useLocation();
   return (
     <div
       style={{
@@ -64,12 +74,16 @@ const MainContent: React.FC<{
         flexDirection: "column",
       }}
     >
-      <Navbar
-        toggleTheme={toggleTheme}
-        isDarkMode={isDarkMode}
-        actualUser={actualUser}
-        setUserToFilterBy={setUserToFilterBy}
-      />
+      {locationRoute.pathname !== ENDPOINTS.LOGIN &&
+        locationRoute.pathname !== ENDPOINTS.REGISTER && (
+          <Navbar
+            toggleTheme={toggleTheme}
+            isDarkMode={isDarkMode}
+            actualUser={actualUser}
+            setUserToFilterBy={setUserToFilterBy}
+          />
+        )}
+
       <div
         style={{
           flex: 1,
@@ -82,13 +96,17 @@ const MainContent: React.FC<{
           <Route
             path="/"
             element={
-              <UserPage
-                actualUser={actualUser}
-                userToFilterBy={userToFilterBy}
-                setUserToFilterBy={setUserToFilterBy}
-              />
+              <ProtectedRoute>
+                <UserPage
+                  actualUser={actualUser}
+                  userToFilterBy={userToFilterBy}
+                  setUserToFilterBy={setUserToFilterBy}
+                />
+              </ProtectedRoute>
             }
           />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </div>
     </div>

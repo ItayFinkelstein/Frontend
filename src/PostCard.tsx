@@ -31,8 +31,8 @@ export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const users = useUsers().users;
 
-  const user = users.find(
-    (userToCheck) => userToCheck._id === props.post.owner
+  const user: User = users.find(
+    (userToCheck: User) => userToCheck._id === props.post.owner
   )!;
 
   return (
@@ -60,7 +60,7 @@ export default function PostCard(props: PostCardProps) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {!props.isActualUser && (
+        {props.isActualUser && (
           <GenericIconButton
             title="add to favorites"
             icon={
