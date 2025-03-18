@@ -10,6 +10,7 @@ import { z } from "zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { useState } from "react";
 import { GenericIconButton } from "./GenericIconButton";
+import userService from "./http-connections/user-service";
 
 export default function UserData(
   props: Required<UserToDisplayProps> & { isActualUser: boolean }
@@ -33,6 +34,7 @@ export default function UserData(
 
   const onSubmit = (data: any) => {
     console.log("Edits name:", data);
+    userService.update({ ...props.userToDisplay, name: data.name });
     setIsEditing(false);
   };
 

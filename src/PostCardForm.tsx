@@ -11,6 +11,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { useState } from "react";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
+import postService from "./http-connections/post-service";
 
 type PostCardForm = {
   post?: Post;
@@ -23,6 +24,10 @@ export default function PostCardForm(props: PostCardForm) {
       .string()
       .min(3, { message: "Description must be at least 3 characters" })
       .max(200, { message: "Description must be no more than 200 letters" }),
+    title: z
+      .string()
+      .min(3, { message: "Title must be at least 3 characters" })
+      .max(200, { message: "Title must be no more than 200 letters" }),
   });
 
   const {
@@ -31,10 +36,20 @@ export default function PostCardForm(props: PostCardForm) {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      description: props.post?.message || "",
+      title: props.post?.title || "",
+    },
   });
 
   const onSubmit = (data: any) => {
-    console.log(data);
+    // todo: handle adding a new post
+    const updatedPost = {
+      ...props.post!,
+      title: data.title,
+      message: data.description,
+    };
+    postService.update(updatedPost);
     props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
   };
 
@@ -43,15 +58,21 @@ export default function PostCardForm(props: PostCardForm) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ minWidth: 400, maxWidth: 445 }}>
         <CardHeader
-          title={props.post?.title}
-          subheader={props.post?.publishDate}
+          title={
+            <ValidatedTextField
+              name="title"
+              register={register}
+              error={errors.title}
+              defaultValue={props.post?.title}
+            />
+          }
+          subheader={
+            props.post !== undefined
+              ? new Date(props.post.publishDate).toLocaleDateString()
+              : undefined
+          }
         />
-        <CardMedia
-          component="img"
-          height="194"
-          image={image}
-          // alt={props.post.title}
-        />
+        <CardMedia component="img" height="194" image={image} />
         <GenericIconButton
           title="Edit post"
           icon={<ImageIcon />}
@@ -65,6 +86,7 @@ export default function PostCardForm(props: PostCardForm) {
             name="description"
             register={register}
             error={errors.description}
+            defaultValue={props.post?.message}
           />
           <Button type="submit" variant="contained" fullWidth>
             Submit

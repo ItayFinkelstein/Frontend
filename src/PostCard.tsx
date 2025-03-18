@@ -13,8 +13,10 @@ import { useState } from "react";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
-import { users } from "./SharedData";
 import { GenericIconButton } from "./GenericIconButton";
+import useUsers from "./data_hooks/useUsers";
+import { getDateAsString } from "./Utils";
+import postService from "./http-connections/post-service";
 
 type PostCardProps = {
   post: Post;
@@ -27,14 +29,17 @@ type PostCardProps = {
 
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
+  const users = useUsers().users;
+
   const user = users.find(
-    (userToCheck) => userToCheck.id === props.post.userId
+    (userToCheck) => userToCheck._id === props.post.owner
   )!;
+
   return (
     <Card sx={{ width: 440 }}>
       <CardHeader
         title={props.post.title}
-        subheader={props.post.publishDate}
+        subheader={getDateAsString(props.post.publishDate)}
         avatar={
           <UserIcon
             user={user}
@@ -46,29 +51,33 @@ export default function PostCard(props: PostCardProps) {
           />
         }
       />
-      <CardMedia
-        component="img"
-        height="194"
-        image={props.post.image}
-        // alt={props.post.title}
-      />
+      {props.post.image && (
+        <CardMedia
+          component="img"
+          height="194"
+          image={props.post.image}
+          // alt={props.post.title}
+        />
+      )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {props.post.description}
+          {props.post.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <GenericIconButton
-          title="add to favorites"
-          icon={
-            isLiked ? (
-              <FavoriteSelectedIcon style={{ color: "red" }} />
-            ) : (
-              <FavoriteUnselectedIcon />
-            )
-          }
-          onClick={() => setIsLiked((curr) => !curr)}
-        />
+        {!props.isActualUser && (
+          <GenericIconButton
+            title="add to favorites"
+            icon={
+              isLiked ? (
+                <FavoriteSelectedIcon style={{ color: "red" }} />
+              ) : (
+                <FavoriteUnselectedIcon />
+              )
+            }
+            onClick={() => setIsLiked((curr) => !curr)}
+          />
+        )}
         <GenericIconButton
           title="comments"
           icon={<CommentIcon />}
@@ -84,9 +93,10 @@ export default function PostCard(props: PostCardProps) {
             <GenericIconButton
               title="Delete post"
               icon={<DeleteIcon />}
-              onClick={() =>
-                console.log("post " + props.post.title + " was deleted")
-              }
+              onClick={() => {
+                postService.delete(props.post._id);
+                console.log("post " + props.post.title + " was deleted");
+              }}
             />
           </>
         )}

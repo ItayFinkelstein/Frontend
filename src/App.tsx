@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./ProtectedRoute";
+import React, { useEffect, useState } from "react";
 import { ThemeProvider } from "@mui/material/styles";
 import {
   BrowserRouter as Router,
@@ -8,17 +11,24 @@ import {
 } from "react-router-dom";
 import { CssBaseline } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme";
+import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
-import { users } from "./SharedData";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import ProtectedRoute from "./ProtectedRoute";
-import Navbar from "./Navbar";
+import useUsers from "./data_hooks/useUsers";
 
 const App: React.FC = () => {
+  const users = useUsers().users;
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [actualUser, setActualUser] = useState<User | undefined>(users[1]);
+  const [actualUser, setActualUser] = useState<User | undefined>(undefined);
+  /** todo: change */
+  useEffect(() => {
+    if (users.length > 0) {
+      setActualUser(users[1]);
+    }
+  }, [users]);
+  const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
+    undefined
+  );
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -32,7 +42,8 @@ const App: React.FC = () => {
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
           actualUser={actualUser}
-          setActualUser={setActualUser}
+          userToFilterBy={userToFilterBy}
+          setUserToFilterBy={setUserToFilterBy}
         />
       </Router>
     </ThemeProvider>
@@ -42,11 +53,17 @@ const App: React.FC = () => {
 const MainContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  setActualUser: (user: User | undefined) => void;
   actualUser: User | undefined;
-}> = ({ toggleTheme, isDarkMode, setActualUser, actualUser }) => {
-  const location = useLocation();
-
+  setUserToFilterBy: (user: User | undefined) => void;
+  userToFilterBy: User | undefined;
+}> = ({
+  toggleTheme,
+  isDarkMode,
+  actualUser,
+  userToFilterBy,
+  setUserToFilterBy,
+}) => {
+  const locationRoute = useLocation();
   return (
     <div
       style={{
@@ -56,14 +73,16 @@ const MainContent: React.FC<{
         flexDirection: "column",
       }}
     >
-      {location.pathname !== "/login" && location.pathname !== "/register" && (
-        <Navbar
-          toggleTheme={toggleTheme}
-          isDarkMode={isDarkMode}
-          actualUser={actualUser}
-          setActualUser={setActualUser}
-        />
-      )}
+      {locationRoute.pathname !== "/login" &&
+        locationRoute.pathname !== "/register" && (
+          <Navbar
+            toggleTheme={toggleTheme}
+            isDarkMode={isDarkMode}
+            actualUser={actualUser}
+            setUserToFilterBy={setUserToFilterBy}
+          />
+        )}
+
       <div
         style={{
           flex: 1,
@@ -79,7 +98,8 @@ const MainContent: React.FC<{
               <ProtectedRoute>
                 <UserPage
                   actualUser={actualUser}
-                  setActualUser={setActualUser}
+                  userToFilterBy={userToFilterBy}
+                  setUserToFilterBy={setUserToFilterBy}
                 />
               </ProtectedRoute>
             }

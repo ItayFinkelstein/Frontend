@@ -1,26 +1,31 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Button, IconButton } from '@mui/material';
-import { Link as RouterLink } from 'react-router-dom';
-import { WbSunny, Brightness2 } from '@mui/icons-material';
-import UserIcon from './UserIcon';
-import { User } from './types/User';
+import React from "react";
+import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
+import { WbSunny, Brightness2 } from "@mui/icons-material";
+import UserIcon from "./UserIcon";
+import { User } from "./types/User";
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
   actualUser: User | undefined;
-  setActualUser: (user: User | undefined) => void;
+  setUserToFilterBy: (user: User | undefined) => void;
 }
 
-const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, actualUser, setActualUser }) => {
-  
+const Navbar: React.FC<NavbarProps> = ({
+  toggleTheme,
+  isDarkMode,
+  actualUser,
+  setUserToFilterBy,
+}) => {
+  console.log("actualUser1", actualUser);
   const actions = [
     {
-      type: 'view',
-      action: () => setActualUser(actualUser),
+      type: "view",
+      action: () => setUserToFilterBy(actualUser),
     },
     {
-      type: 'logout',
+      type: "logout",
       action: () => console.log(actualUser),
     },
   ];
@@ -34,12 +39,16 @@ const Navbar: React.FC<NavbarProps> = ({ toggleTheme, isDarkMode, actualUser, se
         <Button color="inherit" component={RouterLink} to="/">
           Feed
         </Button>
-        <IconButton color="inherit" onClick={toggleTheme} sx={{ marginRight: 2 }}>
+        <IconButton
+          color="inherit"
+          onClick={toggleTheme}
+          sx={{ marginRight: 2 }}
+        >
           {isDarkMode ? <WbSunny /> : <Brightness2 />}
         </IconButton>
         <UserIcon
           user={actualUser}
-          style={{ marginLeft: 'auto' }}
+          style={{ marginLeft: "auto" }}
           actions={actions}
         />
       </Toolbar>
