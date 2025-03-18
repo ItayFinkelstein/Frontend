@@ -72,12 +72,7 @@ export default function PostCardForm(props: PostCardForm) {
               : undefined
           }
         />
-        <CardMedia
-          component="img"
-          height="194"
-          image={image}
-          // alt={props.post.title}
-        />
+        <CardMedia component="img" height="194" image={image} />
         <GenericIconButton
           title="Edit post"
           icon={<ImageIcon />}

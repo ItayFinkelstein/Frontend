@@ -16,36 +16,6 @@ export type UserToDisplayProps = {
   setUserToDisplay: (user: User | undefined) => void;
 };
 export default function PostPage(props: PostPageProps) {
-  // const posts: Post[] = [
-  //   {
-  //     _id: "1",
-  //     title: "Gil tries Minecraft",
-  //     publishDate: "February 28, 2025",
-  //     userId: 2,
-  //     image: "/src/assets/minecraft.jpg",
-  //     description:
-  //       "The best game in the world of 2010. The game taught us important life lessons about " +
-  //       "building a better world through hard work, resources and friendship.",
-  //     comments: [
-  //       { id: 1, writer: "Itay", message: "Awesome :)" },
-  //       {
-  //         id: 2,
-  //         writer: "Minecraft player",
-  //         message: "Creative mode for the win",
-  //       },
-  //     ],
-  //   },
-  //   {
-  //     _id: "2",
-  //     title: "Super Sonic",
-  //     publishDate: "February 28, 2025",
-  //     userId: 3,
-  //     image: "/src/assets/Sonic.jpg",
-  //     description: "Sonic sonic, super sonic",
-  //     comments: [{ id: 3, writer: "Itay", message: "Mario is better" }],
-  //   },
-  // ];
-
   const posts = usePosts().posts;
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
