@@ -6,7 +6,6 @@ import PostCardForm from "./PostCardForm";
 import { User } from "./types/User";
 import UserData from "./UserData";
 import usePosts from "./data_hooks/usePosts";
-import GoogleLoginButton from "./GoogleLoginButton";
 
 type PostPageProps = {
   actualUser?: User;
@@ -42,7 +41,6 @@ export default function PostPage(props: PostPageProps) {
           }
         />
       )}
-      <GoogleLoginButton />
       {posts
         .filter(
           (post) =>
