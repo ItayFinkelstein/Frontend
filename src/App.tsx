@@ -15,6 +15,7 @@ import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
 import useUsers from "./data_hooks/useUsers";
+import { ENDPOINTS } from "./endpoints";
 
 const App: React.FC = () => {
   const users = useUsers().users;
@@ -73,8 +74,8 @@ const MainContent: React.FC<{
         flexDirection: "column",
       }}
     >
-      {locationRoute.pathname !== "/login" &&
-        locationRoute.pathname !== "/register" && (
+      {locationRoute.pathname !== ENDPOINTS.LOGIN &&
+        locationRoute.pathname !== ENDPOINTS.REGISTER && (
           <Navbar
             toggleTheme={toggleTheme}
             isDarkMode={isDarkMode}

@@ -5,6 +5,7 @@ import { WbSunny, Brightness2 } from "@mui/icons-material";
 import UserIcon from "./UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
+import { ENDPOINTS } from "./endpoints";
 
 interface NavbarProps {
   toggleTheme: () => void;
@@ -28,7 +29,7 @@ const Navbar: React.FC<NavbarProps> = ({
     },
     {
       type: "logout",
-      action: () => logout(() => navigate("/login")),
+      action: () => logout(() => navigate(ENDPOINTS.LOGIN)),
     },
   ];
 

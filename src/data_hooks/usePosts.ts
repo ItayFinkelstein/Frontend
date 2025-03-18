@@ -3,7 +3,7 @@ import postService from "../http-connections/post-service";
 import useData from "./useData";
 
 const usePosts = () => {
-  const { data, setData, error, setError, isLoading, setIsLoading } =
+  const { data, setData, error, setError, isLoading, setIsLoading, fetchData } =
     useData<Post>(postService);
 
   return {
@@ -13,6 +13,7 @@ const usePosts = () => {
     setError,
     isLoading,
     setIsLoading,
+    fetchPosts: fetchData,
   };
 };
 
