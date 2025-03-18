@@ -30,7 +30,6 @@ export default function UserIcon(props: UserIconProps) {
     <Avatar
       sx={{
         bgcolor: red[500],
-        // borderRadius: "50%", // make it circular
         ...(props.onClick !== undefined && {
           "&:hover": {
             outline: "2.5px solid lightgray",
