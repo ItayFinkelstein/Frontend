@@ -14,11 +14,10 @@ const usePosts = () => {
     const { response, cancel } = postService.getWithPaging(page);
     response
       .then((res) => {
-        if (res.data.length === 0) {
-          setHasMore(false);
-        } else {
-          setPosts((prevPosts) => [...prevPosts, ...res.data]);
+        if (res.data.posts.length !== 0) {
+          setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
         }
+        setHasMore(!res.data.hasNextPage);
         setIsLoading(false);
       })
       .catch((err) => {
