@@ -6,6 +6,8 @@ import PostCardForm from "./PostCardForm";
 import { User } from "./types/User";
 import UserData from "./UserData";
 import usePosts from "./data_hooks/usePosts";
+import { IconButton } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Autorenew";
 
 type PostPageProps = {
   actualUser?: User;
@@ -16,7 +18,7 @@ export type UserToDisplayProps = {
   setUserToDisplay: (user: User | undefined) => void;
 };
 export default function PostPage(props: PostPageProps) {
-  const posts = usePosts().posts;
+  const { posts, loadNextPage, isLoading, hasMore } = usePosts();
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
@@ -57,6 +59,11 @@ export default function PostPage(props: PostPageProps) {
             />
           );
         })}
+      {hasMore && (
+        <IconButton onClick={loadNextPage} disabled={isLoading}>
+          <RefreshIcon />
+        </IconButton>
+      )}
     </div>
   ) : postToShowComments !== null ? (
     <CommentsPage
