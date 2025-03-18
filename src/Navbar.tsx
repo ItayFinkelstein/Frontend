@@ -1,9 +1,10 @@
 import React from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { WbSunny, Brightness2 } from "@mui/icons-material";
 import UserIcon from "./UserIcon";
 import { User } from "./types/User";
+import { logout } from "./http-connections/authService";
 
 interface NavbarProps {
   toggleTheme: () => void;
@@ -18,7 +19,8 @@ const Navbar: React.FC<NavbarProps> = ({
   actualUser,
   setUserToFilterBy,
 }) => {
-  console.log("actualUser1", actualUser);
+  const navigate = useNavigate();
+
   const actions = [
     {
       type: "view",
@@ -26,7 +28,7 @@ const Navbar: React.FC<NavbarProps> = ({
     },
     {
       type: "logout",
-      action: () => console.log(actualUser),
+      action: () => logout(() => navigate("/login")),
     },
   ];
 

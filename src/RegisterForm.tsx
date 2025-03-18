@@ -5,8 +5,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { register } from "./http-connections/authService";
 
 const schema = z.object({
   name: z
@@ -21,7 +20,7 @@ type Inputs = z.infer<typeof schema>;
 
 const RegisterForm: React.FC = () => {
   const {
-    register,
+    register: registerField,
     handleSubmit,
     formState: { errors },
   } = useForm<Inputs>({
@@ -31,22 +30,7 @@ const RegisterForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      //TODO: NEED TO CHANGE
-      await axios.post("http://localhost:3000/auth/register", data);
-
-      const loginResponse = await axios.post(
-        "http://localhost:3000/auth/login",
-        {
-          email: data.email,
-          password: data.password,
-        }
-      );
-      const { accessToken, refreshToken } = loginResponse.data;
-
-      Cookies.set("jwt", accessToken, { expires: 1 / 24 });
-
-      localStorage.setItem("refreshToken", refreshToken);
-
+      await register(data.name, data.email, data.password);
       navigate("/");
     } catch (error) {
       console.error("There was an error registering or logging in!", error);
@@ -63,21 +47,21 @@ const RegisterForm: React.FC = () => {
       <ValidatedTextField
         name="name"
         label="Name"
-        register={register}
+        register={registerField}
         error={errors.name}
         autoFocus
       />
       <ValidatedTextField
         name="email"
         label="Email Address"
-        register={register}
+        register={registerField}
         error={errors.email}
       />
       <ValidatedTextField
         name="password"
         label="Password"
         type="password"
-        register={register}
+        register={registerField}
         error={errors.password}
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

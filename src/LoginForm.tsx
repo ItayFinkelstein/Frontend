@@ -6,8 +6,7 @@ import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
-import axios from "axios";
-import Cookies from "js-cookie";
+import { login } from "./http-connections/authService";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,19 +27,7 @@ const LoginForm: React.FC = () => {
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      //TODO: NEED TO CHANGE TO DO IT ELSWHERE
-
-      const response = await axios.post(
-        "http://localhost:3000/auth/login",
-        data
-      );
-      const { accessToken, refreshToken } = response.data;
-
-      // Save the access token as a cookie
-      Cookies.set("jwt", accessToken, { expires: 1 / 24 });
-
-      // Store the refresh token in localStorage
-      localStorage.setItem("refreshToken", refreshToken);
+      await login(data.email, data.password);
       navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);
@@ -64,6 +51,7 @@ const LoginForm: React.FC = () => {
       <ValidatedTextField
         name="password"
         label="Password"
+        type="password"
         register={register}
         error={errors.password}
       />
