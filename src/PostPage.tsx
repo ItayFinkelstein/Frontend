@@ -15,13 +15,19 @@ export type UserToDisplayProps = {
   userToDisplay?: User | undefined;
   setUserToDisplay: (user: User | undefined) => void;
 };
+
 export default function PostPage(props: PostPageProps) {
-  const posts = usePosts().posts;
+  const { posts, fetchPosts } = usePosts();
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
   );
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
+
+  const handlePostEdit = () => {
+    setPostToEdit(null);
+    fetchPosts();
+  };
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -66,8 +72,6 @@ export default function PostPage(props: PostPageProps) {
       actualUser={props.actualUser?.name}
     />
   ) : (
-    postToEdit && (
-      <PostCardForm post={postToEdit} hideForm={() => setPostToEdit(null)} />
-    )
+    postToEdit && <PostCardForm post={postToEdit} hideForm={handlePostEdit} />
   );
 }

@@ -50,7 +50,7 @@ export default function UserIcon(props: UserIconProps) {
     <Box>
       {props.actions !== undefined ? (
         <UserMenu
-          actions={props.actions}
+          actions={[...props.actions]}
           childStyle={props.style}
           child={avatar}
         />

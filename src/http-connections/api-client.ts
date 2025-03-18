@@ -1,10 +1,24 @@
 import axios, { CanceledError } from "axios";
-import { BASE_URL } from "../Utils";
+import { SERVER_BASE_URL } from "../config";
+import Cookies from "js-cookie";
 
 export { CanceledError };
 
-const apiclient = axios.create({
-  baseURL: BASE_URL,
+const apiClient = axios.create({
+  baseURL: SERVER_BASE_URL,
 });
 
-export default apiclient;
+apiClient.interceptors.request.use(
+  (config) => {
+    const token = Cookies.get("jwt");
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default apiClient;

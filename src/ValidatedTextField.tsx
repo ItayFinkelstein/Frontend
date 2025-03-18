@@ -9,6 +9,8 @@ interface ValidatedTextFieldProps {
   label?: string;
   fullWidth?: boolean;
   defaultValue?: string;
+  autoFocus?: boolean;
+  type?: string;
 }
 
 const ValidatedTextField: React.FC<ValidatedTextFieldProps> = (
@@ -27,6 +29,8 @@ const ValidatedTextField: React.FC<ValidatedTextFieldProps> = (
       error={!!props.error}
       helperText={props.error?.message}
       defaultValue={props.defaultValue}
+      autoFocus={props.autoFocus}
+      type={props.type || "text"}
     />
   );
 };

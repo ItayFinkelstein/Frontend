@@ -2,10 +2,6 @@ import apiClient, { CanceledError } from "./api-client";
 
 export { CanceledError };
 
-/** TODO: Remove this. Obviuosly in a real production code this would NEVER be in the code itsef, even in a branch commit. */
-const token =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2N2Q3NDE1ZjM0OTAwZjU0MTQ0NWU4YzgiLCJ0b2tlblNpZ25SYW5kb20iOjU5ODMwMTA2MzcsImlhdCI6MTc0MjE2MDQwNiwiZXhwIjoxNzQyMTY0MDA2fQ.CJfng42uKliE3DqLxIwQUC4UP6jwHQVrPK5BF1nIaKE";
-
 interface BaseEntity {
   _id: string;
 }
@@ -29,9 +25,6 @@ class HttpService<T extends BaseEntity> {
 
     const response = apiClient.post(this.endpoint, entity, {
       signal: controller.signal,
-      headers: {
-        authorization: `Bearer ${token}`,
-      },
     });
     return { response, cancel: () => controller.abort() };
   }

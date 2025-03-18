@@ -18,20 +18,6 @@ const lightTheme = createTheme({
         },
     },
     components: {
-        MuiPaper: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#F9F1E8', // Lighter shade of Toasted Beige
-                },
-            },
-        },
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: '#ffffff', // Keep TextField white
-                },
-            },
-        },
         MuiAppBar: {
             styleOverrides: {
                 root: {
