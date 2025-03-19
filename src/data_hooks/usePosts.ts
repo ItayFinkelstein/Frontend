@@ -21,7 +21,7 @@ const usePosts = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        if (err instanceof CanceledError) return;
+        if (err instanceof CanceledError) return; // A "good" error, it means something decides to cancel the fetch request.
         setError(err);
         setIsLoading(false);
       });
@@ -29,9 +29,7 @@ const usePosts = () => {
     return cancel;
   };
 
-  /** todo: don't show loading icon when there are no more data in DB */
   const loadNextPage = () => {
-    console.log("Loading next page");
     if (hasMore && !isLoading) {
       fetchPosts(currentPage + 1);
       setCurrentPage((prevPage) => prevPage + 1);
