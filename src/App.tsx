@@ -15,19 +15,10 @@ import { lightTheme, darkTheme } from "./theme";
 import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
-import useUsers from "./data_hooks/useUsers";
 import { ENDPOINTS } from "./endpoints";
 
 const App: React.FC = () => {
-  const users = useUsers().users;
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [actualUser, setActualUser] = useState<User | undefined>(undefined);
-
-  useEffect(() => {
-    if (users.length > 0) {
-      setActualUser(users[1]);
-    }
-  }, [users]);
 
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
@@ -49,7 +40,6 @@ const App: React.FC = () => {
         <AppContent
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
-          actualUser={actualUser}
           userToFilterBy={userToFilterBy}
           setUserToFilterBy={setUserToFilterBy}
         />
@@ -61,16 +51,9 @@ const App: React.FC = () => {
 const AppContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  actualUser: User | undefined;
   setUserToFilterBy: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({
-  toggleTheme,
-  isDarkMode,
-  actualUser,
-  userToFilterBy,
-  setUserToFilterBy,
-}) => {
+}> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterBy }) => {
   const locationRoute = useLocation();
 
   return (
@@ -87,7 +70,6 @@ const AppContent: React.FC<{
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
-              actualUser={actualUser}
               setUserToFilterBy={setUserToFilterBy}
             />
           </div>
@@ -98,7 +80,6 @@ const AppContent: React.FC<{
         <MainContent
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
-          actualUser={actualUser}
           userToFilterBy={userToFilterBy}
           setUserToFilterBy={setUserToFilterBy}
         />
@@ -110,10 +91,9 @@ const AppContent: React.FC<{
 const MainContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  actualUser: User | undefined;
   setUserToFilterBy: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({ actualUser, userToFilterBy, setUserToFilterBy }) => {
+}> = ({ userToFilterBy, setUserToFilterBy }) => {
   return (
     <div
       style={{
@@ -130,7 +110,6 @@ const MainContent: React.FC<{
           element={
             <ProtectedRoute>
               <UserPage
-                actualUser={actualUser}
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterBy}
               />

@@ -1,6 +1,6 @@
-import React from 'react';
-import FormLayout from './FormLayout';
-import RegisterForm from '../RegisterForm';
+import React from "react";
+import FormLayout from "./FormLayout";
+import RegisterForm from "../RegisterForm";
 
 const Register: React.FC = () => {
   return (

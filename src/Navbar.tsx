@@ -1,26 +1,26 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
+import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { WbSunny, Brightness2, Home } from "@mui/icons-material";
 import UserIcon from "./UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
 import { ENDPOINTS } from "./endpoints";
+import useActualUser from "./useActualUser";
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
-  actualUser: User | undefined;
   setUserToFilterBy: (user: User | undefined) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
   toggleTheme,
   isDarkMode,
-  actualUser,
   setUserToFilterBy,
 }) => {
   const navigate = useNavigate();
+  const { setActualUser } = useActualUser();
 
   const actions = [
     {
@@ -29,9 +29,15 @@ const Navbar: React.FC<NavbarProps> = ({
     },
     {
       type: "logout",
-      action: () => logout(() => navigate(ENDPOINTS.LOGIN)),
+      action: () =>
+        logout(() => {
+          setActualUser(undefined);
+          navigate(ENDPOINTS.LOGIN);
+        }),
     },
   ];
+
+  const { actualUser } = useActualUser();
 
   return (
     <AppBar position="fixed" color="primary">

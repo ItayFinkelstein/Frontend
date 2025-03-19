@@ -14,9 +14,9 @@ import { GenericIconButton } from "./GenericIconButton";
 import classes from "./CommentsPage.module.css";
 import commentService from "./http-connections/commentService";
 import useComments from "./data_hooks/useComment";
+import useActualUser from "./useActualUser";
 
 type CommentsPageProps = {
-  actualUser: string | undefined;
   post: Post;
   closeCommentsForm: () => void;
   isCurrentUserPost: boolean;
@@ -24,6 +24,7 @@ type CommentsPageProps = {
 
 export default function CommentsPage(props: CommentsPageProps) {
   const { comments, fetchComments } = useComments(props.post._id);
+  const { actualUser } = useActualUser();
   const schema = z.object({
     description: z
       .string()
@@ -41,7 +42,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   const onSubmit = async (data: { description: string }) => {
     await commentService.add({
       postId: props.post._id,
-      owner: props.actualUser!,
+      owner: actualUser!.name,
       message: data.description,
     });
     fetchComments();
@@ -64,7 +65,7 @@ export default function CommentsPage(props: CommentsPageProps) {
         onClick={props.closeCommentsForm}
       />
       <Box className={classes.commentsContainer}>
-        {!props.isCurrentUserPost && props.actualUser !== undefined && (
+        {!props.isCurrentUserPost && actualUser !== undefined && (
           <form onSubmit={handleSubmit(onSubmit)}>
             <Card sx={{ width: 500 }}>
               <CardContent>
