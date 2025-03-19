@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Post } from "../types/Post";
-import postService, { CanceledError } from "../http-connections/post-service";
+import postService, { CanceledError } from "../http-connections/postService";
 
 const usePosts = () => {
   const [posts, setPosts] = useState<Post[]>([]);
@@ -42,6 +42,8 @@ const usePosts = () => {
     const cancel = fetchPosts(currentPage);
     return () => cancel(); // Cleanup on unmount, important because of strict mode in development (which calls fetchPosts twice)
   }, []);
+  const { data, setData, error, setError, isLoading, setIsLoading, fetchData } =
+    useData<Post>(postService);
 
   return {
     posts,
@@ -51,6 +53,7 @@ const usePosts = () => {
     isLoading,
     loadNextPage,
     hasMore,
+    fetchPosts: fetchData,
   };
 };
 

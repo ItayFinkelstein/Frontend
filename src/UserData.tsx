@@ -10,7 +10,7 @@ import { z } from "zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { useState } from "react";
 import { GenericIconButton } from "./GenericIconButton";
-import userService from "./http-connections/user-service";
+import userService from "./http-connections/userService";
 
 export default function UserData(
   props: Required<UserToDisplayProps> & { isActualUser: boolean }
@@ -21,7 +21,7 @@ export default function UserData(
     name: z
       .string()
       .min(1, { message: "Name is required" })
-      .max(100, { message: "Name must be no more than 100 characters" }),
+      .max(20, { message: "Name must be no more than 20 characters" }),
   });
 
   const {

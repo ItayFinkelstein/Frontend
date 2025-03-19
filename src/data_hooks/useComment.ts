@@ -1,9 +1,9 @@
 import { Comment } from "../types/Comment";
-import commentService from "../http-connections/comment-service";
+import commentService from "../http-connections/commentService";
 import useData from "./useData";
 
 const useComments = (postId: string) => {
-  const { data, setData, error, setError, isLoading, setIsLoading } =
+  const { data, setData, error, setError, isLoading, setIsLoading, fetchData } =
     useData<Comment>(commentService, () => {
       return commentService.getByPostId(postId);
     });
@@ -15,6 +15,7 @@ const useComments = (postId: string) => {
     setError,
     isLoading,
     setIsLoading,
+    fetchComments: fetchData,
   };
 };
 

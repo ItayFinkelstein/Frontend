@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CanceledError, HttpService } from "../http-connections/http-service";
+import { CanceledError, HttpService } from "../http-connections/httpService";
 import { AxiosResponse } from "axios";
 
 const useData = <T extends { _id: string }>(
@@ -13,7 +13,7 @@ const useData = <T extends { _id: string }>(
   const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
+  const fetchData = () => {
     setIsLoading(true);
     const { response, cancel } = getfunction ? getfunction() : service.getAll();
     response
@@ -29,9 +29,13 @@ const useData = <T extends { _id: string }>(
       });
 
     return () => cancel();
+  };
+
+  useEffect(() => {
+    fetchData();
   }, [service]);
 
-  return { data, setData, error, setError, isLoading, setIsLoading };
+  return { data, setData, error, setError, isLoading, setIsLoading, fetchData };
 };
 
 export default useData;

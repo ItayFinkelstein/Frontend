@@ -8,22 +8,28 @@ import UserData from "./UserData";
 import usePosts from "./data_hooks/usePosts";
 import { IconButton } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Autorenew";
+import useActualUser from "./useActualUser";
 
-type PostPageProps = {
-  actualUser?: User;
-} & UserToDisplayProps;
+type PostPageProps = {} & UserToDisplayProps;
 
 export type UserToDisplayProps = {
   userToDisplay?: User | undefined;
   setUserToDisplay: (user: User | undefined) => void;
 };
+
 export default function PostPage(props: PostPageProps) {
   const { posts, loadNextPage, isLoading, hasMore } = usePosts();
+  const { actualUser } = useActualUser();
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
   );
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
+
+  const handlePostEdit = () => {
+    setPostToEdit(null);
+    fetchPosts();
+  };
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -32,8 +38,8 @@ export default function PostPage(props: PostPageProps) {
           userToDisplay={props.userToDisplay}
           setUserToDisplay={props.setUserToDisplay}
           isActualUser={
-            props.actualUser !== undefined &&
-            props.actualUser._id === props.userToDisplay._id
+            actualUser !== undefined &&
+            actualUser._id === props.userToDisplay._id
           }
         />
       )}
@@ -50,10 +56,6 @@ export default function PostPage(props: PostPageProps) {
               post={post}
               showPostComments={() => setPostToShowComments(post)}
               editPost={() => setPostToEdit(post)}
-              isActualUser={
-                props.actualUser !== undefined &&
-                post.owner === props.actualUser._id
-              }
               setUser={(newUser: User) => props.setUserToDisplay(newUser)}
               isClickableIcon={props.userToDisplay === undefined}
             />
@@ -69,12 +71,9 @@ export default function PostPage(props: PostPageProps) {
     <CommentsPage
       post={postToShowComments}
       closeCommentsForm={() => setPostToShowComments(null)}
-      isCurrentUserPost={props.actualUser?._id === postToShowComments.owner}
-      actualUser={props.actualUser?.name}
+      isCurrentUserPost={actualUser?._id === postToShowComments.owner}
     />
   ) : (
-    postToEdit && (
-      <PostCardForm post={postToEdit} hideForm={() => setPostToEdit(null)} />
-    )
+    postToEdit && <PostCardForm post={postToEdit} hideForm={handlePostEdit} />
   );
 }

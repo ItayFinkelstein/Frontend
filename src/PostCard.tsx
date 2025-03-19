@@ -16,13 +16,13 @@ import UserIcon from "./UserIcon";
 import { GenericIconButton } from "./GenericIconButton";
 import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
-import postService from "./http-connections/post-service";
+import postService from "./http-connections/postService";
+import useActualUser from "./useActualUser";
 
 type PostCardProps = {
   post: Post;
   showPostComments: () => void;
   editPost: () => void;
-  isActualUser: boolean;
   setUser: (newUser: User) => void;
   isClickableIcon?: boolean;
 };
@@ -30,9 +30,12 @@ type PostCardProps = {
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const users = useUsers().users;
+  const { actualUser } = useActualUser();
+  const isActualUser =
+    actualUser !== undefined && props.post.owner === actualUser._id;
 
-  const user = users.find(
-    (userToCheck) => userToCheck._id === props.post.owner
+  const user: User = users.find(
+    (userToCheck: User) => userToCheck._id === props.post.owner
   )!;
 
   return (
@@ -52,12 +55,7 @@ export default function PostCard(props: PostCardProps) {
         }
       />
       {props.post.image && (
-        <CardMedia
-          component="img"
-          height="194"
-          image={props.post.image}
-          // alt={props.post.title}
-        />
+        <CardMedia component="img" height="194" image={props.post.image} />
       )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
@@ -65,7 +63,18 @@ export default function PostCard(props: PostCardProps) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {!props.isActualUser && (
+        <GenericIconButton
+          title="like this post"
+          icon={
+            isLiked ? (
+              <FavoriteSelectedIcon style={{ color: "red" }} />
+            ) : (
+              <FavoriteUnselectedIcon />
+            )
+          }
+          onClick={() => setIsLiked((curr) => !curr)}
+        />
+        {isActualUser && (
           <GenericIconButton
             title="add to favorites"
             icon={
@@ -83,7 +92,7 @@ export default function PostCard(props: PostCardProps) {
           icon={<CommentIcon />}
           onClick={props.showPostComments}
         />
-        {props.isActualUser && (
+        {isActualUser && (
           <>
             <GenericIconButton
               title="Edit post"
