@@ -7,6 +7,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { login } from "./http-connections/authService";
+import GoogleLoginButton from "./GoogleLoginButton";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,6 +29,11 @@ const LoginForm: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       await login(data.email, data.password);
+      // setActualUser({
+      //   _id: loggedInUser._id,
+      //   email: loggedInUser.email,
+      //   name: loggedInUser.name,
+      // });
       navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);
@@ -58,6 +64,7 @@ const LoginForm: React.FC = () => {
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
       </Button>
+      <GoogleLoginButton />
       <Button
         fullWidth
         variant="contained"
