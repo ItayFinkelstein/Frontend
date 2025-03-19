@@ -31,7 +31,6 @@ const LoginForm: React.FC = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
       const loggedInUser = await login(data.email, data.password);
-      console.log(loggedInUser);
       setActualUser({
         _id: loggedInUser._id,
         email: loggedInUser.email,
