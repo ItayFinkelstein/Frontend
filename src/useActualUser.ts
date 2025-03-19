@@ -13,7 +13,6 @@ export default function useActualUser() {
   }
 
   useEffect(() => {
-    console.log("useEffect users", users);
     if (!isLoading && users.length > 0) {
       setActualUser(getUserFromStorageId(users));
     }
