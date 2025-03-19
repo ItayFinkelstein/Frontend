@@ -1,5 +1,5 @@
 import { Post } from "../types/Post";
-import apiClient from "./api-client";
+import apiClient from "./apiClient";
 import { CanceledError, HttpService } from "./httpService";
 
 export { CanceledError };

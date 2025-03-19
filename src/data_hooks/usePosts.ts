@@ -17,7 +17,7 @@ const usePosts = () => {
         if (res.data.posts.length !== 0) {
           setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
         }
-        setHasMore(!res.data.hasNextPage);
+        setHasMore(res.data.hasNextPage);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -42,8 +42,6 @@ const usePosts = () => {
     const cancel = fetchPosts(currentPage);
     return () => cancel(); // Cleanup on unmount, important because of strict mode in development (which calls fetchPosts twice)
   }, []);
-  const { data, setData, error, setError, isLoading, setIsLoading, fetchData } =
-    useData<Post>(postService);
 
   return {
     posts,
@@ -53,7 +51,7 @@ const usePosts = () => {
     isLoading,
     loadNextPage,
     hasMore,
-    fetchPosts: fetchData,
+    fetchPosts: fetchPosts,
   };
 };
 

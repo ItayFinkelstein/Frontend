@@ -9,6 +9,7 @@ import usePosts from "./data_hooks/usePosts";
 import { IconButton } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Autorenew";
 import useActualUser from "./useActualUser";
+import { GenericIconButton } from "./GenericIconButton";
 
 type PostPageProps = {} & UserToDisplayProps;
 
@@ -28,7 +29,6 @@ export default function PostPage(props: PostPageProps) {
 
   const handlePostEdit = () => {
     setPostToEdit(null);
-    fetchPosts();
   };
 
   return postToShowComments === null && postToEdit === null ? (
@@ -62,9 +62,14 @@ export default function PostPage(props: PostPageProps) {
           );
         })}
       {hasMore && (
-        <IconButton onClick={loadNextPage} disabled={isLoading}>
-          <RefreshIcon />
-        </IconButton>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <GenericIconButton
+            title="load more posts"
+            icon={<RefreshIcon />}
+            onClick={loadNextPage}
+            disabled={isLoading}
+          />
+        </div>
       )}
     </div>
   ) : postToShowComments !== null ? (
