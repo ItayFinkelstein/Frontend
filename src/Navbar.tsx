@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
+import React from "react";
+import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { WbSunny, Brightness2, Home } from "@mui/icons-material";
 import UserIcon from "./UserIcon";

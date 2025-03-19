@@ -9,7 +9,7 @@ import FavoriteSelectedIcon from "@mui/icons-material/Favorite";
 import FavoriteUnselectedIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
