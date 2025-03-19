@@ -75,7 +75,6 @@ const LoginForm: React.FC = () => {
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
       </Button>
-      <GoogleLoginButton />
       <Box sx={{ display: "flex", alignItems: "center", width: "100%", my: 2 }}>
         <Divider sx={{ flexGrow: 1 }} />
         <Typography variant="body2" sx={{ mx: 2 }}>
@@ -83,16 +82,8 @@ const LoginForm: React.FC = () => {
         </Typography>
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
-      <Button
-        fullWidth
-        variant="contained"
-        color="secondary"
-        startIcon={<GoogleIcon />}
-        sx={{ mt: 1, mb: 2 }}
-      >
-        Login with Google
-      </Button>
-      <Grid container>
+      <GoogleLoginButton />
+      <Grid container sx={{ mt: 2 }}>
         <Grid item>
           <Link component={RouterLink} to="/register" variant="body2">
             {"Don't have an account? Register"}
