@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CanceledError, HttpService } from "../http-connections/http-service";
+import { CanceledError, HttpService } from "../http-connections/httpService";
 import { AxiosResponse } from "axios";
 
 const useData = <T extends { _id: string }>(

@@ -1,5 +1,5 @@
 import { Post } from "../types/Post";
-import createHttpService, { CanceledError } from "./http-service";
+import createHttpService, { CanceledError } from "./httpService";
 
 export { CanceledError };
 

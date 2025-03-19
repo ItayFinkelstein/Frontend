@@ -1,6 +1,6 @@
 import React from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Box, Button, Grid, Link } from "@mui/material";
+import { Box, Button, Grid, Link, Divider, Typography } from "@mui/material";
 import { Google as GoogleIcon } from "@mui/icons-material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
@@ -38,7 +38,13 @@ const LoginForm: React.FC = () => {
     <Box
       component="form"
       noValidate
-      sx={{ mt: 1 }}
+      sx={{
+        mt: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+      }}
       onSubmit={handleSubmit(onSubmit)}
     >
       <ValidatedTextField
@@ -47,6 +53,7 @@ const LoginForm: React.FC = () => {
         register={register}
         error={errors.email}
         autoFocus={true}
+        fullWidth
       />
       <ValidatedTextField
         name="password"
@@ -54,10 +61,18 @@ const LoginForm: React.FC = () => {
         type="password"
         register={register}
         error={errors.password}
+        fullWidth
       />
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Login
       </Button>
+      <Box sx={{ display: "flex", alignItems: "center", width: "100%", my: 2 }}>
+        <Divider sx={{ flexGrow: 1 }} />
+        <Typography variant="body2" sx={{ mx: 2 }}>
+          OR
+        </Typography>
+        <Divider sx={{ flexGrow: 1 }} />
+      </Box>
       <Button
         fullWidth
         variant="contained"

@@ -1,5 +1,5 @@
 import { Post } from "../types/Post";
-import postService from "../http-connections/post-service";
+import postService from "../http-connections/postService";
 import useData from "./useData";
 
 const usePosts = () => {
