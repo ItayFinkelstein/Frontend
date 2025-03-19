@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Box, Button, Grid, Link } from "@mui/material";
+import { Box, Button, Grid, Link, Avatar, IconButton } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { register } from "./http-connections/authService";
+import { uploadImage } from "./http-connections/userService";
+import avatar from "./assets/avatar.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
 
 const schema = z.object({
   name: z
@@ -14,36 +18,80 @@ const schema = z.object({
     .max(20, "Name must be at most 20 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(4, "Password must be at least 4 characters"),
+  img: z.instanceof(FileList).optional(),
 });
 
 type Inputs = z.infer<typeof schema>;
 
 const RegisterForm: React.FC = () => {
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const {
     register: registerField,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm<Inputs>({
     resolver: zodResolver(schema),
   });
   const navigate = useNavigate();
+  const [img] = watch(["img"]);
+  const inputFileRef: { current: HTMLInputElement | null } = { current: null };
+
+  useEffect(() => {
+    if (img != null && img[0]) {
+      setSelectedImage(img[0]);
+    }
+  }, [img]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await register(data.name, data.email, data.password);
+      let avatarUrl = "";
+      if (data.img && data.img[0]) {
+        const { request } = uploadImage(data.img[0]);
+        const response = await request;
+        avatarUrl = response.data.url;
+      }
+
+      await register(data.name, data.email, data.password, avatarUrl);
       navigate("/");
     } catch (error) {
       console.error("There was an error registering or logging in!", error);
     }
   };
 
+  const { ref, ...restRegisterParams } = registerField("img");
+
   return (
     <Box
       component="form"
       noValidate
-      sx={{ mt: 1 }}
+      sx={{
+        mt: 2,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        width: "100%",
+      }}
       onSubmit={handleSubmit(onSubmit)}
     >
+      <Avatar
+        src={selectedImage ? URL.createObjectURL(selectedImage) : avatar}
+        alt="Avatar"
+        sx={{ width: "10rem", height: "10rem", mb: 2 }}
+      />
+      <IconButton color="primary" component="label" sx={{ mb: 2 }}>
+        <FontAwesomeIcon icon={faImage} />
+        <input
+          ref={(item) => {
+            inputFileRef.current = item;
+            ref(item);
+          }}
+          {...restRegisterParams}
+          type="file"
+          accept="image/png, image/jpeg"
+          style={{ display: "none" }}
+        />
+      </IconButton>
       <ValidatedTextField
         name="name"
         label="Name"
@@ -64,6 +112,7 @@ const RegisterForm: React.FC = () => {
         register={registerField}
         error={errors.password}
       />
+
       <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
         Register
       </Button>

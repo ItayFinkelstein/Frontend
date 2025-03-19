@@ -1,5 +1,5 @@
 import { Comment } from "../types/Comment";
-import commentService from "../http-connections/comment-service";
+import commentService from "../http-connections/commentService";
 import useData from "./useData";
 
 const useComments = (postId: string) => {

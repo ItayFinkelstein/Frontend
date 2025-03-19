@@ -11,7 +11,7 @@ import ImageIcon from "@mui/icons-material/Image";
 import { useState } from "react";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
-import postService from "./http-connections/post-service";
+import postService from "./http-connections/postService";
 
 type PostCardForm = {
   post?: Post;

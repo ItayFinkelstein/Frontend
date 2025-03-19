@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import apiClient from "./api-client";
+import apiClient from "./apiClient";
 import { ENDPOINTS } from "../endpoints";
 
 const authPrefix: string = "/auth";
@@ -14,8 +14,8 @@ const login = async (email: string, password: string) => {
     return response.data;
 };
 
-const register = async (name: string, email: string, password: string) => {
-    await apiClient.post(authPrefix + ENDPOINTS.REGISTER, { name, email, password });
+const register = async (name: string, email: string, password: string, avatarUrl: string) => {
+    await apiClient.post(authPrefix + ENDPOINTS.REGISTER, { name, email, password, avatarUrl });
     return login(email, password);
 };
 
