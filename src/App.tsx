@@ -1,3 +1,4 @@
+import "./global.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
@@ -18,8 +19,13 @@ import { ENDPOINTS } from "./endpoints";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [actualUser, setActualUser] = useState<User | undefined>(undefined);
 
-  /** todo: change */
+  useEffect(() => {
+    if (users.length > 0) {
+      setActualUser(users[1]);
+    }
+  }, [users]);
 
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
@@ -29,11 +35,16 @@ const App: React.FC = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  useEffect(() => {
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    document.body.classList.toggle("light-mode", !isDarkMode);
+  }, [isDarkMode]);
+
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
       <Router>
-        <MainContent
+        <AppContent
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
@@ -44,55 +55,81 @@ const App: React.FC = () => {
   );
 };
 
-const MainContent: React.FC<{
+const AppContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
   setUserToFilterBy: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
 }> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterBy }) => {
   const locationRoute = useLocation();
+
   return (
     <div
       style={{
-        height: "100vh",
-        width: "100vw",
+        minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
       }}
     >
       {locationRoute.pathname !== ENDPOINTS.LOGIN &&
         locationRoute.pathname !== ENDPOINTS.REGISTER && (
-          <Navbar
-            toggleTheme={toggleTheme}
-            isDarkMode={isDarkMode}
-            setUserToFilterBy={setUserToFilterBy}
-          />
+          <div style={{ height: "5vh", flexShrink: 0 }}>
+            <Navbar
+              toggleTheme={toggleTheme}
+              isDarkMode={isDarkMode}
+              actualUser={actualUser}
+              setUserToFilterBy={setUserToFilterBy}
+            />
+          </div>
         )}
-
-      <div
-        style={{
-          flex: 1,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <ProtectedRoute>
-                <UserPage
-                  userToFilterBy={userToFilterBy}
-                  setUserToFilterBy={setUserToFilterBy}
-                />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+      <div style={{ height: "10vh" }} />{" "}
+      {/* Add spacing between Navbar and MainContent */}
+      <div style={{ flex: 1, overflowY: "auto" }}>
+        <MainContent
+          toggleTheme={toggleTheme}
+          isDarkMode={isDarkMode}
+          actualUser={actualUser}
+          userToFilterBy={userToFilterBy}
+          setUserToFilterBy={setUserToFilterBy}
+        />
       </div>
+    </div>
+  );
+};
+
+const MainContent: React.FC<{
+  toggleTheme: () => void;
+  isDarkMode: boolean;
+  actualUser: User | undefined;
+  setUserToFilterBy: (user: User | undefined) => void;
+  userToFilterBy: User | undefined;
+}> = ({ actualUser, userToFilterBy, setUserToFilterBy }) => {
+  return (
+    <div
+      style={{
+        height: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "100%",
+      }}
+    >
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <UserPage
+                actualUser={actualUser}
+                userToFilterBy={userToFilterBy}
+                setUserToFilterBy={setUserToFilterBy}
+              />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+      </Routes>
     </div>
   );
 };

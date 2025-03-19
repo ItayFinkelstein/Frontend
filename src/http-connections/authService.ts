@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import apiClient from "./api-client";
+import apiClient from "./apiClient";
 import { ENDPOINTS } from "../endpoints";
 
 const authPrefix: string = "/auth";
@@ -25,11 +25,17 @@ export const setLoginTokens = (data: {
   localStorage.setItem("refreshToken", data.refreshToken);
 };
 
-const register = async (name: string, email: string, password: string) => {
+const register = async (
+  name: string,
+  email: string,
+  password: string,
+  avatarUrl: string
+) => {
   await apiClient.post(authPrefix + ENDPOINTS.REGISTER, {
     name,
     email,
     password,
+    avatarUrl,
   });
   return login(email, password);
 };

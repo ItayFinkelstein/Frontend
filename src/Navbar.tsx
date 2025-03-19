@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { AppBar, Toolbar, Typography, Button, IconButton } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { WbSunny, Brightness2 } from "@mui/icons-material";
+import { WbSunny, Brightness2, Home } from "@mui/icons-material";
 import UserIcon from "./UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
@@ -40,14 +40,14 @@ const Navbar: React.FC<NavbarProps> = ({
   const { actualUser } = useActualUser();
 
   return (
-    <AppBar position="sticky" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TastyTalks
         </Typography>
-        <Button color="inherit" component={RouterLink} to="/">
-          Feed
-        </Button>
+        <IconButton color="inherit" component={RouterLink} to="/">
+          <Home />
+        </IconButton>
         <IconButton
           color="inherit"
           onClick={toggleTheme}

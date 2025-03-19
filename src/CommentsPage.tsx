@@ -12,7 +12,7 @@ import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
 import classes from "./CommentsPage.module.css";
-import commentService from "./http-connections/comment-service";
+import commentService from "./http-connections/commentService";
 import useComments from "./data_hooks/useComment";
 import useActualUser from "./useActualUser";
 

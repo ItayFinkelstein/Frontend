@@ -16,7 +16,7 @@ import UserIcon from "./UserIcon";
 import { GenericIconButton } from "./GenericIconButton";
 import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
-import postService from "./http-connections/post-service";
+import postService from "./http-connections/postService";
 import useActualUser from "./useActualUser";
 
 type PostCardProps = {
@@ -63,6 +63,17 @@ export default function PostCard(props: PostCardProps) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
+        <GenericIconButton
+          title="like this post"
+          icon={
+            isLiked ? (
+              <FavoriteSelectedIcon style={{ color: "red" }} />
+            ) : (
+              <FavoriteUnselectedIcon />
+            )
+          }
+          onClick={() => setIsLiked((curr) => !curr)}
+        />
         {isActualUser && (
           <GenericIconButton
             title="add to favorites"

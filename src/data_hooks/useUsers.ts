@@ -1,4 +1,4 @@
-import userService from "../http-connections/user-service";
+import userService from "../http-connections/userService";
 import { User } from "../types/User";
 import useData from "./useData";
 

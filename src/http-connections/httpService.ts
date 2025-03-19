@@ -1,4 +1,4 @@
-import apiClient, { CanceledError } from "./api-client";
+import apiClient, { CanceledError } from "./apiClient";
 
 export { CanceledError };
 
