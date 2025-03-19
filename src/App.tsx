@@ -1,3 +1,4 @@
+import "./global.css";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
@@ -35,6 +36,13 @@ const App: React.FC = () => {
     setIsDarkMode(!isDarkMode);
   };
 
+  useEffect(() => {
+    document.body.style.backgroundColor = isDarkMode
+      ? darkTheme.palette.background.default
+      : lightTheme.palette.background.default;
+    document.body.style.overflowX = "hidden"; // Disable horizontal scrollbar on body
+  }, [isDarkMode]);
+
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -68,10 +76,12 @@ const MainContent: React.FC<{
   return (
     <div
       style={{
-        height: "100vh",
+        minHeight: "100vh",
         width: "100vw",
         display: "flex",
         flexDirection: "column",
+        overflowX: "hidden",
+        overflowY: "auto",
       }}
     >
       {locationRoute.pathname !== ENDPOINTS.LOGIN &&
@@ -90,6 +100,7 @@ const MainContent: React.FC<{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          width: "100%",
         }}
       >
         <Routes>

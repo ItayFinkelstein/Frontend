@@ -34,7 +34,7 @@ const Navbar: React.FC<NavbarProps> = ({
   ];
 
   return (
-    <AppBar position="sticky" color="primary">
+    <AppBar position="fixed" color="primary">
       <Toolbar>
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TastyTalks
