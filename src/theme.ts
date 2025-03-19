@@ -37,6 +37,18 @@ const lightTheme = createTheme({
                 },
             },
         },
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        color: 'inherit',
+                    },
+                    '&:active': {
+                        color: 'inherit',
+                    },
+                },
+            },
+        },
     },
 });
 
@@ -80,6 +92,18 @@ const darkTheme = createTheme({
             },
         },
         MuiButton: {
+            styleOverrides: {
+                root: {
+                    '&:hover': {
+                        color: 'inherit',
+                    },
+                    '&:active': {
+                        color: 'inherit',
+                    },
+                },
+            },
+        },
+        MuiIconButton: {
             styleOverrides: {
                 root: {
                     '&:hover': {

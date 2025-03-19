@@ -15,3 +15,11 @@
   ::-webkit-scrollbar-thumb:hover {
     background: #555;
   }
+
+  body.light-mode {
+    overflow-x: hidden; /* Disable horizontal scrollbar */
+  }
+  
+  body.dark-mode {
+    overflow-x: hidden; /* Disable horizontal scrollbar */
+  }
