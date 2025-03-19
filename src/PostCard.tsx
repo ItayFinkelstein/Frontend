@@ -9,7 +9,7 @@ import FavoriteSelectedIcon from "@mui/icons-material/Favorite";
 import FavoriteUnselectedIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
@@ -17,12 +17,12 @@ import { GenericIconButton } from "./GenericIconButton";
 import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
 import postService from "./http-connections/post-service";
+import useActualUser from "./useActualUser";
 
 type PostCardProps = {
   post: Post;
   showPostComments: () => void;
   editPost: () => void;
-  isActualUser: boolean;
   setUser: (newUser: User) => void;
   isClickableIcon?: boolean;
 };
@@ -30,6 +30,9 @@ type PostCardProps = {
 export default function PostCard(props: PostCardProps) {
   const [isLiked, setIsLiked] = useState(false);
   const users = useUsers().users;
+  const { actualUser } = useActualUser();
+  const isActualUser =
+    actualUser !== undefined && props.post.owner === actualUser._id;
 
   const user: User = users.find(
     (userToCheck: User) => userToCheck._id === props.post.owner
@@ -60,7 +63,7 @@ export default function PostCard(props: PostCardProps) {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        {props.isActualUser && (
+        {isActualUser && (
           <GenericIconButton
             title="add to favorites"
             icon={
@@ -78,7 +81,7 @@ export default function PostCard(props: PostCardProps) {
           icon={<CommentIcon />}
           onClick={props.showPostComments}
         />
-        {props.isActualUser && (
+        {isActualUser && (
           <>
             <GenericIconButton
               title="Edit post"

@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { login } from "./http-connections/authService";
 import GoogleLoginButton from "./GoogleLoginButton";
+import useActualUser from "./useActualUser";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,15 +26,18 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(schema),
   });
   const navigate = useNavigate();
+  const { setActualUser } = useActualUser();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
-      await login(data.email, data.password);
-      // setActualUser({
-      //   _id: loggedInUser._id,
-      //   email: loggedInUser.email,
-      //   name: loggedInUser.name,
-      // });
+      const loggedInUser = await login(data.email, data.password);
+      console.log(loggedInUser);
+      setActualUser({
+        _id: loggedInUser._id,
+        email: loggedInUser.email,
+        name: loggedInUser.name,
+      });
+
       navigate("/");
     } catch (error) {
       console.error("There was an error logging in!", error);
