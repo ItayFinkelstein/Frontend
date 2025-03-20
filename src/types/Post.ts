@@ -7,6 +7,6 @@ export type Post = {
   owner: string;
   image?: string;
   message: string;
-  comments: Comment[];
+  commentAmount: number;
   likes: string[];
 };

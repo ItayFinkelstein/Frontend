@@ -19,6 +19,7 @@ import { getDateAsString } from "./Utils";
 import postService from "./http-connections/postService";
 import useActualUser from "./useActualUser";
 import usePosts from "./data_hooks/usePosts";
+import classes from "./PostCard.module.css";
 
 type PostCardProps = {
   post: Post;
@@ -72,7 +73,7 @@ export default function PostCard(props: PostCardProps) {
         <GenericIconButton
           title="like this post"
           icon={
-            <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
+            <div className={classes.iconNumber}>
               {isLiked ? (
                 <FavoriteSelectedIcon style={{ color: "red" }} />
               ) : (
@@ -86,8 +87,8 @@ export default function PostCard(props: PostCardProps) {
               const updatedPost = {
                 ...props.post,
                 likes: isLiked
-                  ? props.post.likes.filter((like) => like !== actualUser._id) // Remove like
-                  : [...props.post.likes, actualUser._id], // Add like
+                  ? props.post.likes.filter((like) => like !== actualUser._id)
+                  : [...props.post.likes, actualUser._id],
               };
               serverRequest(
                 () => {
@@ -95,16 +96,24 @@ export default function PostCard(props: PostCardProps) {
                 },
                 () => {
                   setIsLiked((curr) => !curr);
+                  /** todo: once post-get-paging gets merged, update the user in users list */
                 }
               );
             }
           }}
         />
+
         <GenericIconButton
           title="comments"
-          icon={<CommentIcon />}
+          icon={
+            <div className={classes.iconNumber}>
+              <CommentIcon />
+              {props.post.commentAmount}
+            </div>
+          }
           onClick={props.showPostComments}
         />
+
         {isActualUser && (
           <>
             <GenericIconButton

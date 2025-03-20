@@ -45,7 +45,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       owner: actualUser!.name,
       message: data.description,
     });
-    fetchComments();
+    fetchComments(); /** todo: once post-get-paging is merged, update the post itself instead of re-fetching the comments */
   };
 
   return (
