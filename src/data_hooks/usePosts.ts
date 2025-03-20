@@ -41,6 +41,16 @@ const usePosts = () => {
     return () => cancel(); // Cleanup on unmount, important because of strict mode in development (which calls fetchPosts twice)
   }, []);
 
+  const updatePost = (updatedPost: Post) => {
+    setPosts((prev) => {
+      const index = prev.findIndex((post) => post._id === updatedPost._id);
+      if (index === -1) return prev;
+      const newPosts = [...prev];
+      newPosts[index] = updatedPost;
+      return newPosts;
+    });
+  };
+
   return {
     posts,
     setPosts,
@@ -50,6 +60,7 @@ const usePosts = () => {
     loadNextPage,
     hasMore,
     fetchPosts: fetchPosts,
+    updatePost,
   };
 };
 

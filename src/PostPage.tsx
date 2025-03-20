@@ -19,7 +19,7 @@ export type UserToDisplayProps = {
 };
 
 export default function PostPage(props: PostPageProps) {
-  const { posts, loadNextPage, isLoading, hasMore } = usePosts();
+  const { posts, loadNextPage, isLoading, hasMore, updatePost } = usePosts();
   const { actualUser } = useActualUser();
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
@@ -27,8 +27,9 @@ export default function PostPage(props: PostPageProps) {
   );
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
 
-  const handlePostEdit = () => {
+  const handlePostEdit = (updatedPost: Post) => {
     setPostToEdit(null);
+    updatePost(updatedPost);
   };
 
   return postToShowComments === null && postToEdit === null ? (
@@ -79,6 +80,8 @@ export default function PostPage(props: PostPageProps) {
       isCurrentUserPost={actualUser?._id === postToShowComments.owner}
     />
   ) : (
-    postToEdit && <PostCardForm post={postToEdit} hideForm={handlePostEdit} />
+    postToEdit && (
+      <PostCardForm post={postToEdit} handlePostUpdate={handlePostEdit} />
+    )
   );
 }

@@ -74,19 +74,6 @@ export default function PostCard(props: PostCardProps) {
           }
           onClick={() => setIsLiked((curr) => !curr)}
         />
-        {isActualUser && (
-          <GenericIconButton
-            title="add to favorites"
-            icon={
-              isLiked ? (
-                <FavoriteSelectedIcon style={{ color: "red" }} />
-              ) : (
-                <FavoriteUnselectedIcon />
-              )
-            }
-            onClick={() => setIsLiked((curr) => !curr)}
-          />
-        )}
         <GenericIconButton
           title="comments"
           icon={<CommentIcon />}

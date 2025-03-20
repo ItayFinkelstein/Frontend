@@ -15,7 +15,7 @@ import postService from "./http-connections/postService";
 
 type PostCardForm = {
   post?: Post;
-  hideForm?: () => void;
+  handlePostUpdate?: (post: Post) => void;
 };
 
 export default function PostCardForm(props: PostCardForm) {
@@ -49,11 +49,15 @@ export default function PostCardForm(props: PostCardForm) {
       title: data.title,
       message: data.description,
     };
-    postService.update(updatedPost);
-    props.hideForm?.(); // todo: when adding it, closing the form should be after receiving success from the server.
+    updatePost(updatedPost);
   };
 
   const [image, setImage] = useState(props.post?.image);
+
+  async function updatePost(updatedPost: Post) {
+    await postService.update(updatedPost);
+    props.handlePostUpdate?.(updatedPost);
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ minWidth: 400, maxWidth: 445 }}>
