@@ -8,4 +8,5 @@ export type Post = {
   image?: string;
   message: string;
   comments: Comment[];
+  likes: string[];
 };
