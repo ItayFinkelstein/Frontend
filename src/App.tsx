@@ -56,6 +56,10 @@ const AppContent: React.FC<{
 }> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterBy }) => {
   const locationRoute = useLocation();
 
+  const isAuthPage =
+    locationRoute.pathname === ENDPOINTS.LOGIN ||
+    locationRoute.pathname === ENDPOINTS.REGISTER;
+
   return (
     <div
       style={{
@@ -64,18 +68,17 @@ const AppContent: React.FC<{
         flexDirection: "column",
       }}
     >
-      {locationRoute.pathname !== ENDPOINTS.LOGIN &&
-        locationRoute.pathname !== ENDPOINTS.REGISTER && (
-          <div style={{ height: "5vh", flexShrink: 0 }}>
+      {!isAuthPage && (
+        <>
+          <div style={{ height: "5vh", flexShrink: 0, marginBottom: "2vh" }}>
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
               setUserToFilterBy={setUserToFilterBy}
             />
           </div>
-        )}
-      <div style={{ height: "10vh" }} />{" "}
-      {/* Add spacing between Navbar and MainContent */}
+        </>
+      )}
       <div style={{ flex: 1, overflowY: "auto" }}>
         <MainContent
           toggleTheme={toggleTheme}
