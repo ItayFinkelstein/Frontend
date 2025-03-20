@@ -70,15 +70,13 @@ const AppContent: React.FC<{
     >
       {!isAuthPage && (
         <>
-          <div style={{ height: "5vh", flexShrink: 0 }}>
+          <div style={{ height: "5vh", flexShrink: 0, marginBottom: "2vh" }}>
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
               setUserToFilterBy={setUserToFilterBy}
             />
           </div>
-          <div style={{ height: "2vh" }} />{" "}
-          {/* Add spacing between Navbar and MainContent */}
         </>
       )}
       <div style={{ flex: 1, overflowY: "auto" }}>
