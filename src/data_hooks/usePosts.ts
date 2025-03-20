@@ -7,7 +7,7 @@ const usePosts = () => {
   const [error, setError] = useState<Error | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
 
   const fetchPosts = (page: number) => {
     setIsLoading(true);
@@ -17,7 +17,7 @@ const usePosts = () => {
         if (res.data.posts.length !== 0) {
           setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
         }
-        setHasMore(res.data.hasNextPage);
+        setHasMorePosts(res.data.hasNextPage);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -30,7 +30,7 @@ const usePosts = () => {
   };
 
   const loadNextPage = () => {
-    if (hasMore && !isLoading) {
+    if (hasMorePosts && !isLoading) {
       fetchPosts(currentPage + 1);
       setCurrentPage((prevPage) => prevPage + 1);
     }
@@ -58,7 +58,7 @@ const usePosts = () => {
     setError,
     isLoading,
     loadNextPage,
-    hasMore,
+    hasMorePosts,
     fetchPosts: fetchPosts,
     updatePost,
   };

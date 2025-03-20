@@ -6,7 +6,6 @@ import PostCardForm from "./PostCardForm";
 import { User } from "./types/User";
 import UserData from "./UserData";
 import usePosts from "./data_hooks/usePosts";
-import { IconButton } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Autorenew";
 import useActualUser from "./useActualUser";
 import { GenericIconButton } from "./GenericIconButton";
@@ -19,7 +18,8 @@ export type UserToDisplayProps = {
 };
 
 export default function PostPage(props: PostPageProps) {
-  const { posts, loadNextPage, isLoading, hasMore, updatePost } = usePosts();
+  const { posts, loadNextPage, isLoading, hasMorePosts, updatePost } =
+    usePosts();
   const { actualUser } = useActualUser();
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
@@ -62,7 +62,7 @@ export default function PostPage(props: PostPageProps) {
             />
           );
         })}
-      {hasMore && (
+      {hasMorePosts && (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <GenericIconButton
             title="load more posts"
