@@ -7,8 +7,8 @@ import { GOOGLE_CLIENT_ID } from "./config.ts";
 
 createRoot(document.getElementById("root")!).render(
   <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
-    <StrictMode>
-      <App />
-    </StrictMode>
+    {/* <StrictMode> */}
+    <App />
+    {/* </StrictMode> */}
   </GoogleOAuthProvider>
 );

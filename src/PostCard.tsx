@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -23,43 +24,49 @@ type PostCardProps = {
   post: Post;
   showPostComments: () => void;
   editPost: () => void;
-  setUser: (newUser: User) => void;
   isClickableIcon?: boolean;
+  setUserToFilterBy: (user: User | undefined) => void;
 };
 
-export default function PostCard(props: PostCardProps) {
+const PostCard: React.FC<PostCardProps> = ({
+  post,
+  showPostComments,
+  editPost,
+  isClickableIcon,
+  setUserToFilterBy,
+}) => {
   const [isLiked, setIsLiked] = useState(false);
   const users = useUsers().users;
   const { actualUser } = useActualUser();
   const isActualUser =
-    actualUser !== undefined && props.post.owner === actualUser._id;
+    actualUser !== undefined && post.owner === actualUser._id;
 
-  const user: User = users.find(
-    (userToCheck: User) => userToCheck._id === props.post.owner
-  )!;
+  const user: User | undefined = users.find(
+    (userToCheck: User) => userToCheck._id === post.owner
+  );
 
   return (
     <Card sx={{ width: 440 }}>
       <CardHeader
-        title={props.post.title}
-        subheader={getDateAsString(props.post.publishDate)}
+        title={post.title}
+        subheader={getDateAsString(post.publishDate)}
         avatar={
           <UserIcon
-            user={user}
+            user={user!} // Ensure the user object is passed to UserIcon
             onClick={
-              props.isClickableIcon !== false
-                ? () => props.setUser(user)
+              isClickableIcon !== false
+                ? () => setUserToFilterBy(user!)
                 : undefined
             }
           />
         }
       />
-      {props.post.image && (
-        <CardMedia component="img" height="194" image={props.post.image} />
+      {post.image && (
+        <CardMedia component="img" height="194" image={post.image} />
       )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {props.post.message}
+          {post.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -77,21 +84,21 @@ export default function PostCard(props: PostCardProps) {
         <GenericIconButton
           title="comments"
           icon={<CommentIcon />}
-          onClick={props.showPostComments}
+          onClick={showPostComments}
         />
         {isActualUser && (
           <>
             <GenericIconButton
               title="Edit post"
               icon={<EditIcon />}
-              onClick={props.editPost}
+              onClick={editPost}
             />
             <GenericIconButton
               title="Delete post"
               icon={<DeleteIcon />}
               onClick={() => {
-                postService.delete(props.post._id);
-                console.log("post " + props.post.title + " was deleted");
+                postService.delete(post._id);
+                console.log("post " + post.title + " was deleted");
               }}
             />
           </>
@@ -99,4 +106,6 @@ export default function PostCard(props: PostCardProps) {
       </CardActions>
     </Card>
   );
-}
+};
+
+export default PostCard;

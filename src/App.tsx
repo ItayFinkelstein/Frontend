@@ -16,86 +16,115 @@ import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
-import usePosts from "./data_hooks/usePosts";
 import postService, { CanceledError } from "./http-connections/postService";
 import { Post } from "./types/Post";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const fetchUserPosts = usePosts().loadNextUserPostsPage;
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasMorePosts, setHasMorePosts] = useState(true);
-  const [page, setPage] = useState(1);
+  // General posts state
   const [posts, setPosts] = useState<Post[]>([]);
+  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [pagePosts, setPagePosts] = useState(1);
 
+  // User-specific posts state
+  const [userPosts, setUserPosts] = useState<Post[]>([]);
+  const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(true);
+  const [hasMoreUserPosts, setHasMoreUserPosts] = useState(true);
+  const [pageUserPosts, setPageUserPosts] = useState(1);
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
 
-  const fetchData = (pageNumber: number) => {
-    setIsLoading(true);
-    console.log("paging", pageNumber);
+  // Fetch general posts
+  const fetchPosts = (
+    pageNumber: number,
+    clearPreviousData: boolean = false
+  ) => {
+    setIsLoadingPosts(true);
     const { response, cancel } = postService.getWithPaging(pageNumber);
     response
       .then((res) => {
-        console.log("res", res);
-        setPage((prevPage) => prevPage + 1);
-        setPosts((prev) => [...prev, ...res.data.posts]);
-        // const newPosts = res.data.posts;
-
-        // // Handle clearPreviousData explicitly
-        // // if (false) {
-        // //   return [...newPosts]; // Hard reset
-        // // } else {
-        // return [...prev, ...newPosts]; // Append to existing posts
-        // }
-        //});
+        setPosts((prev) => {
+          const newPosts = res.data.posts;
+          return clearPreviousData ? [...newPosts] : [...prev, ...newPosts];
+        });
         setHasMorePosts(res.data.hasNextPage);
-
-        setIsLoading(false);
+        setPagePosts((prevPage) => prevPage + 1);
+        setIsLoadingPosts(false);
       })
       .catch((err) => {
-        setIsLoading(false);
+        setIsLoadingPosts(false);
         if (err instanceof CanceledError) return;
         console.warn(err);
-        //setError(err);
       });
 
     return () => cancel();
   };
 
-  useEffect(() => {
-    console.log("fetching data");
-    fetchData(page);
-  }, [postService]);
+  // Fetch user-specific posts
+  const fetchUserPosts = (
+    pageNumber: number,
+    userId: string,
+    clearPreviousData: boolean = false
+  ) => {
+    setIsLoadingUserPosts(true);
+    const { response, cancel } = postService.getWithPaging(pageNumber, userId);
+    response
+      .then((res) => {
+        setUserPosts((prev) => {
+          const newPosts = res.data.posts;
+          return clearPreviousData ? [...newPosts] : [...prev, ...newPosts];
+        });
+        setHasMoreUserPosts(res.data.hasNextPage);
+        setPageUserPosts((prevPage) => prevPage + 1);
+        setIsLoadingUserPosts(false);
+      })
+      .catch((err) => {
+        setIsLoadingUserPosts(false);
+        if (err instanceof CanceledError) return;
+        console.warn(err);
+      });
 
-  useEffect(() => {
-    console.log("posts from app", posts);
-  }, [posts]);
+    return () => cancel();
+  };
 
-  function setUserToFilterByFunc(newUser: User | undefined) {
-    // console.log("****************");
-    // console.trace("set user", newUser);
-    // console.log("userToFilterBy", userToFilterBy);
-    // console.log("****************");
+  // Handle user filter change
+  const setUserToFilterByFunc = (newUser: User | undefined) => {
     if (newUser !== undefined && newUser._id !== userToFilterBy?._id) {
-      console.log("CONDITION", newUser._id);
-      fetchData(page);
+      setUserToFilterBy(newUser);
+      setPageUserPosts(1);
+      setUserPosts([]);
+      if (newUser._id) {
+        fetchUserPosts(1, newUser._id, true);
+      }
+    } else if (newUser === undefined && userToFilterBy !== undefined) {
+      setUserToFilterBy(undefined);
     }
-    console.log("REACHED HERE");
-    // console.log("user state", userPostsState.posts);
-    setUserToFilterBy(newUser);
-  }
+  };
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
   };
 
   useEffect(() => {
-    document.body.classList.toggle("dark-mode", isDarkMode);
-    document.body.classList.toggle("light-mode", !isDarkMode);
-  }, [isDarkMode]);
+    fetchPosts(pagePosts);
+  }, []);
+
+  // useEffect(() => {
+  //   if (userToFilterBy) {
+  //     fetchUserPosts(pageUserPosts, userToFilterBy._id);
+  //   }
+  // }, [userToFilterBy]);
+
+  useEffect(() => {
+    console.log("Posts updated:", posts);
+  }, [posts]);
+
+  useEffect(() => {
+    console.log("User Posts updated:", userPosts);
+  }, [userPosts]);
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
@@ -106,9 +135,14 @@ const App: React.FC = () => {
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
           setUserToFilterByFunc={setUserToFilterByFunc}
-          fetchData={() => fetchData(page)}
           posts={posts}
           hasMorePosts={hasMorePosts}
+          fetchPosts={() => fetchPosts(pagePosts)}
+          userPosts={userPosts}
+          hasMoreUserPosts={hasMoreUserPosts}
+          fetchUserPosts={() =>
+            userToFilterBy && fetchUserPosts(pageUserPosts, userToFilterBy._id)
+          }
         />
       </Router>
     </ThemeProvider>
@@ -122,7 +156,10 @@ const AppContent: React.FC<{
   userToFilterBy: User | undefined;
   posts: Post[];
   hasMorePosts: boolean;
-  fetchData: () => void;
+  fetchPosts: () => void;
+  userPosts: Post[];
+  hasMoreUserPosts: boolean;
+  fetchUserPosts: () => void;
 }> = ({
   toggleTheme,
   isDarkMode,
@@ -130,7 +167,10 @@ const AppContent: React.FC<{
   setUserToFilterByFunc,
   posts,
   hasMorePosts,
-  fetchData,
+  fetchPosts,
+  userPosts,
+  hasMoreUserPosts,
+  fetchUserPosts,
 }) => {
   const locationRoute = useLocation();
 
@@ -152,8 +192,7 @@ const AppContent: React.FC<{
             />
           </div>
         )}
-      <div style={{ height: "10vh" }} />{" "}
-      {/* Add spacing between Navbar and MainContent */}
+      <div style={{ height: "10vh" }} />
       <div style={{ flex: 1, overflowY: "auto" }}>
         <MainContent
           toggleTheme={toggleTheme}
@@ -162,7 +201,10 @@ const AppContent: React.FC<{
           setUserToFilterByFunc={setUserToFilterByFunc}
           posts={posts}
           hasMorePosts={hasMorePosts}
-          fetchData={fetchData}
+          fetchPosts={fetchPosts}
+          userPosts={userPosts}
+          hasMoreUserPosts={hasMoreUserPosts}
+          fetchUserPosts={fetchUserPosts}
         />
       </div>
     </div>
@@ -176,13 +218,19 @@ const MainContent: React.FC<{
   userToFilterBy: User | undefined;
   posts: Post[];
   hasMorePosts: boolean;
-  fetchData: () => void;
+  fetchPosts: () => void;
+  userPosts: Post[];
+  hasMoreUserPosts: boolean;
+  fetchUserPosts: () => void;
 }> = ({
   userToFilterBy,
   setUserToFilterByFunc,
   posts,
   hasMorePosts,
-  fetchData,
+  fetchPosts,
+  userPosts,
+  hasMoreUserPosts,
+  fetchUserPosts,
 }) => {
   return (
     <div
@@ -201,10 +249,13 @@ const MainContent: React.FC<{
             <ProtectedRoute>
               <UserPage
                 posts={posts}
+                hasMorePosts={hasMorePosts}
+                fetchPosts={fetchPosts}
+                userPosts={userPosts}
+                hasMoreUserPosts={hasMoreUserPosts}
+                fetchUserPosts={fetchUserPosts}
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterByFunc}
-                hasMorePosts={hasMorePosts}
-                fetchData={fetchData}
               />
             </ProtectedRoute>
           }
