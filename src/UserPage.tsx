@@ -13,6 +13,7 @@ type UserPageProps = {
   fetchUserPosts: () => void;
   userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
+  updatePost: (post: Post) => void;
 };
 
 const UserPage: React.FC<UserPageProps> = ({
@@ -24,6 +25,7 @@ const UserPage: React.FC<UserPageProps> = ({
   fetchUserPosts,
   userToFilterBy,
   setUserToFilterBy,
+  updatePost,
 }) => {
   return (
     <Box>
@@ -36,6 +38,7 @@ const UserPage: React.FC<UserPageProps> = ({
         fetchUserPosts={fetchUserPosts}
         userToFilterBy={userToFilterBy}
         setUserToFilterBy={setUserToFilterBy}
+        updatePost={updatePost}
       />
     </Box>
   );

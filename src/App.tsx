@@ -22,22 +22,21 @@ import { Post } from "./types/Post";
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // General posts state
   const [posts, setPosts] = useState<Post[]>([]);
   const [isLoadingPosts, setIsLoadingPosts] = useState(true);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [pagePosts, setPagePosts] = useState(1);
 
-  // User-specific posts state
+  // User-specific
   const [userPosts, setUserPosts] = useState<Post[]>([]);
   const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(true);
   const [hasMoreUserPosts, setHasMoreUserPosts] = useState(true);
   const [pageUserPosts, setPageUserPosts] = useState(1);
+
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
 
-  // Fetch general posts
   const fetchPosts = (
     pageNumber: number,
     clearPreviousData: boolean = false
@@ -63,7 +62,6 @@ const App: React.FC = () => {
     return () => cancel();
   };
 
-  // Fetch user-specific posts
   const fetchUserPosts = (
     pageNumber: number,
     userId: string,
@@ -90,7 +88,6 @@ const App: React.FC = () => {
     return () => cancel();
   };
 
-  // Handle user filter change
   const setUserToFilterByFunc = (newUser: User | undefined) => {
     if (newUser !== undefined && newUser._id !== userToFilterBy?._id) {
       setUserToFilterBy(newUser);
@@ -112,12 +109,6 @@ const App: React.FC = () => {
     fetchPosts(pagePosts);
   }, []);
 
-  // useEffect(() => {
-  //   if (userToFilterBy) {
-  //     fetchUserPosts(pageUserPosts, userToFilterBy._id);
-  //   }
-  // }, [userToFilterBy]);
-
   useEffect(() => {
     console.log("Posts updated:", posts);
   }, [posts]);
@@ -125,6 +116,24 @@ const App: React.FC = () => {
   useEffect(() => {
     console.log("User Posts updated:", userPosts);
   }, [userPosts]);
+
+  const updatePostToArray = (
+    updatedPost: Post,
+    setPostsToEditComment: (value: React.SetStateAction<Post[]>) => void
+  ) => {
+    setPostsToEditComment((prevPosts) => {
+      const index = prevPosts.findIndex((post) => post._id === updatedPost._id);
+      if (index === -1) return prevPosts;
+      const newPosts = [...prevPosts];
+      newPosts[index] = updatedPost;
+      return newPosts;
+    });
+  };
+
+  const updatePost = (updatedPost: Post) => {
+    updatePostToArray(updatedPost, setPosts);
+    updatePostToArray(updatedPost, setUserPosts);
+  };
 
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
@@ -143,6 +152,7 @@ const App: React.FC = () => {
           fetchUserPosts={() =>
             userToFilterBy && fetchUserPosts(pageUserPosts, userToFilterBy._id)
           }
+          updatePost={updatePost}
         />
       </Router>
     </ThemeProvider>
@@ -160,6 +170,7 @@ const AppContent: React.FC<{
   userPosts: Post[];
   hasMoreUserPosts: boolean;
   fetchUserPosts: () => void;
+  updatePost: (post: Post) => void;
 }> = ({
   toggleTheme,
   isDarkMode,
@@ -171,6 +182,7 @@ const AppContent: React.FC<{
   userPosts,
   hasMoreUserPosts,
   fetchUserPosts,
+  updatePost,
 }) => {
   const locationRoute = useLocation();
 
@@ -205,6 +217,7 @@ const AppContent: React.FC<{
           userPosts={userPosts}
           hasMoreUserPosts={hasMoreUserPosts}
           fetchUserPosts={fetchUserPosts}
+          updatePost={updatePost}
         />
       </div>
     </div>
@@ -222,6 +235,7 @@ const MainContent: React.FC<{
   userPosts: Post[];
   hasMoreUserPosts: boolean;
   fetchUserPosts: () => void;
+  updatePost: (post: Post) => void;
 }> = ({
   userToFilterBy,
   setUserToFilterByFunc,
@@ -231,6 +245,7 @@ const MainContent: React.FC<{
   userPosts,
   hasMoreUserPosts,
   fetchUserPosts,
+  updatePost,
 }) => {
   return (
     <div
@@ -256,6 +271,7 @@ const MainContent: React.FC<{
                 fetchUserPosts={fetchUserPosts}
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterByFunc}
+                updatePost={updatePost}
               />
             </ProtectedRoute>
           }
