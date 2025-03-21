@@ -10,7 +10,7 @@ import FavoriteSelectedIcon from "@mui/icons-material/Favorite";
 import FavoriteUnselectedIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "./types/User";
 import { Post } from "./types/Post";
 import UserIcon from "./UserIcon";
@@ -19,6 +19,8 @@ import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
 import postService from "./http-connections/postService";
 import useActualUser from "./useActualUser";
+import usePosts from "./data_hooks/usePosts";
+import classes from "./PostCard.module.css";
 
 type PostCardProps = {
   post: Post;
@@ -36,17 +38,26 @@ const PostCard: React.FC<PostCardProps> = ({
   setUserToFilterBy,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
+};
+
+export default function PostCard(props: PostCardProps) {
   const users = useUsers().users;
+  const { serverRequest } = usePosts();
   const { actualUser } = useActualUser();
   const isActualUser =
-    actualUser !== undefined && post.owner === actualUser._id;
+    actualUser !== undefined && props.post.owner === actualUser._id;
+  const [isLiked, setIsLiked] = useState(false);
+
+  useEffect(() => {
+    setIsLiked(props.post.likes.some((like) => like === actualUser?._id));
+  }, [actualUser, props.post]);
 
   const user: User | undefined = users.find(
     (userToCheck: User) => userToCheck._id === post.owner
   );
 
   return (
-    <Card sx={{ width: 440 }}>
+    <Card sx={{ width: "30vw" }}>
       <CardHeader
         title={post.title}
         subheader={getDateAsString(post.publishDate)}
@@ -73,19 +84,46 @@ const PostCard: React.FC<PostCardProps> = ({
         <GenericIconButton
           title="like this post"
           icon={
-            isLiked ? (
-              <FavoriteSelectedIcon style={{ color: "red" }} />
-            ) : (
-              <FavoriteUnselectedIcon />
-            )
+            <div className={classes.iconNumber}>
+              {isLiked ? (
+                <FavoriteSelectedIcon style={{ color: "red" }} />
+              ) : (
+                <FavoriteUnselectedIcon />
+              )}
+              {props.post.likes.length}
+            </div>
           }
-          onClick={() => setIsLiked((curr) => !curr)}
+          onClick={() => {
+            if (actualUser !== undefined) {
+              const updatedPost = {
+                ...props.post,
+                likes: isLiked
+                  ? props.post.likes.filter((like) => like !== actualUser._id)
+                  : [...props.post.likes, actualUser._id],
+              };
+              serverRequest(
+                () => {
+                  return postService.update(updatedPost);
+                },
+                () => {
+                  setIsLiked((curr) => !curr);
+                  /** todo: once post-get-paging gets merged, update the user in users list */
+                }
+              );
+            }
+          }}
         />
         <GenericIconButton
           title="comments"
-          icon={<CommentIcon />}
-          onClick={showPostComments}
+          icon={
+            <div className={classes.iconNumber}>
+              <CommentIcon />
+              {props.post.commentAmount}
+            </div>
+          }
+          onClick={props.showPostComments}
         />
+
         {isActualUser && (
           <>
             <GenericIconButton
@@ -107,6 +145,6 @@ const PostCard: React.FC<PostCardProps> = ({
       </CardActions>
     </Card>
   );
-};
+}
 
 export default PostCard;

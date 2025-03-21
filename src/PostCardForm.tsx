@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Card from "@mui/material/Card/Card";
 import { Post } from "./types/Post";
 import CardHeader from "@mui/material/CardHeader/CardHeader";
@@ -8,14 +9,15 @@ import { Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ImageIcon from "@mui/icons-material/Image";
-import { useState } from "react";
 import ValidatedTextField from "./ValidatedTextField";
 import { GenericIconButton } from "./GenericIconButton";
 import postService from "./http-connections/postService";
+import EnhanceCaption from "./EnhanceCaption";
 
 type PostCardForm = {
   post?: Post;
   handlePostUpdate?: (post: Post) => void;
+  onUpdate?: (updatedPost: Post) => void;
 };
 
 export default function PostCardForm(props: PostCardForm) {
@@ -34,6 +36,8 @@ export default function PostCardForm(props: PostCardForm) {
     register,
     handleSubmit,
     formState: { errors },
+    getValues,
+    setValue,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -42,8 +46,9 @@ export default function PostCardForm(props: PostCardForm) {
     },
   });
 
-  const onSubmit = (data: any) => {
-    // todo: handle adding a new post
+  const [image, setImage] = useState(props.post?.image);
+
+  const onSubmit = async (data: any) => {
     const updatedPost = {
       ...props.post!,
       title: data.title,
@@ -60,7 +65,7 @@ export default function PostCardForm(props: PostCardForm) {
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={{ minWidth: 400, maxWidth: 445 }}>
+      <Card sx={{ width: "30vw" }}>
         <CardHeader
           title={
             <ValidatedTextField
@@ -92,7 +97,12 @@ export default function PostCardForm(props: PostCardForm) {
             error={errors.description}
             defaultValue={props.post?.message}
           />
-          <Button type="submit" variant="contained" fullWidth>
+          <EnhanceCaption
+            currentDescription={getValues("description")}
+            setValue={setValue}
+            fieldToUpdate="description"
+          />
+          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
             Submit
           </Button>
         </CardContent>

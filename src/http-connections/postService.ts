@@ -1,12 +1,13 @@
 import { Post } from "../types/Post";
 import apiClient from "./apiClient";
 import { CanceledError, HttpService } from "./httpService";
+import { ENDPOINTS } from "../endpoints";
 
 export { CanceledError };
 
 class PostService extends HttpService<Post> {
   constructor() {
-    super("/post");
+    super(ENDPOINTS.POST);
   }
   getWithPaging(page: number, userId?: string) {
     console.trace("getWithPaging called", page);

@@ -186,6 +186,10 @@ const AppContent: React.FC<{
 }) => {
   const locationRoute = useLocation();
 
+  const isAuthPage =
+    locationRoute.pathname === ENDPOINTS.LOGIN ||
+    locationRoute.pathname === ENDPOINTS.REGISTER;
+
   return (
     <div
       style={{
@@ -194,17 +198,22 @@ const AppContent: React.FC<{
         flexDirection: "column",
       }}
     >
-      {locationRoute.pathname !== ENDPOINTS.LOGIN &&
-        locationRoute.pathname !== ENDPOINTS.REGISTER && (
-          <div style={{ height: "5vh", flexShrink: 0 }}>
+      {!isAuthPage && (
+        <>
+          <div style={{ height: "5vh", flexShrink: 0, marginBottom: "2vh" }}>
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
               setUserToFilterBy={setUserToFilterByFunc}
             />
           </div>
+<<<<<<< HEAD
         )}
       <div style={{ height: "10vh" }} />
+=======
+        </>
+      )}
+>>>>>>> 937a527bf5a347e2cbc4f41cba1c9f05d7e4b428
       <div style={{ flex: 1, overflowY: "auto" }}>
         <MainContent
           toggleTheme={toggleTheme}

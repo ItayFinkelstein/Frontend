@@ -4,6 +4,7 @@ import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardContent from "@mui/material/CardContent/CardContent";
 import Typography from "@mui/material/Typography/Typography";
 import Box from "@mui/material/Box/Box";
+import Paper from "@mui/material/Paper/Paper";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -45,20 +46,17 @@ export default function CommentsPage(props: CommentsPageProps) {
       owner: actualUser!.name,
       message: data.description,
     });
-    fetchComments();
+    fetchComments(); /** todo: once post-get-paging is merged, update the post itself instead of re-fetching the comments */
   };
 
   return (
-    <Box
-      sx={{
-        gap: "10px",
-        boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
-        width: "90vw",
-        borderRadius: 2,
-      }}
-    >
-      <h2 className={classes.header}>Comments of post: {props.post.title}</h2>
-      <h2 className={classes.header}>Comment Amount: {comments.length}</h2>
+    <Paper elevation={3} sx={{ padding: 2, margin: 2 }}>
+      <Typography variant="h5" className={classes.header}>
+        Comments of post: {props.post.title}
+      </Typography>
+      <Typography variant="h6" className={classes.header}>
+        Comment Amount: {comments.length}
+      </Typography>
       <GenericIconButton
         title="Close comments"
         icon={<KeyboardReturnIcon />}
@@ -67,7 +65,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       <Box className={classes.commentsContainer}>
         {!props.isCurrentUserPost && actualUser !== undefined && (
           <form onSubmit={handleSubmit(onSubmit)}>
-            <Card sx={{ width: 500 }}>
+            <Card sx={{ width: "100%", marginBottom: 2 }}>
               <CardContent>
                 <ValidatedTextField
                   name="description"
@@ -84,7 +82,7 @@ export default function CommentsPage(props: CommentsPageProps) {
         )}
         {comments.map((comment) => {
           return (
-            <Card sx={{ width: 500 }} key={comment._id}>
+            <Card sx={{ width: "100%", marginBottom: 2 }} key={comment._id}>
               <CardHeader
                 title={comment.owner}
                 subheader={comment.publishDate}
@@ -98,6 +96,6 @@ export default function CommentsPage(props: CommentsPageProps) {
           );
         })}
       </Box>
-    </Box>
+    </Paper>
   );
 }
