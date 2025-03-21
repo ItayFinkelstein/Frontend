@@ -3,7 +3,6 @@ import UserIcon from "./UserIcon";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Send";
-import { UserToDisplayProps } from "./PostPage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,6 +10,12 @@ import ValidatedTextField from "./ValidatedTextField";
 import { useState } from "react";
 import { GenericIconButton } from "./GenericIconButton";
 import userService from "./http-connections/userService";
+import { User } from "./types/User";
+
+export interface UserToDisplayProps {
+  userToDisplay: User;
+  setUserToDisplay: (user: User | undefined) => void;
+}
 
 export default function UserData(
   props: Required<UserToDisplayProps> & { isActualUser: boolean }

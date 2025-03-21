@@ -23,13 +23,13 @@ const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   const [posts, setPosts] = useState<Post[]>([]);
-  const [isLoadingPosts, setIsLoadingPosts] = useState(true);
+  const [, setIsLoadingPosts] = useState(true);
   const [hasMorePosts, setHasMorePosts] = useState(true);
   const [pagePosts, setPagePosts] = useState(1);
 
   // User-specific
   const [userPosts, setUserPosts] = useState<Post[]>([]);
-  const [isLoadingUserPosts, setIsLoadingUserPosts] = useState(true);
+  const [, setIsLoadingUserPosts] = useState(true);
   const [hasMoreUserPosts, setHasMoreUserPosts] = useState(true);
   const [pageUserPosts, setPageUserPosts] = useState(1);
 
@@ -108,14 +108,6 @@ const App: React.FC = () => {
   useEffect(() => {
     fetchPosts(pagePosts);
   }, []);
-
-  useEffect(() => {
-    console.log("Posts updated:", posts);
-  }, [posts]);
-
-  useEffect(() => {
-    console.log("User Posts updated:", userPosts);
-  }, [userPosts]);
 
   const updatePostToArray = (
     updatedPost: Post,
@@ -207,13 +199,9 @@ const AppContent: React.FC<{
               setUserToFilterBy={setUserToFilterByFunc}
             />
           </div>
-<<<<<<< HEAD
-        )}
-      <div style={{ height: "10vh" }} />
-=======
+          <div style={{ height: "10vh" }} />
         </>
       )}
->>>>>>> 937a527bf5a347e2cbc4f41cba1c9f05d7e4b428
       <div style={{ flex: 1, overflowY: "auto" }}>
         <MainContent
           toggleTheme={toggleTheme}

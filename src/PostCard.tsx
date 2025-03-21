@@ -19,8 +19,8 @@ import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
 import postService from "./http-connections/postService";
 import useActualUser from "./useActualUser";
-import usePosts from "./data_hooks/usePosts";
 import classes from "./PostCard.module.css";
+import usePosts from "./data_hooks/usePosts";
 
 type PostCardProps = {
   post: Post;
@@ -30,54 +30,44 @@ type PostCardProps = {
   setUserToFilterBy: (user: User | undefined) => void;
 };
 
-const PostCard: React.FC<PostCardProps> = ({
-  post,
-  showPostComments,
-  editPost,
-  isClickableIcon,
-  setUserToFilterBy,
-}) => {
+const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
-};
-
-export default function PostCard(props: PostCardProps) {
-  const users = useUsers().users;
   const { serverRequest } = usePosts();
+  const users = useUsers().users;
   const { actualUser } = useActualUser();
   const isActualUser =
     actualUser !== undefined && props.post.owner === actualUser._id;
-  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     setIsLiked(props.post.likes.some((like) => like === actualUser?._id));
   }, [actualUser, props.post]);
 
   const user: User | undefined = users.find(
-    (userToCheck: User) => userToCheck._id === post.owner
+    (userToCheck: User) => userToCheck._id === props.post.owner
   );
 
   return (
     <Card sx={{ width: "30vw" }}>
       <CardHeader
-        title={post.title}
-        subheader={getDateAsString(post.publishDate)}
+        title={props.post.title}
+        subheader={getDateAsString(props.post.publishDate)}
         avatar={
           <UserIcon
             user={user!} // Ensure the user object is passed to UserIcon
             onClick={
-              isClickableIcon !== false
-                ? () => setUserToFilterBy(user!)
+              props.isClickableIcon !== false
+                ? () => props.setUserToFilterBy(user!)
                 : undefined
             }
           />
         }
       />
-      {post.image && (
-        <CardMedia component="img" height="194" image={post.image} />
+      {props.post.image && (
+        <CardMedia component="img" height="194" image={props.post.image} />
       )}
       <CardContent>
         <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {post.message}
+          {props.post.message}
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
@@ -129,15 +119,15 @@ export default function PostCard(props: PostCardProps) {
             <GenericIconButton
               title="Edit post"
               icon={<EditIcon />}
-              onClick={editPost}
+              onClick={props.editPost}
             />
             <GenericIconButton
               title="Delete post"
               icon={<DeleteIcon />}
               onClick={() => {
-                postService.delete(post._id);
+                postService.delete(props.post._id);
                 /** todo: fix in next PR */
-                console.log("post " + post.title + " was deleted");
+                console.log("post " + props.post.title + " was deleted");
               }}
             />
           </>
@@ -145,6 +135,6 @@ export default function PostCard(props: PostCardProps) {
       </CardActions>
     </Card>
   );
-}
+};
 
 export default PostCard;

@@ -57,8 +57,6 @@ export default function PostCardForm(props: PostCardForm) {
     updatePost(updatedPost);
   };
 
-  const [image, setImage] = useState(props.post?.image);
-
   async function updatePost(updatedPost: Post) {
     await postService.update(updatedPost);
     props.handlePostUpdate?.(updatedPost);
