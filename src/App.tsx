@@ -17,23 +17,71 @@ import UserPage from "./UserPage";
 import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
 import usePosts from "./data_hooks/usePosts";
+import postService, { CanceledError } from "./http-connections/postService";
+import { Post } from "./types/Post";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const fetchUserPosts = usePosts().loadNextUserPostsPage;
 
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasMorePosts, setHasMorePosts] = useState(true);
+  const [page, setPage] = useState(1);
+  const [posts, setPosts] = useState<Post[]>([]);
+
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
 
+  const fetchData = (pageNumber: number) => {
+    setIsLoading(true);
+    console.log("paging", pageNumber);
+    const { response, cancel } = postService.getWithPaging(pageNumber);
+    response
+      .then((res) => {
+        console.log("res", res);
+        setPage((prevPage) => prevPage + 1);
+        setPosts((prev) => [...prev, ...res.data.posts]);
+        // const newPosts = res.data.posts;
+
+        // // Handle clearPreviousData explicitly
+        // // if (false) {
+        // //   return [...newPosts]; // Hard reset
+        // // } else {
+        // return [...prev, ...newPosts]; // Append to existing posts
+        // }
+        //});
+        setHasMorePosts(res.data.hasNextPage);
+
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+        if (err instanceof CanceledError) return;
+        console.warn(err);
+        //setError(err);
+      });
+
+    return () => cancel();
+  };
+
+  useEffect(() => {
+    console.log("fetching data");
+    fetchData(page);
+  }, [postService]);
+
+  useEffect(() => {
+    console.log("posts from app", posts);
+  }, [posts]);
+
   function setUserToFilterByFunc(newUser: User | undefined) {
-    console.log("****************");
-    console.trace("set user", newUser);
-    console.log("userToFilterBy", userToFilterBy);
-    console.log("****************");
+    // console.log("****************");
+    // console.trace("set user", newUser);
+    // console.log("userToFilterBy", userToFilterBy);
+    // console.log("****************");
     if (newUser !== undefined && newUser._id !== userToFilterBy?._id) {
       console.log("CONDITION", newUser._id);
-      fetchUserPosts(newUser._id);
+      fetchData(page);
     }
     console.log("REACHED HERE");
     // console.log("user state", userPostsState.posts);
@@ -58,6 +106,9 @@ const App: React.FC = () => {
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
           setUserToFilterByFunc={setUserToFilterByFunc}
+          fetchData={() => fetchData(page)}
+          posts={posts}
+          hasMorePosts={hasMorePosts}
         />
       </Router>
     </ThemeProvider>
@@ -69,7 +120,18 @@ const AppContent: React.FC<{
   isDarkMode: boolean;
   setUserToFilterByFunc: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterByFunc }) => {
+  posts: Post[];
+  hasMorePosts: boolean;
+  fetchData: () => void;
+}> = ({
+  toggleTheme,
+  isDarkMode,
+  userToFilterBy,
+  setUserToFilterByFunc,
+  posts,
+  hasMorePosts,
+  fetchData,
+}) => {
   const locationRoute = useLocation();
 
   return (
@@ -98,6 +160,9 @@ const AppContent: React.FC<{
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
           setUserToFilterByFunc={setUserToFilterByFunc}
+          posts={posts}
+          hasMorePosts={hasMorePosts}
+          fetchData={fetchData}
         />
       </div>
     </div>
@@ -109,7 +174,16 @@ const MainContent: React.FC<{
   isDarkMode: boolean;
   setUserToFilterByFunc: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({ userToFilterBy, setUserToFilterByFunc }) => {
+  posts: Post[];
+  hasMorePosts: boolean;
+  fetchData: () => void;
+}> = ({
+  userToFilterBy,
+  setUserToFilterByFunc,
+  posts,
+  hasMorePosts,
+  fetchData,
+}) => {
   return (
     <div
       style={{
@@ -126,8 +200,11 @@ const MainContent: React.FC<{
           element={
             <ProtectedRoute>
               <UserPage
+                posts={posts}
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterByFunc}
+                hasMorePosts={hasMorePosts}
+                fetchData={fetchData}
               />
             </ProtectedRoute>
           }

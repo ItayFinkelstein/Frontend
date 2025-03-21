@@ -61,7 +61,7 @@ const usePosts = () => {
     setUserPostsLoading(true);
     setUserPosts((prev) => [...prev, ...prev]);
     setUserPosts([]);
-    const { response, cancel } = postService.getWithPaging(page, userId);
+    const { response, cancel } = postService.getAll();
     response
       .then((res) => {
         if (res.data.posts.length !== 0) {
@@ -94,7 +94,7 @@ const usePosts = () => {
   // Load next page for all posts
   const loadNextAllPostsPage = () => {
     if (hasMoreAllPosts && !allPostsLoading) {
-      fetchAllPosts(allPostsPage);
+      //fetchAllPosts(allPostsPage);
     }
   };
 
@@ -133,8 +133,8 @@ const usePosts = () => {
 
   // Fetch initial posts for all posts on mount
   useEffect(() => {
-    const cancel = fetchAllPosts(1);
-    return () => cancel();
+    //const cancel = fetchAllPosts(1);
+    //return () => cancel();
   }, []);
 
   return {

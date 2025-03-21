@@ -9,11 +9,12 @@ class PostService extends HttpService<Post> {
     super("/post");
   }
   getWithPaging(page: number, userId?: string) {
+    console.log("getWithPaging called", page);
     // console.trace("stack trace:");
     const controller = new AbortController();
     const response = apiClient.get(`${this.endpoint}/paging`, {
       signal: controller.signal,
-      params: { undefined, userId },
+      params: { page, userId },
     });
     return { response, cancel: () => controller.abort() };
   }
