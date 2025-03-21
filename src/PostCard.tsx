@@ -39,7 +39,7 @@ export default function PostCard(props: PostCardProps) {
   )!;
 
   return (
-    <Card sx={{ width: 440 }}>
+    <Card sx={{ width: "30vw" }}>
       <CardHeader
         title={props.post.title}
         subheader={getDateAsString(props.post.publishDate)}
@@ -74,19 +74,6 @@ export default function PostCard(props: PostCardProps) {
           }
           onClick={() => setIsLiked((curr) => !curr)}
         />
-        {isActualUser && (
-          <GenericIconButton
-            title="add to favorites"
-            icon={
-              isLiked ? (
-                <FavoriteSelectedIcon style={{ color: "red" }} />
-              ) : (
-                <FavoriteUnselectedIcon />
-              )
-            }
-            onClick={() => setIsLiked((curr) => !curr)}
-          />
-        )}
         <GenericIconButton
           title="comments"
           icon={<CommentIcon />}
