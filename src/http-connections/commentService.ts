@@ -1,12 +1,13 @@
 import { Comment } from "../types/Comment";
 import apiClient from "./apiClient";
 import { CanceledError, HttpService } from "./httpService";
+import { ENDPOINTS } from "../endpoints";
 
 export { CanceledError };
 
 class CommentService extends HttpService<Comment> {
   constructor() {
-    super("/comments");
+    super(ENDPOINTS.COMMENT);
   }
 
   getByPostId(postId: string) {
