@@ -34,6 +34,7 @@ export default function UserData(
 
   const onSubmit = (data: any) => {
     console.log("Edits name:", data);
+    /** todo: check in next PR if needs to be fixed */
     userService.update({ ...props.userToDisplay, name: data.name });
     setIsEditing(false);
   };

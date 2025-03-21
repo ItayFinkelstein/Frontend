@@ -41,10 +41,6 @@ const PostPage: React.FC<PostPageProps> = ({
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
   const { actualUser } = useActualUser();
 
-  useEffect(() => {
-    console.log("userToFilterBy changed:", userToFilterBy);
-  }, [userToFilterBy]);
-
   const handlePostEdit = (updatedPost: Post) => {
     setPostToEdit(null);
     updatePost(updatedPost);

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Post } from "../types/Post";
 import postService, { CanceledError } from "../http-connections/postService";
 
+/** todo: delete this entire file. Leaving it now for reference only, don't use it */
 const usePosts = () => {
   // State for all posts
   const [allPosts, setAllPosts] = useState<Post[]>([]);
@@ -65,17 +66,11 @@ const usePosts = () => {
     response
       .then((res) => {
         if (res.data.posts.length !== 0) {
-          console.log("Fetched user posts:", res.data.posts);
-          // setUserPosts((prevPosts) =>
-          //   clearPreviousDatas
-          //     ? [...res.data.posts]
-          //     : [...prevPosts, ...res.data.posts]
-          // );
           setUserPosts((prevPosts) => {
             const updatedPosts = clearPreviousData
-              ? [...res.data.posts] // Replace with new posts
-              : [...prevPosts, ...res.data.posts]; // Append new posts
-            return [...updatedPosts]; // Ensure a new reference is created
+              ? [...res.data.posts]
+              : [...prevPosts, ...res.data.posts];
+            return [...updatedPosts];
           });
         }
         setHasMoreUserPosts(res.data.hasNextPage);

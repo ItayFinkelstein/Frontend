@@ -98,6 +98,7 @@ const PostCard: React.FC<PostCardProps> = ({
               icon={<DeleteIcon />}
               onClick={() => {
                 postService.delete(post._id);
+                /** todo: fix in next PR */
                 console.log("post " + post.title + " was deleted");
               }}
             />
