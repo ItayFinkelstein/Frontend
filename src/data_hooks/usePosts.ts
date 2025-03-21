@@ -2,26 +2,37 @@ import { useState, useEffect } from "react";
 import { Post } from "../types/Post";
 import postService, { CanceledError } from "../http-connections/postService";
 
-const usePosts = () => {
+const createPostState = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [error, setError] = useState<Error | undefined>();
   const [isLoading, setIsLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [hasMorePosts, setHasMorePosts] = useState(true);
 
-  const fetchPosts = (page: number) => {
+  const fetchPosts = (
+    page: number,
+    userId?: string,
+    clearPreviousData?: boolean
+  ) => {
     setIsLoading(true);
-    const { response, cancel } = postService.getWithPaging(page);
+    // console.log("-------------------------");
+    // console.log("skip", currentPage);
+    const { response, cancel } = postService.getWithPaging(page, userId);
     response
       .then((res) => {
         if (res.data.posts.length !== 0) {
-          setPosts((prevPosts) => [...prevPosts, ...res.data.posts]);
+          setPosts((prevPosts) =>
+            clearPreviousData
+              ? [...res.data.posts]
+              : [...prevPosts, ...res.data.posts]
+          );
         }
-        setHasMorePosts(res.data.hasNextPage);
+        setHasMorePosts(clearPreviousData === true);
         setIsLoading(false);
+        setCurrentPage((prevPage) => (clearPreviousData ? 1 : prevPage + 1));
       })
       .catch((err) => {
-        if (err instanceof CanceledError) return; // A "good" error, it means something decides to cancel the fetch request.
+        if (err instanceof CanceledError) return;
         setError(err);
         setIsLoading(false);
       });
@@ -29,17 +40,11 @@ const usePosts = () => {
     return cancel;
   };
 
-  const loadNextPage = () => {
+  const loadNextPage = (userId?: string) => {
     if (hasMorePosts && !isLoading) {
-      fetchPosts(currentPage + 1);
-      setCurrentPage((prevPage) => prevPage + 1);
+      fetchPosts(currentPage + 1, userId);
     }
   };
-
-  useEffect(() => {
-    const cancel = fetchPosts(currentPage);
-    return () => cancel(); // Cleanup on unmount, important because of strict mode in development (which calls fetchPosts twice)
-  }, []);
 
   const updatePost = (updatedPost: Post) => {
     setPosts((prev) => {
@@ -59,8 +64,23 @@ const usePosts = () => {
     isLoading,
     loadNextPage,
     hasMorePosts,
-    fetchPosts: fetchPosts,
+    fetchPosts,
     updatePost,
+  };
+};
+
+const usePosts = () => {
+  const allPostsState = createPostState();
+  const userPostsState = createPostState();
+
+  useEffect(() => {
+    const cancel = allPostsState.fetchPosts(1);
+    return () => cancel();
+  }, []);
+
+  return {
+    allPostsState,
+    userPostsState,
   };
 };
 

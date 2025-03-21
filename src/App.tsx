@@ -16,13 +16,28 @@ import Navbar from "./Navbar";
 import UserPage from "./UserPage";
 import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
+import usePosts from "./data_hooks/usePosts";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const userPostsState = usePosts().userPostsState;
 
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
+
+  function setUserToFilterByFunc(newUser: User | undefined) {
+    console.log("****************");
+    console.trace("set user", newUser);
+    console.log("userToFilterBy", userToFilterBy);
+    console.log("****************");
+    if (newUser !== undefined && newUser._id !== userToFilterBy?._id) {
+      console.log("CONDITION", newUser._id);
+      userPostsState.fetchPosts(0, newUser._id, true);
+    }
+    console.log("user state", userPostsState.posts);
+    setUserToFilterBy(newUser);
+  }
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -41,7 +56,7 @@ const App: React.FC = () => {
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
-          setUserToFilterBy={setUserToFilterBy}
+          setUserToFilterByFunc={setUserToFilterByFunc}
         />
       </Router>
     </ThemeProvider>
@@ -51,9 +66,9 @@ const App: React.FC = () => {
 const AppContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  setUserToFilterBy: (user: User | undefined) => void;
+  setUserToFilterByFunc: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterBy }) => {
+}> = ({ toggleTheme, isDarkMode, userToFilterBy, setUserToFilterByFunc }) => {
   const locationRoute = useLocation();
 
   return (
@@ -70,7 +85,7 @@ const AppContent: React.FC<{
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
-              setUserToFilterBy={setUserToFilterBy}
+              setUserToFilterBy={setUserToFilterByFunc}
             />
           </div>
         )}
@@ -81,7 +96,7 @@ const AppContent: React.FC<{
           toggleTheme={toggleTheme}
           isDarkMode={isDarkMode}
           userToFilterBy={userToFilterBy}
-          setUserToFilterBy={setUserToFilterBy}
+          setUserToFilterByFunc={setUserToFilterByFunc}
         />
       </div>
     </div>
@@ -91,9 +106,9 @@ const AppContent: React.FC<{
 const MainContent: React.FC<{
   toggleTheme: () => void;
   isDarkMode: boolean;
-  setUserToFilterBy: (user: User | undefined) => void;
+  setUserToFilterByFunc: (user: User | undefined) => void;
   userToFilterBy: User | undefined;
-}> = ({ userToFilterBy, setUserToFilterBy }) => {
+}> = ({ userToFilterBy, setUserToFilterByFunc }) => {
   return (
     <div
       style={{
@@ -111,7 +126,7 @@ const MainContent: React.FC<{
             <ProtectedRoute>
               <UserPage
                 userToFilterBy={userToFilterBy}
-                setUserToFilterBy={setUserToFilterBy}
+                setUserToFilterBy={setUserToFilterByFunc}
               />
             </ProtectedRoute>
           }

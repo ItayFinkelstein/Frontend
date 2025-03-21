@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PostCard from "./PostCard";
 import { Post } from "./types/Post";
 import CommentsPage from "./CommentsPage";
@@ -18,9 +18,37 @@ export type UserToDisplayProps = {
 };
 
 export default function PostPage(props: PostPageProps) {
-  const { posts, loadNextPage, isLoading, hasMorePosts, updatePost } =
-    usePosts();
+  const { allPostsState, userPostsState } = usePosts();
   const { actualUser } = useActualUser();
+
+  /** decide how to initialize the constants based on whether to filter by user or not */
+  let { posts, loadNextPage, isLoading, hasMorePosts, updatePost } =
+    props.userToDisplay !== undefined
+      ? {
+          posts: userPostsState.posts,
+          loadNextPage: () =>
+            userPostsState.loadNextPage(props.userToDisplay!._id),
+          isLoading: userPostsState.isLoading,
+          hasMorePosts: userPostsState.hasMorePosts,
+          updatePost: userPostsState.updatePost,
+        }
+      : {
+          posts: allPostsState.posts,
+          loadNextPage: allPostsState.loadNextPage,
+          isLoading: allPostsState.isLoading,
+          hasMorePosts: allPostsState.hasMorePosts,
+          updatePost: allPostsState.updatePost,
+        };
+
+  useEffect(() => {
+    console.log("all state", allPostsState);
+    console.log("user state", userPostsState);
+  }, [
+    allPostsState,
+    userPostsState,
+    allPostsState.posts,
+    userPostsState.posts,
+  ]);
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
@@ -67,7 +95,7 @@ export default function PostPage(props: PostPageProps) {
           <GenericIconButton
             title="load more posts"
             icon={<RefreshIcon />}
-            onClick={loadNextPage}
+            onClick={() => loadNextPage(props.userToDisplay?._id)}
             disabled={isLoading}
           />
         </div>
