@@ -2,7 +2,7 @@ import Cookies from "js-cookie";
 import apiClient from "./apiClient";
 import { ENDPOINTS } from "../endpoints";
 
-const authPrefix: string = "/auth";
+const authPrefix: string = ENDPOINTS.AUTH;
 
 const login = async (email: string, password: string) => {
   const response = await apiClient.post(authPrefix + ENDPOINTS.LOGIN, {

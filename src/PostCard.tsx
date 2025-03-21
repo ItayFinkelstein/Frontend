@@ -46,7 +46,7 @@ export default function PostCard(props: PostCardProps) {
   )!;
 
   return (
-    <Card sx={{ width: 440 }}>
+    <Card sx={{ width: "30vw" }}>
       <CardHeader
         title={props.post.title}
         subheader={getDateAsString(props.post.publishDate)}
@@ -102,7 +102,6 @@ export default function PostCard(props: PostCardProps) {
             }
           }}
         />
-
         <GenericIconButton
           title="comments"
           icon={
