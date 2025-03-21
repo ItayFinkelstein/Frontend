@@ -16,29 +16,19 @@ type UserPageProps = {
   updatePost: (post: Post) => void;
 };
 
-const UserPage: React.FC<UserPageProps> = ({
-  posts,
-  hasMorePosts,
-  fetchPosts,
-  userPosts,
-  hasMoreUserPosts,
-  fetchUserPosts,
-  userToFilterBy,
-  setUserToFilterBy,
-  updatePost,
-}) => {
+const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
   return (
     <Box>
       <PostPage
-        posts={posts}
-        hasMorePosts={hasMorePosts}
-        fetchPosts={fetchPosts}
-        userPosts={userPosts}
-        hasMoreUserPosts={hasMoreUserPosts}
-        fetchUserPosts={fetchUserPosts}
-        userToFilterBy={userToFilterBy}
-        setUserToFilterBy={setUserToFilterBy}
-        updatePost={updatePost}
+        posts={props.posts}
+        hasMorePosts={props.hasMorePosts}
+        fetchPosts={props.fetchPosts}
+        userPosts={props.userPosts}
+        hasMoreUserPosts={props.hasMoreUserPosts}
+        fetchUserPosts={props.fetchUserPosts}
+        userToFilterBy={props.userToFilterBy}
+        setUserToFilterBy={props.setUserToFilterBy}
+        updatePost={props.updatePost}
       />
     </Box>
   );

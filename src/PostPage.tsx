@@ -21,20 +21,14 @@ type PostPageProps = {
   updatePost: (post: Post) => void;
 };
 
-const PostPage: React.FC<PostPageProps> = ({
-  posts,
-  hasMorePosts,
-  fetchPosts,
-  userPosts,
-  hasMoreUserPosts,
-  fetchUserPosts,
-  userToFilterBy,
-  setUserToFilterBy,
-  updatePost,
-}) => {
-  const displayedPosts = !!userToFilterBy ? userPosts : posts;
-  const hasMore = !!userToFilterBy ? hasMoreUserPosts : hasMorePosts;
-  const fetchMore = !!userToFilterBy ? fetchUserPosts : fetchPosts;
+const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
+  const displayedPosts = !!props.userToFilterBy ? props.userPosts : props.posts;
+  const hasMore = !!props.userToFilterBy
+    ? props.hasMoreUserPosts
+    : props.hasMorePosts;
+  const fetchMore = !!props.userToFilterBy
+    ? props.fetchUserPosts
+    : props.fetchPosts;
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
   );
@@ -43,17 +37,18 @@ const PostPage: React.FC<PostPageProps> = ({
 
   const handlePostEdit = (updatedPost: Post) => {
     setPostToEdit(null);
-    updatePost(updatedPost);
+    props.updatePost(updatedPost);
   };
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-      {userToFilterBy && (
+      {props.userToFilterBy && (
         <UserData
-          userToDisplay={userToFilterBy}
-          setUserToDisplay={setUserToFilterBy}
+          userToDisplay={props.userToFilterBy}
+          setUserToDisplay={props.setUserToFilterBy}
           isActualUser={
-            actualUser !== undefined && actualUser._id === userToFilterBy._id
+            actualUser !== undefined &&
+            actualUser._id === props.userToFilterBy._id
           }
         />
       )}
@@ -62,7 +57,7 @@ const PostPage: React.FC<PostPageProps> = ({
           <PostCard
             key={post._id}
             post={post}
-            setUserToFilterBy={setUserToFilterBy}
+            setUserToFilterBy={props.setUserToFilterBy}
             showPostComments={() => setPostToShowComments(post)}
             editPost={() => setPostToEdit(post)}
           />
