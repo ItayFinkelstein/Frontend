@@ -18,7 +18,10 @@ import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
 
 const App: React.FC = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const savedTheme = localStorage.getItem("theme");
+    return savedTheme ? JSON.parse(savedTheme) : false;
+  });
 
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
@@ -29,6 +32,7 @@ const App: React.FC = () => {
   };
 
   useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify(isDarkMode));
     document.body.classList.toggle("dark-mode", isDarkMode);
     document.body.classList.toggle("light-mode", !isDarkMode);
   }, [isDarkMode]);

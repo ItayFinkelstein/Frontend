@@ -30,7 +30,7 @@ export default function PostPage(props: PostPageProps) {
   };
 
   return postToShowComments === null && postToEdit === null ? (
-    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2vh" }}>
       {props.userToDisplay && (
         <UserData
           userToDisplay={props.userToDisplay}
@@ -39,6 +39,7 @@ export default function PostPage(props: PostPageProps) {
             actualUser !== undefined &&
             actualUser._id === props.userToDisplay._id
           }
+          isSuggestion={false}
         />
       )}
       {posts

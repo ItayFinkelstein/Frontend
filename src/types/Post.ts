@@ -1,4 +1,3 @@
-import { Comment } from "./Comment";
 
 export type Post = {
   _id: string;
