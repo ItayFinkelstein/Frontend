@@ -18,37 +18,41 @@ export type UserToDisplayProps = {
 };
 
 export default function PostPage(props: PostPageProps) {
-  const { allPostsState, userPostsState } = usePosts();
+  const {
+    allPosts,
+    allPostsLoading,
+    hasMoreAllPosts,
+    loadNextAllPostsPage,
+    updateAllPost,
+    userPostsLoading,
+    hasMoreUserPosts,
+    loadNextUserPostsPage,
+    updateUserPost,
+    userPosts,
+  } = usePosts();
+
   const { actualUser } = useActualUser();
 
-  /** decide how to initialize the constants based on whether to filter by user or not */
-  let { posts, loadNextPage, isLoading, hasMorePosts, updatePost } =
-    props.userToDisplay !== undefined
-      ? {
-          posts: userPostsState.posts,
-          loadNextPage: () =>
-            userPostsState.loadNextPage(props.userToDisplay!._id),
-          isLoading: userPostsState.isLoading,
-          hasMorePosts: userPostsState.hasMorePosts,
-          updatePost: userPostsState.updatePost,
-        }
-      : {
-          posts: allPostsState.posts,
-          loadNextPage: allPostsState.loadNextPage,
-          isLoading: allPostsState.isLoading,
-          hasMorePosts: allPostsState.hasMorePosts,
-          updatePost: allPostsState.updatePost,
-        };
+  useEffect(() => {
+    console.log("hasMoreUserPosts", hasMoreUserPosts);
+  }, [hasMoreUserPosts]);
 
   useEffect(() => {
-    console.log("all state", allPostsState);
-    console.log("user state", userPostsState);
-  }, [
-    allPostsState,
-    userPostsState,
-    allPostsState.posts,
-    userPostsState.posts,
-  ]);
+    console.log("FIRST RENDER!!!!!!!!!!!!!!!!!!");
+  }, []);
+
+  // Dynamically decide which posts to use
+  const posts = props.userToDisplay !== undefined ? userPosts : allPosts;
+  const loadNextPage =
+    props.userToDisplay !== undefined
+      ? () => loadNextUserPostsPage(props.userToDisplay!._id)
+      : loadNextAllPostsPage;
+  const isLoading =
+    props.userToDisplay !== undefined ? userPostsLoading : allPostsLoading;
+  const hasMorePosts =
+    props.userToDisplay !== undefined ? hasMoreUserPosts : hasMoreAllPosts;
+  const updatePost =
+    props.userToDisplay !== undefined ? updateUserPost : updateAllPost;
 
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
     null
@@ -59,6 +63,10 @@ export default function PostPage(props: PostPageProps) {
     setPostToEdit(null);
     updatePost(updatedPost);
   };
+
+  useEffect(() => {
+    console.log("USER POSTS in PostPage updated:", userPosts);
+  }, [userPosts]);
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -72,30 +80,24 @@ export default function PostPage(props: PostPageProps) {
           }
         />
       )}
-      {posts
-        .filter(
-          (post) =>
-            props.userToDisplay === undefined ||
-            post.owner === props.userToDisplay._id
-        )
-        .map((post) => {
-          return (
-            <PostCard
-              key={post._id}
-              post={post}
-              showPostComments={() => setPostToShowComments(post)}
-              editPost={() => setPostToEdit(post)}
-              setUser={(newUser: User) => props.setUserToDisplay(newUser)}
-              isClickableIcon={props.userToDisplay === undefined}
-            />
-          );
-        })}
+      {posts.map((post) => {
+        return (
+          <PostCard
+            key={post._id}
+            post={post}
+            showPostComments={() => setPostToShowComments(post)}
+            editPost={() => setPostToEdit(post)}
+            setUser={(newUser: User) => props.setUserToDisplay(newUser)}
+            isClickableIcon={props.userToDisplay === undefined}
+          />
+        );
+      })}
       {hasMorePosts && (
         <div style={{ display: "flex", justifyContent: "center" }}>
           <GenericIconButton
             title="load more posts"
             icon={<RefreshIcon />}
-            onClick={() => loadNextPage(props.userToDisplay?._id)}
+            onClick={() => loadNextPage()}
             disabled={isLoading}
           />
         </div>

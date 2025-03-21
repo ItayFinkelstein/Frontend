@@ -20,7 +20,7 @@ import usePosts from "./data_hooks/usePosts";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const userPostsState = usePosts().userPostsState;
+  const fetchUserPosts = usePosts().loadNextUserPostsPage;
 
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
@@ -33,9 +33,10 @@ const App: React.FC = () => {
     console.log("****************");
     if (newUser !== undefined && newUser._id !== userToFilterBy?._id) {
       console.log("CONDITION", newUser._id);
-      userPostsState.fetchPosts(0, newUser._id, true);
+      fetchUserPosts(newUser._id);
     }
-    console.log("user state", userPostsState.posts);
+    console.log("REACHED HERE");
+    // console.log("user state", userPostsState.posts);
     setUserToFilterBy(newUser);
   }
 

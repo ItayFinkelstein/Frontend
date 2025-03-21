@@ -13,7 +13,7 @@ class PostService extends HttpService<Post> {
     const controller = new AbortController();
     const response = apiClient.get(`${this.endpoint}/paging`, {
       signal: controller.signal,
-      params: { page, userId },
+      params: { undefined, userId },
     });
     return { response, cancel: () => controller.abort() };
   }
