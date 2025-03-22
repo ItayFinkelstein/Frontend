@@ -16,6 +16,7 @@ import PhotoIcon from "../../PhotoIcon";
 type PostCardForm = {
   post?: Post;
   updatePost: ((post: Post) => void) | ((post: Omit<Post, "_id">) => void);
+  isMain?: boolean;
 };
 
 export default function PostCardForm(props: PostCardForm) {
@@ -47,7 +48,7 @@ export default function PostCardForm(props: PostCardForm) {
   });
 
   const [image, setImage] = useState<File | null>(null);
-
+  const [allowRenderPhoto, setAllowRenderPhoto] = useState(false);
   const [img] = watch(["img"]);
   const inputFileRef: { current: HTMLInputElement | null } = { current: null };
   const { ref, ...restRegisterParams } = register("img");
@@ -56,14 +57,6 @@ export default function PostCardForm(props: PostCardForm) {
       setImage(img[0]);
     }
   }, [img]);
-
-  useEffect(() => {
-    console.log("image", image);
-  }, [image]);
-
-  useEffect(() => {
-    console.log("post", props.post);
-  }, [props.post]);
 
   const onSubmit = async (data: any) => {
     let avatarUrl = "";
@@ -81,6 +74,7 @@ export default function PostCardForm(props: PostCardForm) {
       image: avatarUrl,
     };
     await props.updatePost(updatedPost);
+    setAllowRenderPhoto(false);
     if (props.post === undefined) {
       reset({
         description: "",
@@ -108,27 +102,28 @@ export default function PostCardForm(props: PostCardForm) {
                   inputFileRef={inputFileRef}
                   refCallback={ref}
                   restRegisterParams={restRegisterParams}
+                  onClick={() => {
+                    setValue("img", undefined);
+                    setAllowRenderPhoto(true);
+                  }}
                 />
               </Box>
             </Box>
           }
-          subheader={
-            props.post !== undefined
-              ? new Date(props.post.publishDate).toLocaleDateString()
-              : undefined
-          }
         />
-        {(image !== null || props.post?.image !== undefined) && (
-          <CardMedia
-            component="img"
-            height="194"
-            image={
-              image !== null ? URL.createObjectURL(image) : props.post?.image
-            }
-            alt="Selected image preview"
-            sx={{ mb: 2 }}
-          />
-        )}
+        {(!props.isMain || allowRenderPhoto) &&
+          (image !== null ||
+            (props.post?.image !== undefined && props.post?.image !== "")) && (
+            <CardMedia
+              component="img"
+              height="194"
+              image={
+                image !== null ? URL.createObjectURL(image) : props.post?.image
+              }
+              alt="Selected image preview"
+              sx={{ mb: 2 }}
+            />
+          )}
         <CardContent sx={{ paddingTop: 0 }}>
           <ValidatedTextField
             name="description"
