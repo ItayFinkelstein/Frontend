@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import PostCard from "./PostCard";
-import UserData from "./UserData";
 import { GenericIconButton } from "./GenericIconButton";
 import RefreshIcon from "@mui/icons-material/Autorenew";
 import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
 import postService from "./http-connections/postService";
 import { SharedProps } from "./App";
+import UserData from "./UserData";
 
 type PostPageProps = {
   posts: Post[];
@@ -73,6 +73,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             props.actualUser !== undefined &&
             props.actualUser._id === props.userToFilterBy._id
           }
+          actualUser={props.actualUser}
           isSuggestion={false}
           setActualUser={props.setActualUser}
         />
@@ -100,7 +101,6 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
               title="load more posts"
               icon={<RefreshIcon />}
               onClick={() => fetchMore()}
-              //disabled={isLoading}
             />
           </div>
         )}

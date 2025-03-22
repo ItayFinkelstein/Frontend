@@ -87,7 +87,7 @@ export default function PostCardForm(props: PostCardForm) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Card sx={{ width: "30vw" }}>
+      <Card sx={{ width: "100%" }}>
         <CardHeader
           title={
             <ValidatedTextField

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Grid, Paper } from "@mui/material";
+import { Box, Typography, Paper } from "@mui/material";
 import useUsers from "./data_hooks/useUsers";
 import UserData from "./UserData";
 import { User } from "./types/User";
@@ -12,6 +12,7 @@ type SuggestionsProps = {
 
 const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
   const users = useUsers().users;
+
   return (
     <Paper
       elevation={3}
@@ -32,21 +33,23 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
           overflowY: "auto",
         }}
       >
-        <Grid container spacing={2}>
-          {users.map((user) => (
-            <Grid item xs={12} sm={6} key={user._id}>
-              {props.userToDisplay?._id !== user._id &&
-                props.actualUser?._id !== user._id && (
-                  <UserData
-                    userToDisplay={user!}
-                    setUserToDisplay={props.setUserToDisplay}
-                    isActualUser={false}
-                    isSuggestion={true}
-                  />
-                )}
-            </Grid>
+        {users
+          .filter(
+            (user) =>
+              user._id !== props.actualUser?._id ||
+              props.actualUser?._id !== user._id
+          )
+          .map((user) => (
+            <Box key={user._id} sx={{ mb: 2 }}>
+              <UserData
+                userToDisplay={user!}
+                setUserToDisplay={props.setUserToDisplay}
+                isActualUser={false}
+                isSuggestion={true}
+                actualUser={props.actualUser}
+              />
+            </Box>
           ))}
-        </Grid>
       </Box>
     </Paper>
   );
