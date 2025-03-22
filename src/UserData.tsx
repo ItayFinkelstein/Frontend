@@ -19,7 +19,10 @@ export interface UserToDisplayProps {
 }
 
 export default function UserData(
-  props: Required<UserToDisplayProps> & { isActualUser: boolean }
+  props: Required<UserToDisplayProps> & {
+    isActualUser: boolean;
+    isSuggestion: boolean;
+  }
 ) {
   const [isEditing, setIsEditing] = useState(false);
   const { setUsers } = useUsers();
@@ -54,7 +57,7 @@ export default function UserData(
   };
 
   return (
-    <Card sx={{ width: 440 }}>
+    <Card sx={{ width: props.isSuggestion ? "10vw" : "30vw" }}>
       <CardHeader
         title={
           <Box display="flex" alignItems="center">
@@ -89,16 +92,18 @@ export default function UserData(
             )}
           </Box>
         }
-        subheader={"mail: " + props.userToDisplay.email}
+        subheader={!props.isSuggestion && "mail: " + props.userToDisplay.email}
         avatar={<UserIcon user={props.userToDisplay} />}
       />
-      <CardContent>
-        <GenericIconButton
-          title="Return"
-          icon={<KeyboardReturnIcon />}
-          onClick={() => props.setUserToDisplay(undefined)}
-        />
-      </CardContent>
+      {!props.isSuggestion && (
+        <CardContent>
+          <GenericIconButton
+            title="Return"
+            icon={<KeyboardReturnIcon />}
+            onClick={() => props.setUserToDisplay(undefined)}
+          />
+        </CardContent>
+      )}
     </Card>
   );
 }

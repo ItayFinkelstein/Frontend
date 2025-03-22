@@ -1,38 +1,38 @@
-import { createTheme } from "@mui/material/styles";
+import { createTheme } from '@mui/material/styles';
 
 const lightTheme = createTheme({
   palette: {
-    mode: "light",
+    mode: 'light',
     primary: {
-      main: "#C1272D", // Deep Tomato Red
+      main: '#C1272D', // Deep Tomato Red
     },
     secondary: {
-      main: "#FFB400", // Amber Gold
+      main: '#FFB400', // Amber Gold
     },
     background: {
-      default: "#F8EDE3", // Toasted Beige
-      paper: "#ffffff",
+      default: '#F8EDE3', // Toasted Beige
+      paper: '#ffffff',
     },
     text: {
-      primary: "#2C2C2C", // Charcoal Black
+      primary: '#2C2C2C', // Charcoal Black
     },
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#C1272D",
+          backgroundColor: '#C1272D',
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          "&:hover": {
-            color: "inherit",
+          '&:hover': {
+            color: 'inherit',
           },
-          "&:active": {
-            color: "inherit",
+          '&:active': {
+            color: 'inherit',
           },
         },
       },
@@ -40,11 +40,11 @@ const lightTheme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          "&:hover": {
-            color: "inherit",
+          '&:hover': {
+            color: 'inherit',
           },
-          "&:active": {
-            color: "inherit",
+          '&:active': {
+            color: 'inherit',
           },
         },
       },
@@ -54,51 +54,51 @@ const lightTheme = createTheme({
 
 const darkTheme = createTheme({
   palette: {
-    mode: "dark",
+    mode: 'dark',
     primary: {
-      main: "#8A1B23", // Dark Crimson
+      main: '#8A1B23', // Dark Crimson
     },
     secondary: {
-      main: "#FF9F00", // Warm Amber
+      main: '#FF9F00', // Warm Amber
     },
     background: {
-      default: "#2C2C2C", // Dark Charcoal
-      paper: "#2C2C2C",
+      default: '#2C2C2C', // Dark Charcoal
+      paper: '#2C2C2C',
     },
     text: {
-      primary: "#E0E0E0", // Light Gray
+      primary: '#E0E0E0', // Light Gray
     },
   },
   components: {
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: "#2C2C2C", // Dark Charcoal
+          backgroundColor: '#2C2C2C', // Dark Charcoal
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: "#2C2C2C", // Dark Charcoal
+          backgroundColor: '#2C2C2C', // Dark Charcoal
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: "#8A1B23",
+          backgroundColor: '#8A1B23',
         },
       },
     },
     MuiButton: {
       styleOverrides: {
         root: {
-          "&:hover": {
-            color: "inherit",
+          '&:hover': {
+            color: 'inherit',
           },
-          "&:active": {
-            color: "inherit",
+          '&:active': {
+            color: 'inherit',
           },
         },
       },
@@ -106,11 +106,11 @@ const darkTheme = createTheme({
     MuiIconButton: {
       styleOverrides: {
         root: {
-          "&:hover": {
-            color: "inherit",
+          '&:hover': {
+            color: 'inherit',
           },
-          "&:active": {
-            color: "inherit",
+          '&:active': {
+            color: 'inherit',
           },
         },
       },

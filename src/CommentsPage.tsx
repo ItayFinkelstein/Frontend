@@ -1,22 +1,24 @@
-import Card from "@mui/material/Card/Card";
+import Card from "@mui/material/Card";
 import { Post } from "./types/Post";
-import CardHeader from "@mui/material/CardHeader/CardHeader";
-import CardContent from "@mui/material/CardContent/CardContent";
-import Typography from "@mui/material/Typography/Typography";
-import Box from "@mui/material/Box/Box";
-import Paper from "@mui/material/Paper/Paper";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@mui/material/Button/Button";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
-import ValidatedTextField from "./ValidatedTextField";
+import CloseIcon from "@mui/icons-material/Close";
+import DeleteIcon from "@mui/icons-material/Delete";
+import SendIcon from "@mui/icons-material/Send";
 import { GenericIconButton } from "./GenericIconButton";
-import classes from "./CommentsPage.module.css";
 import commentService from "./http-connections/commentService";
 import useComments from "./data_hooks/useComment";
 import useActualUser from "./useActualUser";
+import useUsers from "./data_hooks/useUsers";
+import { User } from "./types/User";
 import { Comment } from "./types/Comment";
+import UserIcon from "./UserIcon";
+import { IconButton, TextField } from "@mui/material";
+import { getDateAsString } from "./Utils";
 
 type CommentsPageProps = {
   post: Post;
@@ -28,12 +30,15 @@ type CommentsPageProps = {
 export default function CommentsPage(props: CommentsPageProps) {
   const { comments, setComments } = useComments(props.post._id);
   const { actualUser } = useActualUser();
+  const users = useUsers().users;
+
   const schema = z.object({
     description: z
       .string()
       .min(3, { message: "Comment must be at least 3 characters" })
       .max(200, { message: "Comment must be no more than 200 letters" }),
   });
+
   const {
     register,
     handleSubmit,
@@ -42,11 +47,23 @@ export default function CommentsPage(props: CommentsPageProps) {
     resolver: zodResolver(schema),
   });
 
+  const onDelete = async (comment: Comment) => {
+    await commentService.delete(comment._id);
+    setComments((prevComments) =>
+      prevComments.filter((c) => c._id !== comment._id)
+    );
+    props.updatePost({
+      ...props.post,
+      commentAmount: props.post.commentAmount - 1,
+    });
+  };
+
   const onSubmit = async (data: { description: string }) => {
     const { response } = await commentService.add({
       postId: props.post._id,
-      owner: actualUser!.name,
+      owner: actualUser!._id,
       message: data.description,
+      publishDate: new Date().toISOString(),
     });
     const commentFromResponse: Comment = (await response).data;
     setComments([...comments, commentFromResponse]);
@@ -57,48 +74,101 @@ export default function CommentsPage(props: CommentsPageProps) {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 2, margin: 2 }}>
-      <Typography variant="h5" className={classes.header}>
-        Comments of post: {props.post.title}
+    <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+          Comments on: {props.post.title}
+        </Typography>
+        <GenericIconButton
+          title="Close comments"
+          icon={<CloseIcon />}
+          onClick={props.closeCommentsForm}
+        />
+      </Box>
+      <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        {comments.length} Comments:
       </Typography>
-      <Typography variant="h6" className={classes.header}>
-        Comment Amount: {comments.length}
-      </Typography>
-      <GenericIconButton
-        title="Close comments"
-        icon={<KeyboardReturnIcon />}
-        onClick={props.closeCommentsForm}
-      />
-      <Box className={classes.commentsContainer}>
+      <Box sx={{ width: "100%", maxHeight: "65vh", overflow: "auto" }}>
         {!props.isCurrentUserPost && actualUser !== undefined && (
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Card sx={{ width: "100%", marginBottom: 2 }}>
-              <CardContent>
-                <ValidatedTextField
-                  name="description"
-                  label="Comment"
-                  register={register}
-                  error={errors.description}
-                />
-                <Button type="submit" variant="contained" fullWidth>
-                  Submit
-                </Button>
-              </CardContent>
-            </Card>
-          </form>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ display: "flex", alignItems: "flex-start", marginBottom: 2 }}
+          >
+            <TextField
+              variant="outlined"
+              multiline
+              rows={2}
+              fullWidth
+              placeholder="Write your comment here..."
+              {...register("description")}
+              error={!!errors.description}
+              helperText={errors.description ? errors.description.message : ""}
+              sx={{
+                mr: 2,
+                "& .MuiOutlinedInput-notchedOutline": { border: "1" },
+              }}
+            />
+            <IconButton type="submit" sx={{ alignSelf: "center" }}>
+              <SendIcon />
+            </IconButton>
+          </Box>
         )}
         {comments.map((comment) => {
+          const user: User | undefined = users.find(
+            (userToCheck: User) => userToCheck._id === comment.owner
+          );
+
           return (
-            <Card sx={{ width: "100%", marginBottom: 2 }} key={comment._id}>
-              <CardHeader
-                title={comment.owner}
-                subheader={comment.publishDate}
-              />
-              <CardContent>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {comment.message}
-                </Typography>
-              </CardContent>
+            <Card
+              sx={{ width: "100%", marginBottom: 1, boxShadow: 1, padding: 1 }}
+              key={comment._id}
+            >
+              <Box
+                display="flex"
+                alignItems="center"
+                sx={{ marginBottom: 0.5 }}
+              >
+                <UserIcon user={user} />
+                <Box
+                  sx={{
+                    marginLeft: 1,
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+                      {user?.name ?? "Unknown"}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary", marginLeft: 1 }}
+                    >
+                      {getDateAsString(comment.publishDate)}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", marginTop: 0.5 }}
+                  >
+                    {comment.message}
+                  </Typography>
+                </Box>
+                {actualUser?._id === comment.owner && (
+                  <GenericIconButton
+                    title="Delete comment"
+                    icon={<DeleteIcon />}
+                    onClick={() => onDelete(comment)}
+                  />
+                )}
+              </Box>
             </Card>
           );
         })}

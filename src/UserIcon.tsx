@@ -1,6 +1,5 @@
 import Avatar from "@mui/material/Avatar/Avatar";
 import { User } from "./types/User";
-import red from "@mui/material/colors/red";
 import Box from "@mui/material/Box/Box";
 import UserMenu from "./UserMenu";
 
@@ -29,7 +28,7 @@ export default function UserIcon(props: UserIconProps) {
   const avatar = (
     <Avatar
       sx={{
-        bgcolor: red[500],
+        bgcolor: "primary.main",
         ...(props.onClick !== undefined && {
           "&:hover": {
             outline: "2.5px solid lightgray",
