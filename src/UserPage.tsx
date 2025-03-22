@@ -4,6 +4,7 @@ import PostPage from "./PostPage";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import Suggestions from "./Suggestions";
+import { SharedProps } from "./App";
 
 type UserPageProps = {
   posts: Post[];
@@ -14,10 +15,7 @@ type UserPageProps = {
   fetchUserPosts: () => void;
   userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
-  updatePost: (post: Post) => void;
-  deletePost: (id: string) => void;
-  addPost: (post: Post) => void;
-};
+} & SharedProps;
 
 const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
   return (
@@ -37,6 +35,8 @@ const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
               updatePost={props.updatePost}
               deletePost={props.deletePost}
               addPost={props.addPost}
+              actualUser={props.actualUser}
+              setActualUser={props.setActualUser}
             />
           </Grid>
           <Grid

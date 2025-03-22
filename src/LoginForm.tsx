@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
 import { login } from "./http-connections/authService";
 import GoogleLoginButton from "./GoogleLoginButton";
-import useActualUser from "./useActualUser";
+import { User } from "./types/User";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -16,7 +16,10 @@ const schema = z.object({
 
 type Inputs = z.infer<typeof schema>;
 
-const LoginForm: React.FC = () => {
+type LoginFormProps = {
+  setActualUser: (user: User | undefined) => void;
+};
+const LoginForm: React.FC<LoginFormProps> = ({ setActualUser }) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +28,6 @@ const LoginForm: React.FC = () => {
     resolver: zodResolver(schema),
   });
   const navigate = useNavigate();
-  const { setActualUser } = useActualUser();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     try {
@@ -81,7 +83,7 @@ const LoginForm: React.FC = () => {
         </Typography>
         <Divider sx={{ flexGrow: 1 }} />
       </Box>
-      <GoogleLoginButton />
+      <GoogleLoginButton setActualUser={setActualUser} />
       <Grid container sx={{ mt: 2 }}>
         <Grid item>
           <Link component={RouterLink} to="/register" variant="body2">

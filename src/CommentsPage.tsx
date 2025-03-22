@@ -12,7 +12,6 @@ import SendIcon from "@mui/icons-material/Send";
 import { GenericIconButton } from "./GenericIconButton";
 import commentService from "./http-connections/commentService";
 import useComments from "./data_hooks/useComment";
-import useActualUser from "./useActualUser";
 import useUsers from "./data_hooks/useUsers";
 import { User } from "./types/User";
 import { Comment } from "./types/Comment";
@@ -25,11 +24,11 @@ type CommentsPageProps = {
   closeCommentsForm: () => void;
   isCurrentUserPost: boolean;
   updatePost: (post: Post) => void;
+  actualUser: User | undefined;
 };
 
 export default function CommentsPage(props: CommentsPageProps) {
   const { comments, setComments } = useComments(props.post._id);
-  const { actualUser } = useActualUser();
   const users = useUsers().users;
 
   const schema = z.object({
@@ -61,7 +60,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   const onSubmit = async (data: { description: string }) => {
     const { response } = await commentService.add({
       postId: props.post._id,
-      owner: actualUser!._id,
+      owner: props.actualUser!._id,
       message: data.description,
       publishDate: new Date().toISOString(),
     });
@@ -89,7 +88,7 @@ export default function CommentsPage(props: CommentsPageProps) {
         {comments.length} Comments:
       </Typography>
       <Box sx={{ width: "100%", maxHeight: "65vh", overflow: "auto" }}>
-        {!props.isCurrentUserPost && actualUser !== undefined && (
+        {!props.isCurrentUserPost && props.actualUser !== undefined && (
           <Box
             component="form"
             onSubmit={handleSubmit(onSubmit)}
@@ -161,7 +160,7 @@ export default function CommentsPage(props: CommentsPageProps) {
                     {comment.message}
                   </Typography>
                 </Box>
-                {actualUser?._id === comment.owner && (
+                {props.actualUser?._id === comment.owner && (
                   <GenericIconButton
                     title="Delete comment"
                     icon={<DeleteIcon />}

@@ -9,6 +9,7 @@ import { register } from "./http-connections/authService";
 import { uploadImage } from "./http-connections/userService";
 import avatar from "./assets/avatar.png";
 import PhotoIcon from "./PhotoIcon";
+import { User } from "./types/User";
 
 const schema = z.object({
   name: z
@@ -22,7 +23,9 @@ const schema = z.object({
 
 type Inputs = z.infer<typeof schema>;
 
-const RegisterForm: React.FC = () => {
+const RegisterForm: React.FC<{
+  setActualUser: (user: User | undefined) => void;
+}> = ({ setActualUser }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const {
     register: registerField,
@@ -51,7 +54,17 @@ const RegisterForm: React.FC = () => {
         avatarUrl = response.data.url;
       }
 
-      await register(data.name, data.email, data.password, avatarUrl);
+      const registeredUser = await register(
+        data.name,
+        data.email,
+        data.password,
+        avatarUrl
+      );
+      setActualUser({
+        _id: registeredUser._id,
+        email: registeredUser.email,
+        name: registeredUser.name,
+      });
       navigate("/");
     } catch (error) {
       console.error("There was an error registering or logging in!", error);

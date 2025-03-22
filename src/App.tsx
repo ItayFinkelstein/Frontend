@@ -18,6 +18,8 @@ import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
 import postService, { CanceledError } from "./http-connections/postService";
 import { Post } from "./types/Post";
+import { getUserFromStorageId } from "./useActualUser";
+import useUsers from "./data_hooks/useUsers";
 
 const App: React.FC = () => {
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -39,6 +41,22 @@ const App: React.FC = () => {
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
+
+  const users = useUsers().users;
+
+  const [actualUser, setActualUser] = useState<User | undefined>(
+    getUserFromStorageId(users)
+  );
+
+  useEffect(() => {
+    if (users.length > 0) {
+      setActualUser(getUserFromStorageId(users));
+    }
+  }, [users.length > 0]);
+  function setActualUserData(user: User | undefined) {
+    localStorage.setItem("actualUser", user?._id || "");
+    setActualUser(user);
+  }
 
   const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -170,27 +188,35 @@ const App: React.FC = () => {
           updatePost={updatePost}
           deletePost={deletePost}
           addPost={addPost}
+          actualUser={actualUser}
+          setActualUser={setActualUserData}
         />
       </Router>
     </ThemeProvider>
   );
 };
 
-const AppContent: React.FC<{
-  toggleTheme: () => void;
-  isDarkMode: boolean;
-  setUserToFilterByFunc: (user: User | undefined) => void;
-  userToFilterBy: User | undefined;
-  posts: Post[];
-  hasMorePosts: boolean;
-  fetchPosts: () => void;
-  userPosts: Post[];
-  hasMoreUserPosts: boolean;
-  fetchUserPosts: () => void;
+export type SharedProps = {
   updatePost: (post: Post) => void;
   deletePost: (id: string) => void;
   addPost: (post: Post) => void;
-}> = ({
+  actualUser: User | undefined;
+  setActualUser: (user: User | undefined) => void;
+};
+const AppContent: React.FC<
+  {
+    toggleTheme: () => void;
+    isDarkMode: boolean;
+    setUserToFilterByFunc: (user: User | undefined) => void;
+    userToFilterBy: User | undefined;
+    posts: Post[];
+    hasMorePosts: boolean;
+    fetchPosts: () => void;
+    userPosts: Post[];
+    hasMoreUserPosts: boolean;
+    fetchUserPosts: () => void;
+  } & SharedProps
+> = ({
   toggleTheme,
   isDarkMode,
   userToFilterBy,
@@ -201,9 +227,7 @@ const AppContent: React.FC<{
   userPosts,
   hasMoreUserPosts,
   fetchUserPosts,
-  updatePost,
-  deletePost,
-  addPost,
+  ...sharedProps
 }) => {
   const locationRoute = useLocation();
 
@@ -226,6 +250,8 @@ const AppContent: React.FC<{
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
               setUserToFilterBy={setUserToFilterByFunc}
+              actualUser={sharedProps.actualUser}
+              setActualUser={sharedProps.setActualUser}
             />
           </div>
         </>
@@ -242,30 +268,27 @@ const AppContent: React.FC<{
           userPosts={userPosts}
           hasMoreUserPosts={hasMoreUserPosts}
           fetchUserPosts={fetchUserPosts}
-          updatePost={updatePost}
-          deletePost={deletePost}
-          addPost={addPost}
+          {...sharedProps}
         />
       </div>
     </div>
   );
 };
 
-const MainContent: React.FC<{
-  toggleTheme: () => void;
-  isDarkMode: boolean;
-  setUserToFilterByFunc: (user: User | undefined) => void;
-  userToFilterBy: User | undefined;
-  posts: Post[];
-  hasMorePosts: boolean;
-  fetchPosts: () => void;
-  userPosts: Post[];
-  hasMoreUserPosts: boolean;
-  fetchUserPosts: () => void;
-  updatePost: (post: Post) => void;
-  deletePost: (id: string) => void;
-  addPost: (post: Post) => void;
-}> = ({
+const MainContent: React.FC<
+  {
+    toggleTheme: () => void;
+    isDarkMode: boolean;
+    setUserToFilterByFunc: (user: User | undefined) => void;
+    userToFilterBy: User | undefined;
+    posts: Post[];
+    hasMorePosts: boolean;
+    fetchPosts: () => void;
+    userPosts: Post[];
+    hasMoreUserPosts: boolean;
+    fetchUserPosts: () => void;
+  } & SharedProps
+> = ({
   userToFilterBy,
   setUserToFilterByFunc,
   posts,
@@ -274,9 +297,9 @@ const MainContent: React.FC<{
   userPosts,
   hasMoreUserPosts,
   fetchUserPosts,
-  updatePost,
-  deletePost,
-  addPost,
+  actualUser,
+  setActualUser,
+  ...sharedProps
 }) => {
   return (
     <div
@@ -302,15 +325,21 @@ const MainContent: React.FC<{
                 fetchUserPosts={fetchUserPosts}
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterByFunc}
-                updatePost={updatePost}
-                deletePost={deletePost}
-                addPost={addPost}
+                actualUser={actualUser}
+                setActualUser={setActualUser}
+                {...sharedProps}
               />
             </ProtectedRoute>
           }
         />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={<Login setActualUser={setActualUser} />}
+        />
+        <Route
+          path="/register"
+          element={<Register setActualUser={setActualUser} />}
+        />
       </Routes>
     </div>
   );

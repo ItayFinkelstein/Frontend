@@ -21,7 +21,7 @@ export default function useActualUser() {
   return { actualUser, setActualUser: setActualUserData };
 }
 
-function getUserFromStorageId(userList: User[]) {
+export function getUserFromStorageId(userList: User[]) {
   const userId = localStorage.getItem("actualUser");
   return userId === "" || userId === null
     ? undefined

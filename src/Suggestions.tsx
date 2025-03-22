@@ -34,7 +34,7 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
         <Grid container spacing={2}>
           {users.map((user) => (
             <Grid item xs={12} sm={6} key={user._id}>
-              {!props.userToDisplay && (
+              {props.userToDisplay?._id !== user._id && (
                 <UserData
                   userToDisplay={user!}
                   setUserToDisplay={props.setUserToDisplay}
