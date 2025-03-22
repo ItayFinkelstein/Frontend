@@ -43,9 +43,14 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
     setIsLiked(props.post.likes.some((like) => like === props.actualUser?._id));
   }, [props.actualUser, props.post]);
 
-  const user: User | undefined = users.find(
-    (userToCheck: User) => userToCheck._id === props.post.owner
-  );
+  const user: User | undefined = isActualUser
+    ? props.actualUser
+    : users.find((userToCheck: User) => userToCheck._id === props.post.owner);
+
+  useEffect(() => {
+    console.log("PC users", users);
+    console.log("PC user", user);
+  }, [users]);
 
   async function onDelete() {
     await postService.delete(props.post._id);
