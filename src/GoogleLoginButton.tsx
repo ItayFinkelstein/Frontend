@@ -2,12 +2,16 @@ import { CredentialResponse, GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { setLoginTokens } from "./http-connections/authService";
 import { useNavigate } from "react-router-dom";
-import useActualUser from "./useActualUser";
 import { SERVER_BASE_URL } from "./config";
+import { User } from "./types/User";
 
-export default function GoogleLoginButton() {
+type GoogleLoginButtonProps = {
+  setActualUser: (user: User | undefined) => void;
+};
+export default function GoogleLoginButton({
+  setActualUser,
+}: GoogleLoginButtonProps) {
   const navigate = useNavigate();
-  const { setActualUser } = useActualUser();
   const googleResponseMessage = async (response: CredentialResponse) => {
     try {
       const res = await axios.post(SERVER_BASE_URL + "/auth/google", {

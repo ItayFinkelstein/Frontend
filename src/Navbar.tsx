@@ -6,21 +6,24 @@ import UserIcon from "./UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
 import { ENDPOINTS } from "./endpoints";
-import useActualUser from "./useActualUser";
+
 
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
   setUserToFilterBy: (user: User | undefined) => void;
+  actualUser: User | undefined;
+  setActualUser: (user: User | undefined) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({
   toggleTheme,
   isDarkMode,
   setUserToFilterBy,
+  actualUser,
+  setActualUser
 }) => {
   const navigate = useNavigate();
-  const { setActualUser } = useActualUser();
 
   const actions = [
     {
@@ -36,8 +39,6 @@ const Navbar: React.FC<NavbarProps> = ({
         }),
     },
   ];
-
-  const { actualUser } = useActualUser();
 
   return (
     <AppBar position="fixed" color="primary">

@@ -18,7 +18,6 @@ import { GenericIconButton } from "./GenericIconButton";
 import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
 import postService from "./http-connections/postService";
-import useActualUser from "./useActualUser";
 import classes from "./PostCard.module.css";
 import usePosts from "./data_hooks/usePosts";
 
@@ -30,19 +29,19 @@ type PostCardProps = {
   isClickableIcon?: boolean;
   setUserToFilterBy: (user: User | undefined) => void;
   updatePost: (post: Post) => void;
+  actualUser: User | undefined;
 };
 
 const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
   const { serverRequest } = usePosts();
   const users = useUsers().users;
-  const { actualUser } = useActualUser();
   const isActualUser =
-    actualUser !== undefined && props.post.owner === actualUser._id;
+    props.actualUser !== undefined && props.post.owner === props.actualUser._id;
 
   useEffect(() => {
-    setIsLiked(props.post.likes.some((like) => like === actualUser?._id));
-  }, [actualUser, props.post]);
+    setIsLiked(props.post.likes.some((like) => like === props.actualUser?._id));
+  }, [props.actualUser, props.post]);
 
   const user: User | undefined = users.find(
     (userToCheck: User) => userToCheck._id === props.post.owner
@@ -91,12 +90,14 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
             </div>
           }
           onClick={() => {
-            if (actualUser !== undefined) {
+            if (props.actualUser !== undefined) {
               const updatedPost = {
                 ...props.post,
                 likes: isLiked
-                  ? props.post.likes.filter((like) => like !== actualUser._id)
-                  : [...props.post.likes, actualUser._id],
+                  ? props.post.likes.filter(
+                      (like) => like !== props.actualUser!._id
+                    )
+                  : [...props.post.likes, props.actualUser._id],
               };
               serverRequest(
                 () => {
