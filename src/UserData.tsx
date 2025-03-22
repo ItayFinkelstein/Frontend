@@ -1,7 +1,7 @@
 import { Paper, Box, Typography, Avatar, IconButton } from "@mui/material";
 import UserIcon from "./UserIcon";
 import EditIcon from "@mui/icons-material/Edit";
-import SendIcon from "@mui/icons-material/Send";
+import SendIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -104,6 +104,14 @@ export default function UserData(
         alignItems: "center",
         gap: props.isSuggestion ? "1rem" : "3rem",
         width: props.isSuggestion ? "95%" : "100%",
+        "&:hover": {
+          backgroundColor: props.isSuggestion ? "lightyellow" : "",
+        },
+      }}
+      onClick={() => {
+        if (props.isSuggestion) {
+          props.setUserToDisplay(props.userToDisplay); // Example: Set the user to display
+        }
       }}
     >
       <Box sx={{ position: "relative" }}>
@@ -138,7 +146,7 @@ export default function UserData(
                 error={errors.name}
               />
               <GenericIconButton
-                title="Send"
+                title="Save"
                 icon={<SendIcon />}
                 onClick={handleSubmit(onSubmit)}
               />

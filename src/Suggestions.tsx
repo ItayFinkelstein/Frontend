@@ -40,7 +40,10 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
               props.actualUser?._id !== user._id
           )
           .map((user) => (
-            <Box key={user._id} sx={{ mb: 2 }}>
+            <Box
+              key={user._id}
+              sx={{ mb: 2, cursor: "pointer", boxShadow: 3, borderRadius: 2 }}
+            >
               <UserData
                 userToDisplay={user!}
                 setUserToDisplay={props.setUserToDisplay}
