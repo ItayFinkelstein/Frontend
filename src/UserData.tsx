@@ -130,17 +130,17 @@ export default function UserData(
         <Box display="flex" alignItems="center">
           {isEditing ? (
             <>
-              <GenericIconButton
-                title="Send"
-                icon={<SendIcon />}
-                onClick={handleSubmit(onSubmit)}
-              />
               <ValidatedTextField
                 name="name"
                 register={register}
                 defaultValue={props.userToDisplay.name}
                 fullWidth={false}
                 error={errors.name}
+              />
+              <GenericIconButton
+                title="Send"
+                icon={<SendIcon />}
+                onClick={handleSubmit(onSubmit)}
               />
             </>
           ) : (
