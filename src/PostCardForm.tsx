@@ -5,7 +5,7 @@ import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
 import { useForm } from "react-hook-form";
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Tooltip } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
@@ -104,7 +104,7 @@ export default function PostCardForm(props: PostCardForm) {
               : undefined
           }
         />
-        {(image !== null || props.post?.image !== undefined) && ( // Display the image preview if a file is selected
+        {(image !== null || props.post?.image !== undefined) && (
           <CardMedia
             component="img"
             height="194"
@@ -115,19 +115,30 @@ export default function PostCardForm(props: PostCardForm) {
             sx={{ mb: 2 }}
           />
         )}
-        <IconButton color="primary" component="label" sx={{ mb: 2 }}>
-          <FontAwesomeIcon icon={faImage} />
-          <input
-            ref={(item) => {
-              inputFileRef.current = item;
-              ref(item);
+        <Tooltip title={"Upload photo"} arrow>
+          <IconButton
+            color="primary"
+            component="label"
+            sx={{
+              mb: 2,
+              "&:hover": {
+                color: "blue",
+              },
             }}
-            {...restRegisterParams}
-            type="file"
-            accept="image/png, image/jpeg"
-            style={{ display: "none" }}
-          />
-        </IconButton>
+          >
+            <FontAwesomeIcon icon={faImage} />
+            <input
+              ref={(item) => {
+                inputFileRef.current = item;
+                ref(item);
+              }}
+              {...restRegisterParams}
+              type="file"
+              accept="image/png, image/jpeg"
+              style={{ display: "none" }}
+            />
+          </IconButton>
+        </Tooltip>
         <CardContent>
           <ValidatedTextField
             name="description"
