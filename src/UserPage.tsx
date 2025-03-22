@@ -59,6 +59,7 @@ const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
               <Suggestions
                 userToDisplay={props.userToFilterBy}
                 setUserToDisplay={props.setUserToFilterBy}
+                actualUser={props.actualUser}
               />
             </Box>
           </Grid>
