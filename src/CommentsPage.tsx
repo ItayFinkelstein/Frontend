@@ -24,10 +24,11 @@ type CommentsPageProps = {
   post: Post;
   closeCommentsForm: () => void;
   isCurrentUserPost: boolean;
+  updatePost: (post: Post) => void;
 };
 
 export default function CommentsPage(props: CommentsPageProps) {
-  const { comments, setComments, fetchComments } = useComments(props.post._id);
+  const { comments, setComments } = useComments(props.post._id);
   const { actualUser } = useActualUser();
   const users = useUsers().users;
 
@@ -54,13 +55,18 @@ export default function CommentsPage(props: CommentsPageProps) {
   };
 
   const onSubmit = async (data: { description: string }) => {
-    await commentService.add({
+    const { response } = await commentService.add({
       postId: props.post._id,
       owner: actualUser!._id,
       message: data.description,
       publishDate: new Date().toISOString(),
     });
-    fetchComments();
+    const commentFromResponse: Comment = (await response).data;
+    setComments([...comments, commentFromResponse]);
+    props.updatePost({
+      ...props.post,
+      commentAmount: props.post.commentAmount + 1,
+    });
   };
 
   return (

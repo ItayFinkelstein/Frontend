@@ -3,7 +3,6 @@ import UserIcon from "./UserIcon";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Send";
-import { UserToDisplayProps } from "./PostPage";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -11,6 +10,13 @@ import ValidatedTextField from "./ValidatedTextField";
 import { useState } from "react";
 import { GenericIconButton } from "./GenericIconButton";
 import userService from "./http-connections/userService";
+import { User } from "./types/User";
+import useUsers from "./data_hooks/useUsers";
+
+export interface UserToDisplayProps {
+  userToDisplay: User;
+  setUserToDisplay: (user: User | undefined) => void;
+}
 
 export default function UserData(
   props: Required<UserToDisplayProps> & {
@@ -19,6 +25,7 @@ export default function UserData(
   }
 ) {
   const [isEditing, setIsEditing] = useState(false);
+  const { setUsers } = useUsers();
 
   const schema = z.object({
     name: z
@@ -35,9 +42,17 @@ export default function UserData(
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log("Edits name:", data);
-    userService.update({ ...props.userToDisplay, name: data.name });
+  const onSubmit = async (data: any) => {
+    const updatedUser = { ...props.userToDisplay, name: data.name };
+    await userService.update(updatedUser);
+    setUsers((users) => {
+      return users.map((user) => {
+        if (user._id === updatedUser._id) {
+          return updatedUser;
+        }
+        return user;
+      });
+    });
     setIsEditing(false);
   };
 

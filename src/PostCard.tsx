@@ -1,3 +1,4 @@
+import React from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
@@ -18,32 +19,39 @@ import useUsers from "./data_hooks/useUsers";
 import { getDateAsString } from "./Utils";
 import postService from "./http-connections/postService";
 import useActualUser from "./useActualUser";
-import usePosts from "./data_hooks/usePosts";
 import classes from "./PostCard.module.css";
+import usePosts from "./data_hooks/usePosts";
 
 type PostCardProps = {
+  deletePost: (id: string) => void;
   post: Post;
   showPostComments: () => void;
   editPost: () => void;
-  setUser: (newUser: User) => void;
   isClickableIcon?: boolean;
+  setUserToFilterBy: (user: User | undefined) => void;
+  updatePost: (post: Post) => void;
 };
 
-export default function PostCard(props: PostCardProps) {
-  const users = useUsers().users;
+const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
+  const [isLiked, setIsLiked] = useState(false);
   const { serverRequest } = usePosts();
+  const users = useUsers().users;
   const { actualUser } = useActualUser();
   const isActualUser =
     actualUser !== undefined && props.post.owner === actualUser._id;
-  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
     setIsLiked(props.post.likes.some((like) => like === actualUser?._id));
   }, [actualUser, props.post]);
 
-  const user: User = users.find(
+  const user: User | undefined = users.find(
     (userToCheck: User) => userToCheck._id === props.post.owner
-  )!;
+  );
+
+  async function onDelete() {
+    await postService.delete(props.post._id);
+    props.deletePost(props.post._id);
+  }
 
   return (
     <Card sx={{ width: "30vw" }}>
@@ -52,10 +60,10 @@ export default function PostCard(props: PostCardProps) {
         subheader={getDateAsString(props.post.publishDate)}
         avatar={
           <UserIcon
-            user={user}
+            user={user!} // Ensure the user object is passed to UserIcon
             onClick={
               props.isClickableIcon !== false
-                ? () => props.setUser(user)
+                ? () => props.setUserToFilterBy(user!)
                 : undefined
             }
           />
@@ -96,7 +104,7 @@ export default function PostCard(props: PostCardProps) {
                 },
                 () => {
                   setIsLiked((curr) => !curr);
-                  /** todo: once post-get-paging gets merged, update the user in users list */
+                  props.updatePost(updatedPost);
                 }
               );
             }
@@ -124,8 +132,7 @@ export default function PostCard(props: PostCardProps) {
               title="Delete post"
               icon={<DeleteIcon />}
               onClick={() => {
-                postService.delete(props.post._id);
-                console.log("post " + props.post.title + " was deleted");
+                onDelete();
               }}
             />
           </>
@@ -133,4 +140,6 @@ export default function PostCard(props: PostCardProps) {
       </CardActions>
     </Card>
   );
-}
+};
+
+export default PostCard;

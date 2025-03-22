@@ -1,9 +1,22 @@
 import { Post } from "../types/Post";
-import createHttpService, { CanceledError } from "./httpService";
+import apiClient from "./apiClient";
+import { CanceledError, HttpService } from "./httpService";
 import { ENDPOINTS } from "../endpoints";
 
 export { CanceledError };
 
-const postService = createHttpService<Post>(ENDPOINTS.POST);
+class PostService extends HttpService<Post> {
+  constructor() {
+    super(ENDPOINTS.POST);
+  }
+  getWithPaging(page: number, userId?: string) {
+    const controller = new AbortController();
+    const response = apiClient.get(`${this.endpoint}/paging`, {
+      signal: controller.signal,
+      params: { page, userId },
+    });
+    return { response, cancel: () => controller.abort() };
+  }
+}
 
-export default postService;
+export default new PostService();

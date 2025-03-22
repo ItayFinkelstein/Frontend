@@ -1,25 +1,40 @@
 import { Grid, Box, Container } from "@mui/material";
+import React from "react";
 import PostPage from "./PostPage";
+import { Post } from "./types/Post";
 import { User } from "./types/User";
 import Suggestions from "./Suggestions";
 
-interface UserPageProps {
-  userToFilterBy: User | undefined;
+type UserPageProps = {
+  posts: Post[];
+  hasMorePosts: boolean;
+  fetchPosts: () => void;
+  userPosts: Post[];
+  hasMoreUserPosts: boolean;
+  fetchUserPosts: () => void;
+  userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
-}
+  updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
+};
 
-export default function UserPage({
-  userToFilterBy,
-  setUserToFilterBy,
-}: UserPageProps) {
+const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
   return (
     <Container>
       <Box sx={{ flexGrow: 1, marginTop: "2vh" }}>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={8}>
             <PostPage
-              userToDisplay={userToFilterBy}
-              setUserToDisplay={setUserToFilterBy}
+              posts={props.posts}
+              hasMorePosts={props.hasMorePosts}
+              fetchPosts={props.fetchPosts}
+              userPosts={props.userPosts}
+              hasMoreUserPosts={props.hasMoreUserPosts}
+              fetchUserPosts={props.fetchUserPosts}
+              userToFilterBy={props.userToFilterBy}
+              setUserToFilterBy={props.setUserToFilterBy}
+              updatePost={props.updatePost}
+              deletePost={props.deletePost}
             />
           </Grid>
           <Grid
@@ -40,8 +55,8 @@ export default function UserPage({
               }}
             >
               <Suggestions
-                userToDisplay={userToFilterBy}
-                setUserToDisplay={setUserToFilterBy}
+                userToDisplay={props.userToFilterBy}
+                setUserToDisplay={props.setUserToFilterBy}
               />
             </Box>
           </Grid>
@@ -49,4 +64,6 @@ export default function UserPage({
       </Box>
     </Container>
   );
-}
+};
+
+export default UserPage;

@@ -16,7 +16,7 @@ import EnhanceCaption from "./EnhanceCaption";
 
 type PostCardForm = {
   post?: Post;
-  hideForm?: () => void;
+  handlePostUpdate?: (post: Post) => void;
   onUpdate?: (updatedPost: Post) => void;
 };
 
@@ -54,11 +54,13 @@ export default function PostCardForm(props: PostCardForm) {
       title: data.title,
       message: data.description,
     };
-    await postService.update(updatedPost);
-    props.onUpdate?.(updatedPost);
-    props.hideForm?.();
+    updatePost(updatedPost);
   };
 
+  async function updatePost(updatedPost: Post) {
+    await postService.update(updatedPost);
+    props.handlePostUpdate?.(updatedPost);
+  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ width: "30vw" }}>
