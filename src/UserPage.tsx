@@ -14,7 +14,7 @@ export default function UserPage({
 }: UserPageProps) {
   return (
     <Container>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box sx={{ flexGrow: 1, marginTop: "2vh" }}>
         <Grid container spacing={2} justifyContent="center">
           <Grid item xs={12} md={8}>
             <PostPage
@@ -35,7 +35,7 @@ export default function UserPage({
                 top: "50%",
                 transform: "translateY(-50%)",
                 width: "25%",
-                height: "600px",
+                height: "500px",
                 overflowY: "auto",
               }}
             >

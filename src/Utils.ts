@@ -16,5 +16,3 @@ export function getDateAsString(dateString: string | undefined) {
     return date.toLocaleDateString("en-GB"); // Format as day/month/year
   }
 }
-
-export const BASE_URL = "http://localhost:3000";

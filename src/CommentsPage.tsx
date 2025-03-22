@@ -8,12 +8,10 @@ import Paper from "@mui/material/Paper";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Button from "@mui/material/Button";
-import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ValidatedTextField from "./ValidatedTextField";
+import SendIcon from "@mui/icons-material/Send";
 import { GenericIconButton } from "./GenericIconButton";
-import classes from "./CommentsPage.module.css";
 import commentService from "./http-connections/commentService";
 import useComments from "./data_hooks/useComment";
 import useActualUser from "./useActualUser";
@@ -21,6 +19,8 @@ import useUsers from "./data_hooks/useUsers";
 import { User } from "./types/User";
 import { Comment } from "./types/Comment";
 import UserIcon from "./UserIcon";
+import { IconButton, TextField } from "@mui/material";
+import { getDateAsString } from "./Utils";
 
 type CommentsPageProps = {
   post: Post;
@@ -31,9 +31,6 @@ type CommentsPageProps = {
 export default function CommentsPage(props: CommentsPageProps) {
   const { comments, setComments, fetchComments } = useComments(props.post._id);
   const { actualUser } = useActualUser();
-  console.log("actualUser", actualUser);
-  console.log("props.isCurrentUserPost", props.isCurrentUserPost);
-
   const users = useUsers().users;
 
   const schema = z.object({
@@ -42,6 +39,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       .min(3, { message: "Comment must be at least 3 characters" })
       .max(200, { message: "Comment must be no more than 200 letters" }),
   });
+
   const {
     register,
     handleSubmit,
@@ -62,47 +60,48 @@ export default function CommentsPage(props: CommentsPageProps) {
       postId: props.post._id,
       owner: actualUser!._id,
       message: data.description,
+      publishDate: new Date().toISOString(),
     });
-    fetchComments(); /** todo: once post-get-paging is merged, update the post itself instead of re-fetching the comments */
+    fetchComments();
   };
 
   return (
     <Paper elevation={3} sx={{ padding: 3, margin: 3, borderRadius: 2 }}>
-      <Typography
-        variant="h5"
-        className={classes.header}
-        sx={{ fontWeight: "bold" }}
-      >
-        Comments of post: {props.post.title}
+      <Box display="flex" justifyContent="space-between" alignItems="center">
+        <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
+          Comments on: {props.post.title}
+        </Typography>
+        <GenericIconButton
+          title="Close comments"
+          icon={<CloseIcon />}
+          onClick={props.closeCommentsForm}
+        />
+      </Box>
+      <Typography variant="h6" sx={{ marginBottom: 2 }}>
+        {comments.length} Comments:
       </Typography>
-      <Typography variant="h6" className={classes.header}>
-        Comment Amount: {comments.length}
-      </Typography>
-      <GenericIconButton
-        title="Close comments"
-        icon={<KeyboardReturnIcon />}
-        onClick={props.closeCommentsForm}
-      />
-      <Box
-        className={classes.commentsContainer}
-        sx={{ width: "100%", overflowY: "auto" }}
-      >
+      <Box sx={{ width: "100%", maxHeight: "65vh", overflow: "auto" }}>
         {!props.isCurrentUserPost && actualUser !== undefined && (
-          <form onSubmit={handleSubmit(onSubmit)}>
-            <Card sx={{ width: "100%", marginBottom: 2, boxShadow: 3 }}>
-              <CardContent>
-                <ValidatedTextField
-                  name="description"
-                  label="Comment"
-                  register={register}
-                  error={errors.description}
-                />
-                <Button type="submit" variant="contained" fullWidth>
-                  Submit
-                </Button>
-              </CardContent>
-            </Card>
-          </form>
+          <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={{ display: "flex", alignItems: "flex-start", marginBottom: 2 }}
+          >
+            <TextField
+              label="Add a comment"
+              variant="outlined"
+              multiline
+              rows={3}
+              fullWidth
+              {...register("description")}
+              error={!!errors.description}
+              helperText={errors.description ? errors.description.message : ""}
+              sx={{ mr: 2 }}
+            />
+            <IconButton type="submit" sx={{ height: "fit-content" }}>
+              <SendIcon />
+            </IconButton>
+          </Box>
         )}
         {comments.map((comment) => {
           const user: User | undefined = users.find(
@@ -126,7 +125,7 @@ export default function CommentsPage(props: CommentsPageProps) {
                     variant="subtitle2"
                     sx={{ color: "text.secondary" }}
                   >
-                    {new Date().toLocaleString()}
+                    {getDateAsString(comment.publishDate)}
                   </Typography>
                 }
                 action={

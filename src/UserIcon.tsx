@@ -29,7 +29,7 @@ export default function UserIcon(props: UserIconProps) {
   const avatar = (
     <Avatar
       sx={{
-        bgcolor: red[500],
+        bgcolor: "primary.main",
         ...(props.onClick !== undefined && {
           "&:hover": {
             outline: "2.5px solid lightgray",

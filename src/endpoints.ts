@@ -6,6 +6,6 @@ export const ENDPOINTS = {
     POST: "/post",
     USER: "/user",
     AI: "/ai",
-    COMMENT: "/comment",
+    COMMENT: "/comments",
     ENHANCE_CAPTION: "/enhance-caption",
 };

@@ -1,45 +1,45 @@
 import React from "react";
-import { Box, Typography, Grid } from "@mui/material";
+import { Box, Typography, Grid, Paper } from "@mui/material";
 import useUsers from "./data_hooks/useUsers";
 import UserData from "./UserData";
 import { User } from "./types/User";
+import useActualUser from "./useActualUser";
 
 type SuggestionsProps = {
-  userToDisplay?: User;
+  userToDisplay?: User | undefined;
   setUserToDisplay: (user: User | undefined) => void;
 };
 
 const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
   const users = useUsers().users;
-
+  const actualUser = useActualUser().actualUser;
+  const isActualUser = actualUser !== undefined;
   return (
-    <Box
+    <Paper
+      elevation={3}
       sx={{
         width: "100%",
         padding: 2,
-        borderLeft: "1px solid #ddd",
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
+        borderRadius: 2,
+        backgroundColor: (theme) => theme.palette.background.paper,
       }}
     >
-      <Box sx={{ flexShrink: 0 }}>
-        <Typography variant="h6" sx={{ mb: 2 }}>
+      <Box sx={{ mb: 2 }}>
+        <Typography variant="h6" sx={{ fontWeight: "bold" }}>
           Suggestions
         </Typography>
       </Box>
       <Box
         sx={{
-          flexGrow: 1,
           overflowY: "auto",
         }}
       >
         <Grid container spacing={2}>
           {users.map((user) => (
             <Grid item xs={12} sm={6} key={user._id}>
-              {props.userToDisplay && (
+              {!props.userToDisplay && (
                 <UserData
-                  userToDisplay={props.userToDisplay}
+                  userToDisplay={user}
                   setUserToDisplay={props.setUserToDisplay}
                   isActualUser={false}
                   isSuggestion={true}
@@ -49,7 +49,7 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
           ))}
         </Grid>
       </Box>
-    </Box>
+    </Paper>
   );
 };
 
