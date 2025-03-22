@@ -52,6 +52,10 @@ export default function CommentsPage(props: CommentsPageProps) {
     setComments((prevComments) =>
       prevComments.filter((c) => c._id !== comment._id)
     );
+    props.updatePost({
+      ...props.post,
+      commentAmount: props.post.commentAmount - 1,
+    });
   };
 
   const onSubmit = async (data: { description: string }) => {

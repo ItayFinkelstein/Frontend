@@ -8,7 +8,6 @@ export default function useActualUser() {
     getUserFromStorageId(users)
   );
   function setActualUserData(user: User | undefined) {
-    console.log("setActualUserData", user);
     localStorage.setItem("actualUser", user?._id || "");
     setActualUser(user);
   }
@@ -24,7 +23,6 @@ export default function useActualUser() {
 
 function getUserFromStorageId(userList: User[]) {
   const userId = localStorage.getItem("actualUser");
-  console.log(userId);
   return userId === "" || userId === null
     ? undefined
     : userList.find((user) => user._id === userId);

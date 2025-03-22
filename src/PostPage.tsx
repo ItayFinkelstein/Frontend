@@ -23,14 +23,12 @@ type PostPageProps = {
 };
 
 const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
-  const userToFilterByIsNotUndefined = props.userToFilterBy !== undefined;
-  const displayedPosts = userToFilterByIsNotUndefined
-    ? props.userPosts
-    : props.posts;
-  const hasMore = userToFilterByIsNotUndefined
+  const userToFilterByExists = props.userToFilterBy !== undefined;
+  const displayedPosts = userToFilterByExists ? props.userPosts : props.posts;
+  const hasMore = userToFilterByExists
     ? props.hasMoreUserPosts
     : props.hasMorePosts;
-  const fetchMore = userToFilterByIsNotUndefined
+  const fetchMore = userToFilterByExists
     ? props.fetchUserPosts
     : props.fetchPosts;
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(

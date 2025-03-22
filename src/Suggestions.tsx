@@ -36,7 +36,7 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
             <Grid item xs={12} sm={6} key={user._id}>
               {!props.userToDisplay && (
                 <UserData
-                  userToDisplay={user}
+                  userToDisplay={user!}
                   setUserToDisplay={props.setUserToDisplay}
                   isActualUser={false}
                   isSuggestion={true}
