@@ -137,7 +137,11 @@ export default function PostCardForm(props: PostCardForm) {
               setValue={setValue}
               fieldToUpdate="description"
             />
-            <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+            <Button
+              type="submit"
+              variant="contained"
+              sx={{ mt: 2, height: "2.3vw" }}
+            >
               Submit
             </Button>
           </Box>
