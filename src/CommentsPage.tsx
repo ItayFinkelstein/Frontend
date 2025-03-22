@@ -65,7 +65,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       publishDate: new Date().toISOString(),
     });
     const commentFromResponse: Comment = (await response).data;
-    setComments([...comments, commentFromResponse]);
+    setComments([commentFromResponse, ...comments]);
     props.updatePost({
       ...props.post,
       commentAmount: props.post.commentAmount + 1,
@@ -108,7 +108,16 @@ export default function CommentsPage(props: CommentsPageProps) {
                 "& .MuiOutlinedInput-notchedOutline": { border: "1" },
               }}
             />
-            <IconButton type="submit" sx={{ alignSelf: "center" }}>
+            <IconButton
+              type="submit"
+              sx={{
+                alignSelf: "center",
+                "&:hover": {
+                  outline: "none",
+                  border: "none",
+                },
+              }}
+            >
               <SendIcon />
             </IconButton>
           </Box>
