@@ -3,7 +3,6 @@ import { Box, Typography, Paper } from "@mui/material";
 import useUsers from "./data_hooks/useUsers";
 import UserData from "./UserData";
 import { User } from "./types/User";
-import useActualUser from "./useActualUser";
 
 type SuggestionsProps = {
   userToDisplay?: User | undefined;
@@ -13,7 +12,6 @@ type SuggestionsProps = {
 
 const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
   const users = useUsers().users;
-  const { actualUser } = useActualUser();
 
   return (
     <Paper
@@ -38,7 +36,8 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
         {users
           .filter(
             (user) =>
-              user._id !== actualUser?._id || props.actualUser?._id !== user._id
+              user._id !== props.actualUser?._id ||
+              props.actualUser?._id !== user._id
           )
           .map((user) => (
             <Box key={user._id} sx={{ mb: 2 }}>
@@ -47,6 +46,7 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
                 setUserToDisplay={props.setUserToDisplay}
                 isActualUser={false}
                 isSuggestion={true}
+                actualUser={props.actualUser}
               />
             </Box>
           ))}

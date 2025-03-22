@@ -12,8 +12,7 @@ import { GenericIconButton } from "./GenericIconButton";
 import userService, { uploadImage } from "./http-connections/userService";
 import { User } from "./types/User";
 import useUsers from "./data_hooks/useUsers";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import PhotoIcon from "./PhotoIcon";
 
 export interface UserToDisplayProps {
   userToDisplay: User;
@@ -25,11 +24,13 @@ export default function UserData(
     isActualUser: boolean;
     isSuggestion: boolean;
     setActualUser?: (user: User | undefined) => void;
+    actualUser?: User | undefined;
   }
 ) {
   const [isEditing, setIsEditing] = useState(false);
   const { setUsers } = useUsers();
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [image, setImage] = useState<File | null>(null);
+
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
   const schema = z.object({
@@ -44,6 +45,7 @@ export default function UserData(
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -53,7 +55,8 @@ export default function UserData(
 
   useEffect(() => {
     if (img && img[0]) {
-      setSelectedImage(img[0]);
+      setImage(img[0]);
+      console.log(img[0]);
     }
   }, [img]);
 
@@ -80,6 +83,13 @@ export default function UserData(
       });
     });
     props.setActualUser?.(updatedUser);
+    if (!props.userToDisplay) {
+      reset({
+        name: "",
+        img: undefined,
+      });
+      setImage(null);
+    }
     setIsEditing(false);
   };
 
@@ -93,11 +103,14 @@ export default function UserData(
         display: "flex",
         alignItems: "center",
         gap: props.isSuggestion ? "1rem" : "3rem",
-        width: "100%",
+        width: props.isSuggestion ? "95%" : "100%",
       }}
     >
       <Box sx={{ position: "relative" }}>
         <UserIcon
+          iconUrl={
+            image ? URL.createObjectURL(image) : props.userToDisplay.iconImage
+          }
           user={props.userToDisplay}
           style={{
             width: props.isSuggestion ? "50px" : "150px",
@@ -105,24 +118,12 @@ export default function UserData(
           }}
           onClick={() => props.setUserToDisplay(props.userToDisplay)}
         />
-        {props.isActualUser && (
-          <IconButton
-            color="primary"
-            component="label"
-            sx={{ position: "absolute", bottom: 0, right: 0 }}
-          >
-            <FontAwesomeIcon icon={faImage} />
-            <input
-              ref={(item) => {
-                inputFileRef.current = item;
-                ref(item);
-              }}
-              {...restRegisterParams}
-              type="file"
-              accept="image/png, image/jpeg"
-              style={{ display: "none" }}
-            />
-          </IconButton>
+        {props.isActualUser && isEditing && (
+          <PhotoIcon
+            inputFileRef={inputFileRef}
+            refCallback={ref}
+            restRegisterParams={restRegisterParams}
+          />
         )}
       </Box>
       <Box sx={{ flexGrow: 1 }}>

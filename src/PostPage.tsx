@@ -73,6 +73,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             props.actualUser !== undefined &&
             props.actualUser._id === props.userToFilterBy._id
           }
+          actualUser={props.actualUser}
           isSuggestion={false}
           setActualUser={props.setActualUser}
         />

@@ -22,6 +22,7 @@ type UserIconMenuProps =
 type UserIconProps = {
   user: User | undefined;
   style?: React.CSSProperties;
+  iconUrl?: string;
 } & UserIconMenuProps;
 
 export default function UserIcon(props: UserIconProps) {
@@ -40,7 +41,7 @@ export default function UserIcon(props: UserIconProps) {
         ...props.style,
       }}
       aria-label="user icon"
-      src={props.user?.iconImage}
+      src={props.iconUrl ?? props.user?.iconImage}
       onClick={() => {
         props.onClick?.();
       }}
