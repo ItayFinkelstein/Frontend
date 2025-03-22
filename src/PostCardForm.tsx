@@ -45,7 +45,6 @@ export default function PostCardForm(props: PostCardForm) {
       description: props.post?.message || "",
       title: props.post?.title || "",
     },
-    shouldUnregister: false,
   });
 
   const [image, setImage] = useState<File | null>(null);
@@ -127,7 +126,7 @@ export default function PostCardForm(props: PostCardForm) {
             defaultValue={props.post?.message}
           />
           <EnhanceCaption
-            currentDescription={getValues("description")}
+            currentDescription={watch("description") || ""}
             setValue={setValue}
             fieldToUpdate="description"
           />
