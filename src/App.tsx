@@ -202,6 +202,7 @@ export type SharedProps = {
   addPost: (post: Post) => void;
   actualUser: User | undefined;
   setActualUser: (user: User | undefined) => void;
+  fetchUserPosts: () => void;
 };
 const AppContent: React.FC<
   {
@@ -214,7 +215,6 @@ const AppContent: React.FC<
     fetchPosts: () => void;
     userPosts: Post[];
     hasMoreUserPosts: boolean;
-    fetchUserPosts: () => void;
   } & SharedProps
 > = ({
   toggleTheme,
@@ -226,7 +226,6 @@ const AppContent: React.FC<
   fetchPosts,
   userPosts,
   hasMoreUserPosts,
-  fetchUserPosts,
   ...sharedProps
 }) => {
   const locationRoute = useLocation();
@@ -267,7 +266,6 @@ const AppContent: React.FC<
           fetchPosts={fetchPosts}
           userPosts={userPosts}
           hasMoreUserPosts={hasMoreUserPosts}
-          fetchUserPosts={fetchUserPosts}
           {...sharedProps}
         />
       </div>
