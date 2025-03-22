@@ -3,7 +3,6 @@ import { Box, Typography, Grid, Paper } from "@mui/material";
 import useUsers from "./data_hooks/useUsers";
 import UserData from "./UserData";
 import { User } from "./types/User";
-import useActualUser from "./useActualUser";
 
 type SuggestionsProps = {
   userToDisplay?: User | undefined;
@@ -12,8 +11,6 @@ type SuggestionsProps = {
 
 const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
   const users = useUsers().users;
-  const actualUser = useActualUser().actualUser;
-  const isActualUser = actualUser !== undefined;
   return (
     <Paper
       elevation={3}

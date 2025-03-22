@@ -1,6 +1,5 @@
 import Avatar from "@mui/material/Avatar/Avatar";
 import { User } from "./types/User";
-import red from "@mui/material/colors/red";
 import Box from "@mui/material/Box/Box";
 import UserMenu from "./UserMenu";
 

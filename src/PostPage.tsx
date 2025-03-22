@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import PostCard from "./PostCard";
