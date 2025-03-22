@@ -37,7 +37,7 @@ export default function UserData(
     name: z
       .string()
       .min(1, { message: "Name is required" })
-      .max(20, { message: "Name must be no more than 20 characters" }),
+      .max(60, { message: "Name must be no more than 60 characters" }),
     img: z.instanceof(FileList).optional(),
   });
 
