@@ -19,6 +19,7 @@ const EnhanceCaption: React.FC<EnhanceCaptionProps> = ({
   const [showEnhancedCaption, setShowEnhancedCaption] = useState(false);
 
   const handleEnhanceCaption = async () => {
+    console.log("Enhancing caption" + currentDescription);
     const enhanced = await generateEnhancedCaption(currentDescription);
     setEnhancedCaption(enhanced);
     setShowEnhancedCaption(true);
