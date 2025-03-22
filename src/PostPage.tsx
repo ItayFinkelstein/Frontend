@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import PostCard from "./PostCard";
@@ -23,11 +23,12 @@ type PostPageProps = {
 };
 
 const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
-  const displayedPosts = !!props.userToFilterBy ? props.userPosts : props.posts;
-  const hasMore = !!props.userToFilterBy
+  const userToFilterByExists = props.userToFilterBy !== undefined;
+  const displayedPosts = userToFilterByExists ? props.userPosts : props.posts;
+  const hasMore = userToFilterByExists
     ? props.hasMoreUserPosts
     : props.hasMorePosts;
-  const fetchMore = !!props.userToFilterBy
+  const fetchMore = userToFilterByExists
     ? props.fetchUserPosts
     : props.fetchPosts;
   const [postToShowComments, setPostToShowComments] = useState<Post | null>(
@@ -42,7 +43,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
   };
 
   return postToShowComments === null && postToEdit === null ? (
-    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "2vh" }}>
       {props.userToFilterBy && (
         <UserData
           userToDisplay={props.userToFilterBy}
@@ -51,6 +52,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             actualUser !== undefined &&
             actualUser._id === props.userToFilterBy._id
           }
+          isSuggestion={false}
         />
       )}
       <>

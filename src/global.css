@@ -1,17 +1,28 @@
+/* Custom scrollbar styles for light and dark modes */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.5) transparent; 
+}
+
+*::-webkit-scrollbar {
+  border-radius: 10px; 
 }
 
 body.light-mode {
