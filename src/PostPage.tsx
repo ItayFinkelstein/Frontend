@@ -8,6 +8,7 @@ import RefreshIcon from "@mui/icons-material/Autorenew";
 import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
 import useActualUser from "./useActualUser";
+import postService from "./http-connections/postService";
 
 type PostPageProps = {
   posts: Post[];
@@ -20,6 +21,7 @@ type PostPageProps = {
   setUserToFilterBy: (user: User | undefined) => void;
   updatePost: (post: Post) => void;
   deletePost: (id: string) => void;
+  addPost: (post: Post) => void;
 };
 
 const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
@@ -36,10 +38,33 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
   const { actualUser } = useActualUser();
 
-  const handlePostEdit = (updatedPost: Post) => {
-    setPostToEdit(null);
-    props.updatePost(updatedPost);
+  const handlePostAdd = async (updatedPost: Post) => {
+    const currentDateTime = new Date()
+      .toISOString()
+      .replace("T", " ")
+      .split(".")[0];
+    const postToAdd = {
+      ...updatedPost,
+      owner: actualUser!._id,
+      publishDate: currentDateTime,
+      commentAmount: 0,
+      likes: [],
+    };
+    const { response } = await postService.add(postToAdd);
+    const resolvedResponse = await response;
+    props.addPost({
+      ...postToAdd,
+      image: resolvedResponse.data.image,
+      _id: resolvedResponse.data._id,
+    });
   };
+
+  async function updatePost(updatedPost: Post) {
+    const { response } = postService.update(updatedPost);
+    const resolvedResponse = await response;
+    setPostToEdit(null);
+    props.updatePost({ ...updatedPost, image: resolvedResponse.data.image });
+  }
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -52,6 +77,10 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             actualUser._id === props.userToFilterBy._id
           }
         />
+      )}
+      {(props.userToFilterBy === undefined ||
+        props.userToFilterBy._id === actualUser?._id) && (
+        <PostCardForm updatePost={handlePostAdd} />
       )}
       <>
         {displayedPosts.map((post) => (
@@ -85,9 +114,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
       updatePost={props.updatePost}
     />
   ) : (
-    postToEdit && (
-      <PostCardForm post={postToEdit} handlePostUpdate={handlePostEdit} />
-    )
+    postToEdit && <PostCardForm post={postToEdit} updatePost={updatePost} />
   );
 };
 

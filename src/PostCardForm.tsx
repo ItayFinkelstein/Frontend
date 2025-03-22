@@ -1,23 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Card from "@mui/material/Card/Card";
 import { Post } from "./types/Post";
 import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
 import { useForm } from "react-hook-form";
-import { Button } from "@mui/material";
+import { Button, IconButton } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ImageIcon from "@mui/icons-material/Image";
 import ValidatedTextField from "./ValidatedTextField";
-import { GenericIconButton } from "./GenericIconButton";
-import postService from "./http-connections/postService";
 import EnhanceCaption from "./EnhanceCaption";
+import { uploadImage } from "./http-connections/userService";
+import { faImage } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 type PostCardForm = {
   post?: Post;
-  handlePostUpdate?: (post: Post) => void;
-  onUpdate?: (updatedPost: Post) => void;
+  updatePost: ((post: Post) => void) | ((post: Omit<Post, "_id">) => void);
 };
 
 export default function PostCardForm(props: PostCardForm) {
@@ -30,6 +29,7 @@ export default function PostCardForm(props: PostCardForm) {
       .string()
       .min(3, { message: "Title must be at least 3 characters" })
       .max(200, { message: "Title must be no more than 200 letters" }),
+    img: z.instanceof(FileList).optional(),
   });
 
   const {
@@ -38,29 +38,54 @@ export default function PostCardForm(props: PostCardForm) {
     formState: { errors },
     getValues,
     setValue,
+    watch,
+    reset,
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
       description: props.post?.message || "",
       title: props.post?.title || "",
     },
+    shouldUnregister: false,
   });
 
-  const [image, setImage] = useState(props.post?.image);
+  const [image, setImage] = useState<File | null>(null);
+
+  const [img] = watch(["img"]);
+  const inputFileRef: { current: HTMLInputElement | null } = { current: null };
+  const { ref, ...restRegisterParams } = register("img");
+  useEffect(() => {
+    if (img !== undefined && img[0]) {
+      setImage(img[0]);
+    }
+  }, [img]);
 
   const onSubmit = async (data: any) => {
+    let avatarUrl = "";
+    if (props.post?.image !== undefined && data.img !== props.post.image) {
+      avatarUrl = props.post.image;
+    } else if (data.img && data.img[0]) {
+      const { request } = uploadImage(data.img[0]);
+      const response = await request;
+      avatarUrl = response.data.url;
+    }
     const updatedPost = {
       ...props.post!,
       title: data.title,
       message: data.description,
+      image: avatarUrl,
     };
-    updatePost(updatedPost);
+    await props.updatePost(updatedPost);
+    if (props.post === undefined) {
+      reset({
+        description: "",
+        title: "",
+        img: undefined,
+      });
+      setImage(null);
+    }
   };
 
-  async function updatePost(updatedPost: Post) {
-    await postService.update(updatedPost);
-    props.handlePostUpdate?.(updatedPost);
-  }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Card sx={{ width: "30vw" }}>
@@ -79,15 +104,30 @@ export default function PostCardForm(props: PostCardForm) {
               : undefined
           }
         />
-        <CardMedia component="img" height="194" image={image} />
-        <GenericIconButton
-          title="Edit post"
-          icon={<ImageIcon />}
-          onClick={() => {
-            console.log("button to change image");
-            setImage(undefined);
-          }}
-        />
+        {(image !== null || props.post?.image !== undefined) && ( // Display the image preview if a file is selected
+          <CardMedia
+            component="img"
+            height="194"
+            image={
+              image !== null ? URL.createObjectURL(image) : props.post?.image
+            }
+            alt="Selected image preview"
+            sx={{ mb: 2 }}
+          />
+        )}
+        <IconButton color="primary" component="label" sx={{ mb: 2 }}>
+          <FontAwesomeIcon icon={faImage} />
+          <input
+            ref={(item) => {
+              inputFileRef.current = item;
+              ref(item);
+            }}
+            {...restRegisterParams}
+            type="file"
+            accept="image/png, image/jpeg"
+            style={{ display: "none" }}
+          />
+        </IconButton>
         <CardContent>
           <ValidatedTextField
             name="description"

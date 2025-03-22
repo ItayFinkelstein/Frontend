@@ -134,6 +134,13 @@ const App: React.FC = () => {
     setPageUserPosts((prev) => prev - 1);
   };
 
+  const addPost = (post: Post) => {
+    setPosts((prevPosts) => [post, ...prevPosts]);
+    if (userToFilterBy && userToFilterBy._id === post.owner) {
+      setUserPosts((prevPosts) => [post, ...prevPosts]);
+    }
+  };
+
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -153,6 +160,7 @@ const App: React.FC = () => {
           }
           updatePost={updatePost}
           deletePost={deletePost}
+          addPost={addPost}
         />
       </Router>
     </ThemeProvider>
@@ -172,6 +180,7 @@ const AppContent: React.FC<{
   fetchUserPosts: () => void;
   updatePost: (post: Post) => void;
   deletePost: (id: string) => void;
+  addPost: (post: Post) => void;
 }> = ({
   toggleTheme,
   isDarkMode,
@@ -185,6 +194,7 @@ const AppContent: React.FC<{
   fetchUserPosts,
   updatePost,
   deletePost,
+  addPost,
 }) => {
   const locationRoute = useLocation();
 
@@ -226,6 +236,7 @@ const AppContent: React.FC<{
           fetchUserPosts={fetchUserPosts}
           updatePost={updatePost}
           deletePost={deletePost}
+          addPost={addPost}
         />
       </div>
     </div>
@@ -245,6 +256,7 @@ const MainContent: React.FC<{
   fetchUserPosts: () => void;
   updatePost: (post: Post) => void;
   deletePost: (id: string) => void;
+  addPost: (post: Post) => void;
 }> = ({
   userToFilterBy,
   setUserToFilterByFunc,
@@ -256,6 +268,7 @@ const MainContent: React.FC<{
   fetchUserPosts,
   updatePost,
   deletePost,
+  addPost,
 }) => {
   return (
     <div
@@ -283,6 +296,7 @@ const MainContent: React.FC<{
                 setUserToFilterBy={setUserToFilterByFunc}
                 updatePost={updatePost}
                 deletePost={deletePost}
+                addPost={addPost}
               />
             </ProtectedRoute>
           }
