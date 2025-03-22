@@ -22,6 +22,7 @@ type UserIconMenuProps =
 type UserIconProps = {
   user: User | undefined;
   style?: React.CSSProperties;
+  iconUrl?: string;
 } & UserIconMenuProps;
 
 export default function UserIcon(props: UserIconProps) {
@@ -29,6 +30,9 @@ export default function UserIcon(props: UserIconProps) {
     <Avatar
       sx={{
         bgcolor: "primary.main",
+        fontSize: props.style?.width
+          ? `calc(${props.style.width} / 2.5)`
+          : "1rem",
         ...(props.onClick !== undefined && {
           "&:hover": {
             outline: "2.5px solid lightgray",
@@ -37,7 +41,7 @@ export default function UserIcon(props: UserIconProps) {
         ...props.style,
       }}
       aria-label="user icon"
-      src={props.user?.iconImage}
+      src={props.iconUrl ?? props.user?.iconImage}
       onClick={() => {
         props.onClick?.();
       }}
