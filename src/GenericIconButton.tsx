@@ -5,12 +5,14 @@ interface GenericIconButtonProps {
   title: string;
   icon: React.ReactElement;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export const GenericIconButton: React.FC<GenericIconButtonProps> = ({
   title,
   icon,
   onClick,
+  disabled,
 }) => {
   return (
     <Tooltip title={title} arrow>
@@ -18,6 +20,7 @@ export const GenericIconButton: React.FC<GenericIconButtonProps> = ({
         aria-label={title}
         style={{ outline: "none" }}
         onClick={onClick}
+        disabled={disabled}
       >
         {icon}
       </IconButton>

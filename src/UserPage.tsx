@@ -1,22 +1,39 @@
+import React from "react";
 import Box from "@mui/material/Box";
 import PostPage from "./PostPage";
+import { Post } from "./types/Post";
 import { User } from "./types/User";
 
-interface UserPageProps {
-  userToFilterBy: User | undefined;
+type UserPageProps = {
+  posts: Post[];
+  hasMorePosts: boolean;
+  fetchPosts: () => void;
+  userPosts: Post[];
+  hasMoreUserPosts: boolean;
+  fetchUserPosts: () => void;
+  userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
-}
+  updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
+};
 
-export default function UserPage({
-  userToFilterBy,
-  setUserToFilterBy,
-}: UserPageProps) {
+const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
   return (
     <Box>
       <PostPage
-        userToDisplay={userToFilterBy}
-        setUserToDisplay={setUserToFilterBy}
+        posts={props.posts}
+        hasMorePosts={props.hasMorePosts}
+        fetchPosts={props.fetchPosts}
+        userPosts={props.userPosts}
+        hasMoreUserPosts={props.hasMoreUserPosts}
+        fetchUserPosts={props.fetchUserPosts}
+        userToFilterBy={props.userToFilterBy}
+        setUserToFilterBy={props.setUserToFilterBy}
+        updatePost={props.updatePost}
+        deletePost={props.deletePost}
       />
     </Box>
   );
-}
+};
+
+export default UserPage;
