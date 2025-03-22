@@ -6,9 +6,9 @@ import { GenericIconButton } from "./GenericIconButton";
 import RefreshIcon from "@mui/icons-material/Autorenew";
 import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
-import useActualUser from "./useActualUser";
-import UserProfile from "./UserProfile";
 import postService from "./http-connections/postService";
+import { SharedProps } from "./App";
+import UserData from "./UserData";
 
 type PostPageProps = {
   posts: Post[];
@@ -19,10 +19,7 @@ type PostPageProps = {
   fetchUserPosts: () => void;
   userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
-  updatePost: (post: Post) => void;
-  deletePost: (id: string) => void;
-  addPost: (post: Post) => void;
-};
+} & SharedProps;
 
 const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
   const userToFilterByExists = props.userToFilterBy !== undefined;
@@ -37,7 +34,6 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
     null
   );
   const [postToEdit, setPostToEdit] = useState<Post | null>(null);
-  const { actualUser } = useActualUser();
 
   const handlePostAdd = async (updatedPost: Post) => {
     const currentDateTime = new Date()
@@ -46,7 +42,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
       .split(".")[0];
     const postToAdd = {
       ...updatedPost,
-      owner: actualUser!._id,
+      owner: props.actualUser!._id,
       publishDate: currentDateTime,
       commentAmount: 0,
       likes: [],
@@ -70,17 +66,19 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "2vh" }}>
       {props.userToFilterBy && (
-        <UserProfile
+        <UserData
           userToDisplay={props.userToFilterBy}
           setUserToDisplay={props.setUserToFilterBy}
           isActualUser={
-            actualUser !== undefined &&
-            actualUser._id === props.userToFilterBy._id
+            props.actualUser !== undefined &&
+            props.actualUser._id === props.userToFilterBy._id
           }
+          isSuggestion={false}
+          setActualUser={props.setActualUser}
         />
       )}
       {(props.userToFilterBy === undefined ||
-        props.userToFilterBy._id === actualUser?._id) && (
+        props.userToFilterBy._id === props.actualUser?._id) && (
         <PostCardForm updatePost={handlePostAdd} />
       )}
       <>
@@ -93,6 +91,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             editPost={() => setPostToEdit(post)}
             updatePost={props.updatePost}
             deletePost={props.deletePost}
+            actualUser={props.actualUser}
           />
         ))}
         {hasMore && (
@@ -110,8 +109,9 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
     <CommentsPage
       post={postToShowComments}
       closeCommentsForm={() => setPostToShowComments(null)}
-      isCurrentUserPost={actualUser?._id === postToShowComments.owner}
+      isCurrentUserPost={props.actualUser?._id === postToShowComments.owner}
       updatePost={props.updatePost}
+      actualUser={props.actualUser}
     />
   ) : (
     postToEdit && <PostCardForm post={postToEdit} updatePost={updatePost} />

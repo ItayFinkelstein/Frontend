@@ -24,6 +24,7 @@ export default function UserData(
   props: Required<UserToDisplayProps> & {
     isActualUser: boolean;
     isSuggestion: boolean;
+    setActualUser?: (user: User | undefined) => void;
   }
 ) {
   const [isEditing, setIsEditing] = useState(false);
@@ -78,6 +79,7 @@ export default function UserData(
         return user;
       });
     });
+    props.setActualUser?.(updatedUser);
     setIsEditing(false);
   };
 

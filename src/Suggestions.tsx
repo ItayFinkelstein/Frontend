@@ -8,6 +8,7 @@ import useActualUser from "./useActualUser";
 type SuggestionsProps = {
   userToDisplay?: User | undefined;
   setUserToDisplay: (user: User | undefined) => void;
+  actualUser: User | undefined;
 };
 
 const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
@@ -35,7 +36,10 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
         }}
       >
         {users
-          .filter((user) => user._id !== actualUser?._id)
+          .filter(
+            (user) =>
+              user._id !== actualUser?._id || props.actualUser?._id !== user._id
+          )
           .map((user) => (
             <Box key={user._id} sx={{ mb: 2 }}>
               <UserData
