@@ -5,7 +5,7 @@ import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
 import { useForm } from "react-hook-form";
-import { Button } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
@@ -35,7 +35,6 @@ export default function PostCardForm(props: PostCardForm) {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     setValue,
     watch,
     reset,
@@ -57,6 +56,14 @@ export default function PostCardForm(props: PostCardForm) {
       setImage(img[0]);
     }
   }, [img]);
+
+  useEffect(() => {
+    console.log("image", image);
+  }, [image]);
+
+  useEffect(() => {
+    console.log("post", props.post);
+  }, [props.post]);
 
   const onSubmit = async (data: any) => {
     let avatarUrl = "";
@@ -89,12 +96,21 @@ export default function PostCardForm(props: PostCardForm) {
       <Card sx={{ width: "100%" }}>
         <CardHeader
           title={
-            <ValidatedTextField
-              name="title"
-              register={register}
-              error={errors.title}
-              defaultValue={props.post?.title}
-            />
+            <Box display="flex" alignItems="center">
+              <ValidatedTextField
+                name="title"
+                register={register}
+                error={errors.title}
+                defaultValue={props.post?.title}
+              />
+              <Box style={{ width: "2vw" }}>
+                <PhotoIcon
+                  inputFileRef={inputFileRef}
+                  refCallback={ref}
+                  restRegisterParams={restRegisterParams}
+                />
+              </Box>
+            </Box>
           }
           subheader={
             props.post !== undefined
@@ -113,26 +129,23 @@ export default function PostCardForm(props: PostCardForm) {
             sx={{ mb: 2 }}
           />
         )}
-        <PhotoIcon
-          inputFileRef={inputFileRef}
-          refCallback={ref}
-          restRegisterParams={restRegisterParams}
-        />
-        <CardContent>
+        <CardContent sx={{ paddingTop: 0 }}>
           <ValidatedTextField
             name="description"
             register={register}
             error={errors.description}
             defaultValue={props.post?.message}
           />
-          <EnhanceCaption
-            currentDescription={watch("description") || ""}
-            setValue={setValue}
-            fieldToUpdate="description"
-          />
-          <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
-            Submit
-          </Button>
+          <Box display="flex" gap={2}>
+            <EnhanceCaption
+              currentDescription={watch("description") || ""}
+              setValue={setValue}
+              fieldToUpdate="description"
+            />
+            <Button type="submit" variant="contained" sx={{ mt: 2 }}>
+              Submit
+            </Button>
+          </Box>
         </CardContent>
       </Card>
     </form>

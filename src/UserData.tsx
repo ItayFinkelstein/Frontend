@@ -1,4 +1,4 @@
-import { Paper, Box, Typography, Avatar, IconButton } from "@mui/material";
+import { Paper, Box, Typography } from "@mui/material";
 import UserIcon from "./UserIcon";
 import EditIcon from "@mui/icons-material/Edit";
 import SendIcon from "@mui/icons-material/Done";
@@ -97,13 +97,16 @@ export default function UserData(
 
   return (
     <Paper
-      elevation={3}
+      elevation={props.isSuggestion ? 0 : 3}
       sx={{
         padding: "20px",
         display: "flex",
         alignItems: "center",
         gap: props.isSuggestion ? "1rem" : "3rem",
         width: props.isSuggestion ? "95%" : "100%",
+        boxShadow: props.isSuggestion
+          ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+          : undefined,
         "&:hover": {
           backgroundColor: props.isSuggestion ? "lightyellow" : "",
         },

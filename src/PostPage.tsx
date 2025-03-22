@@ -80,7 +80,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
       )}
       {(props.userToFilterBy === undefined ||
         props.userToFilterBy._id === props.actualUser?._id) && (
-        <PostCardForm updatePost={handlePostAdd} />
+        <PostCardForm post={undefined} updatePost={handlePostAdd} />
       )}
       <>
         {displayedPosts.map((post) => (
