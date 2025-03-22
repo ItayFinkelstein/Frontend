@@ -1,7 +1,5 @@
 import Card from "@mui/material/Card";
 import { Post } from "./types/Post";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -88,17 +86,20 @@ export default function CommentsPage(props: CommentsPageProps) {
             sx={{ display: "flex", alignItems: "flex-start", marginBottom: 2 }}
           >
             <TextField
-              label="Add a comment"
               variant="outlined"
               multiline
-              rows={3}
+              rows={2}
               fullWidth
+              placeholder="Write your comment here..."
               {...register("description")}
               error={!!errors.description}
               helperText={errors.description ? errors.description.message : ""}
-              sx={{ mr: 2 }}
+              sx={{
+                mr: 2,
+                "& .MuiOutlinedInput-notchedOutline": { border: "1" },
+              }}
             />
-            <IconButton type="submit" sx={{ height: "fit-content" }}>
+            <IconButton type="submit" sx={{ alignSelf: "center" }}>
               <SendIcon />
             </IconButton>
           </Box>
@@ -110,39 +111,54 @@ export default function CommentsPage(props: CommentsPageProps) {
 
           return (
             <Card
-              sx={{ width: "100%", marginBottom: 2, boxShadow: 3 }}
+              sx={{ width: "100%", marginBottom: 1, boxShadow: 1, padding: 1 }}
               key={comment._id}
             >
-              <CardHeader
-                avatar={<UserIcon user={user} />}
-                title={
-                  <Typography variant="caption" sx={{ fontWeight: "bold" }}>
-                    {user?.name ?? "Unknown"}
-                  </Typography>
-                }
-                subheader={
-                  <Typography
-                    variant="subtitle2"
-                    sx={{ color: "text.secondary" }}
+              <Box
+                display="flex"
+                alignItems="center"
+                sx={{ marginBottom: 0.5 }}
+              >
+                <UserIcon user={user} />
+                <Box
+                  sx={{
+                    marginLeft: 1,
+                    flexGrow: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
                   >
-                    {getDateAsString(comment.publishDate)}
+                    <Typography variant="caption" sx={{ fontWeight: "bold" }}>
+                      {user?.name ?? "Unknown"}
+                    </Typography>
+                    <Typography
+                      variant="caption"
+                      sx={{ color: "text.secondary", marginLeft: 1 }}
+                    >
+                      {getDateAsString(comment.publishDate)}
+                    </Typography>
+                  </Box>
+                  <Typography
+                    variant="body2"
+                    sx={{ color: "text.secondary", marginTop: 0.5 }}
+                  >
+                    {comment.message}
                   </Typography>
-                }
-                action={
-                  actualUser?._id === comment.owner && (
-                    <GenericIconButton
-                      title="Delete comment"
-                      icon={<DeleteIcon />}
-                      onClick={() => onDelete(comment)}
-                    />
-                  )
-                }
-              />
-              <CardContent>
-                <Typography variant="body2" sx={{ color: "text.secondary" }}>
-                  {comment.message}
-                </Typography>
-              </CardContent>
+                </Box>
+                {actualUser?._id === comment.owner && (
+                  <GenericIconButton
+                    title="Delete comment"
+                    icon={<DeleteIcon />}
+                    onClick={() => onDelete(comment)}
+                  />
+                )}
+              </Box>
             </Card>
           );
         })}
