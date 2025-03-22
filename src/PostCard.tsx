@@ -54,7 +54,7 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
   }
 
   return (
-    <Card sx={{ width: "30vw" }}>
+    <Card sx={{ width: "100%" }}>
       <CardHeader
         title={props.post.title}
         subheader={getDateAsString(props.post.publishDate)}

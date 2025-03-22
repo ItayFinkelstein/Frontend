@@ -29,6 +29,9 @@ export default function UserIcon(props: UserIconProps) {
     <Avatar
       sx={{
         bgcolor: "primary.main",
+        fontSize: props.style?.width
+          ? `calc(${props.style.width} / 2.5)`
+          : "1rem",
         ...(props.onClick !== undefined && {
           "&:hover": {
             outline: "2.5px solid lightgray",

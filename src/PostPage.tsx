@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import PostCard from "./PostCard";
-import UserData from "./UserData";
 import { GenericIconButton } from "./GenericIconButton";
 import RefreshIcon from "@mui/icons-material/Autorenew";
 import CommentsPage from "./CommentsPage";
 import PostCardForm from "./PostCardForm";
 import useActualUser from "./useActualUser";
+import UserProfile from "./UserProfile"; // Import the UserProfile component
 
 type PostPageProps = {
   posts: Post[];
@@ -45,14 +45,13 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "2vh" }}>
       {props.userToFilterBy && (
-        <UserData
+        <UserProfile
           userToDisplay={props.userToFilterBy}
           setUserToDisplay={props.setUserToFilterBy}
           isActualUser={
             actualUser !== undefined &&
             actualUser._id === props.userToFilterBy._id
           }
-          isSuggestion={false}
         />
       )}
       <>
@@ -73,7 +72,6 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
               title="load more posts"
               icon={<RefreshIcon />}
               onClick={() => fetchMore()}
-              //disabled={isLoading}
             />
           </div>
         )}
