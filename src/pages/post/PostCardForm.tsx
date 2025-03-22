@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Card from "@mui/material/Card/Card";
-import { Post } from "./types/Post";
+import { Post } from "../../types/Post";
 import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
@@ -8,10 +8,10 @@ import { useForm } from "react-hook-form";
 import { Box, Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ValidatedTextField from "./ValidatedTextField";
-import EnhanceCaption from "./EnhanceCaption";
-import { uploadImage } from "./http-connections/userService";
-import PhotoIcon from "./PhotoIcon";
+import ValidatedTextField from "../../ValidatedTextField";
+import EnhanceCaption from "../../EnhanceCaption";
+import { uploadImage } from "../../http-connections/userService";
+import PhotoIcon from "../../PhotoIcon";
 
 type PostCardForm = {
   post?: Post;
