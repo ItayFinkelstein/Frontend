@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { Box, Button, Grid, Link, Avatar, IconButton } from "@mui/material";
+import { Box, Button, Grid, Link, Avatar } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,8 +8,7 @@ import ValidatedTextField from "./ValidatedTextField";
 import { register } from "./http-connections/authService";
 import { uploadImage } from "./http-connections/userService";
 import avatar from "./assets/avatar.png";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
+import PhotoIcon from "./PhotoIcon";
 
 const schema = z.object({
   name: z
@@ -79,19 +78,11 @@ const RegisterForm: React.FC = () => {
         alt="Avatar"
         sx={{ width: "10rem", height: "10rem", mb: 2 }}
       />
-      <IconButton color="primary" component="label" sx={{ mb: 2 }}>
-        <FontAwesomeIcon icon={faImage} />
-        <input
-          ref={(item) => {
-            inputFileRef.current = item;
-            ref(item);
-          }}
-          {...restRegisterParams}
-          type="file"
-          accept="image/png, image/jpeg"
-          style={{ display: "none" }}
-        />
-      </IconButton>
+      <PhotoIcon
+        inputFileRef={inputFileRef}
+        refCallback={ref}
+        restRegisterParams={restRegisterParams}
+      />
       <ValidatedTextField
         name="name"
         label="Name"
