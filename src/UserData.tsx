@@ -11,6 +11,7 @@ import { useState } from "react";
 import { GenericIconButton } from "./GenericIconButton";
 import userService from "./http-connections/userService";
 import { User } from "./types/User";
+import useUsers from "./data_hooks/useUsers";
 
 export interface UserToDisplayProps {
   userToDisplay: User;
@@ -21,6 +22,7 @@ export default function UserData(
   props: Required<UserToDisplayProps> & { isActualUser: boolean }
 ) {
   const [isEditing, setIsEditing] = useState(false);
+  const { setUsers } = useUsers();
 
   const schema = z.object({
     name: z
@@ -37,9 +39,17 @@ export default function UserData(
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: any) => {
-    /** todo: check in next PR if needs to be fixed */
-    userService.update({ ...props.userToDisplay, name: data.name });
+  const onSubmit = async (data: any) => {
+    const updatedUser = { ...props.userToDisplay, name: data.name };
+    await userService.update(updatedUser);
+    setUsers((users) => {
+      return users.map((user) => {
+        if (user._id === updatedUser._id) {
+          return updatedUser;
+        }
+        return user;
+      });
+    });
     setIsEditing(false);
   };
 

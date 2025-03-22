@@ -14,6 +14,7 @@ type UserPageProps = {
   userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
   updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
 };
 
 const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
@@ -29,6 +30,7 @@ const UserPage: React.FC<UserPageProps> = (props: UserPageProps) => {
         userToFilterBy={props.userToFilterBy}
         setUserToFilterBy={props.setUserToFilterBy}
         updatePost={props.updatePost}
+        deletePost={props.deletePost}
       />
     </Box>
   );

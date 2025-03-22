@@ -19,6 +19,7 @@ type PostPageProps = {
   userToFilterBy?: User;
   setUserToFilterBy: (user: User | undefined) => void;
   updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
 };
 
 const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
@@ -39,10 +40,6 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
     setPostToEdit(null);
     props.updatePost(updatedPost);
   };
-
-  useEffect(() => {
-    console.log("displayedPosts", displayedPosts);
-  }, [displayedPosts]);
 
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -65,6 +62,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             showPostComments={() => setPostToShowComments(post)}
             editPost={() => setPostToEdit(post)}
             updatePost={props.updatePost}
+            deletePost={props.deletePost}
           />
         ))}
         {hasMore && (

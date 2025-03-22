@@ -127,6 +127,13 @@ const App: React.FC = () => {
     updatePostToArray(updatedPost, setUserPosts);
   };
 
+  const deletePost = (id: string) => {
+    setPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
+    setUserPosts((prevPosts) => prevPosts.filter((post) => post._id !== id));
+    setPagePosts((prev) => prev - 1);
+    setPageUserPosts((prev) => prev - 1);
+  };
+
   return (
     <ThemeProvider theme={isDarkMode ? darkTheme : lightTheme}>
       <CssBaseline />
@@ -145,6 +152,7 @@ const App: React.FC = () => {
             userToFilterBy && fetchUserPosts(pageUserPosts, userToFilterBy._id)
           }
           updatePost={updatePost}
+          deletePost={deletePost}
         />
       </Router>
     </ThemeProvider>
@@ -163,6 +171,7 @@ const AppContent: React.FC<{
   hasMoreUserPosts: boolean;
   fetchUserPosts: () => void;
   updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
 }> = ({
   toggleTheme,
   isDarkMode,
@@ -175,6 +184,7 @@ const AppContent: React.FC<{
   hasMoreUserPosts,
   fetchUserPosts,
   updatePost,
+  deletePost,
 }) => {
   const locationRoute = useLocation();
 
@@ -215,6 +225,7 @@ const AppContent: React.FC<{
           hasMoreUserPosts={hasMoreUserPosts}
           fetchUserPosts={fetchUserPosts}
           updatePost={updatePost}
+          deletePost={deletePost}
         />
       </div>
     </div>
@@ -233,6 +244,7 @@ const MainContent: React.FC<{
   hasMoreUserPosts: boolean;
   fetchUserPosts: () => void;
   updatePost: (post: Post) => void;
+  deletePost: (id: string) => void;
 }> = ({
   userToFilterBy,
   setUserToFilterByFunc,
@@ -243,6 +255,7 @@ const MainContent: React.FC<{
   hasMoreUserPosts,
   fetchUserPosts,
   updatePost,
+  deletePost,
 }) => {
   return (
     <div
@@ -269,6 +282,7 @@ const MainContent: React.FC<{
                 userToFilterBy={userToFilterBy}
                 setUserToFilterBy={setUserToFilterByFunc}
                 updatePost={updatePost}
+                deletePost={deletePost}
               />
             </ProtectedRoute>
           }

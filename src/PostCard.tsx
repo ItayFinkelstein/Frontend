@@ -23,6 +23,7 @@ import classes from "./PostCard.module.css";
 import usePosts from "./data_hooks/usePosts";
 
 type PostCardProps = {
+  deletePost: (id: string) => void;
   post: Post;
   showPostComments: () => void;
   editPost: () => void;
@@ -46,6 +47,11 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
   const user: User | undefined = users.find(
     (userToCheck: User) => userToCheck._id === props.post.owner
   );
+
+  async function onDelete() {
+    await postService.delete(props.post._id);
+    props.deletePost(props.post._id);
+  }
 
   return (
     <Card sx={{ width: "30vw" }}>
@@ -126,9 +132,7 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
               title="Delete post"
               icon={<DeleteIcon />}
               onClick={() => {
-                postService.delete(props.post._id);
-                /** todo: fix in next PR */
-                console.log("post " + props.post.title + " was deleted");
+                onDelete();
               }}
             />
           </>
