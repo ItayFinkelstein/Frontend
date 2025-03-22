@@ -112,6 +112,11 @@ export default function CommentsPage(props: CommentsPageProps) {
               type="submit"
               sx={{
                 alignSelf: "center",
+                outline: "none",
+                border: "none",
+                "&:focus": {
+                  outline: "none",
+                },
                 "&:hover": {
                   outline: "none",
                   border: "none",
