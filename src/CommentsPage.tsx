@@ -70,7 +70,7 @@ export default function CommentsPage(props: CommentsPageProps) {
   };
 
   return (
-    <Paper elevation={3} sx={{ padding: 3, margin: 3, borderRadius: 2 }}>
+    <Paper elevation={3} sx={{ padding: 3, borderRadius: 2 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: 2 }}>
           Comments on: {props.post.title}

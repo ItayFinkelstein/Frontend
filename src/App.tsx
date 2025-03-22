@@ -20,7 +20,7 @@ import postService, { CanceledError } from "./http-connections/postService";
 import { Post } from "./types/Post";
 
 const App: React.FC = () => {
-  const [isDarkMode] = useState(() => {
+  const [isDarkMode, setIsDarkMode] = useState(() => {
     const savedTheme = localStorage.getItem("theme");
     return savedTheme ? JSON.parse(savedTheme) : false;
   });
@@ -39,6 +39,20 @@ const App: React.FC = () => {
   const [userToFilterBy, setUserToFilterBy] = useState<User | undefined>(
     undefined
   );
+
+  const toggleTheme = () => {
+    setIsDarkMode(!isDarkMode);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("theme", JSON.stringify(isDarkMode));
+    document.body.classList.toggle("dark-mode", isDarkMode);
+    document.body.classList.toggle("light-mode", !isDarkMode);
+  }, [isDarkMode]);
+
+  useEffect(() => {
+    fetchPosts(pagePosts);
+  }, []);
 
   const fetchPosts = (
     pageNumber: number,
@@ -103,16 +117,6 @@ const App: React.FC = () => {
       setUserToFilterBy(undefined);
     }
   };
-
-  const toggleTheme = () => {
-    localStorage.setItem("theme", JSON.stringify(isDarkMode));
-    document.body.classList.toggle("dark-mode", isDarkMode);
-    document.body.classList.toggle("light-mode", !isDarkMode);
-  };
-
-  useEffect(() => {
-    fetchPosts(pagePosts);
-  }, []);
 
   const updatePostToArray = (
     updatedPost: Post,
@@ -207,14 +211,13 @@ const AppContent: React.FC<{
     >
       {!isAuthPage && (
         <>
-          <div style={{ height: "5vh", flexShrink: 0, marginBottom: "2vh" }}>
+          <div style={{ height: "5vh", flexShrink: 0, marginBottom: "7vh" }}>
             <Navbar
               toggleTheme={toggleTheme}
               isDarkMode={isDarkMode}
               setUserToFilterBy={setUserToFilterByFunc}
             />
           </div>
-          <div style={{ height: "10vh" }} />
         </>
       )}
       <div style={{ flex: 1, overflowY: "auto" }}>
