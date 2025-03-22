@@ -16,6 +16,7 @@ const lightTheme = createTheme({
     text: {
       primary: '#2C2C2C', // Charcoal Black
     },
+    
   },
   components: {
     MuiAppBar: {

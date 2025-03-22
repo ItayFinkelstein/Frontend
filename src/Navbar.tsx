@@ -7,7 +7,6 @@ import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
 import { ENDPOINTS } from "./endpoints";
 
-
 interface NavbarProps {
   toggleTheme: () => void;
   isDarkMode: boolean;
@@ -21,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({
   isDarkMode,
   setUserToFilterBy,
   actualUser,
-  setActualUser
+  setActualUser,
 }) => {
   const navigate = useNavigate();
 
@@ -46,9 +45,6 @@ const Navbar: React.FC<NavbarProps> = ({
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           TastyTalks
         </Typography>
-        <IconButton color="inherit" component={RouterLink} to="/">
-          <Home />
-        </IconButton>
         <IconButton
           color="inherit"
           onClick={toggleTheme}

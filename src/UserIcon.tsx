@@ -29,7 +29,7 @@ export default function UserIcon(props: UserIconProps) {
   const avatar = (
     <Avatar
       sx={{
-        bgcolor: "primary.main",
+        bgcolor: "#B22222",
         fontSize: props.style?.width
           ? `calc(${props.style.width} / 2.5)`
           : "1rem",
