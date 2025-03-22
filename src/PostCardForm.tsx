@@ -5,14 +5,13 @@ import CardHeader from "@mui/material/CardHeader/CardHeader";
 import CardMedia from "@mui/material/CardMedia/CardMedia";
 import CardContent from "@mui/material/CardContent/CardContent";
 import { useForm } from "react-hook-form";
-import { Button, IconButton, Tooltip } from "@mui/material";
+import { Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "./ValidatedTextField";
 import EnhanceCaption from "./EnhanceCaption";
 import { uploadImage } from "./http-connections/userService";
-import { faImage } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import PhotoIcon from "./PhotoIcon";
 
 type PostCardForm = {
   post?: Post;
@@ -115,30 +114,11 @@ export default function PostCardForm(props: PostCardForm) {
             sx={{ mb: 2 }}
           />
         )}
-        <Tooltip title={"Upload photo"} arrow>
-          <IconButton
-            color="primary"
-            component="label"
-            sx={{
-              mb: 2,
-              "&:hover": {
-                color: "blue",
-              },
-            }}
-          >
-            <FontAwesomeIcon icon={faImage} />
-            <input
-              ref={(item) => {
-                inputFileRef.current = item;
-                ref(item);
-              }}
-              {...restRegisterParams}
-              type="file"
-              accept="image/png, image/jpeg"
-              style={{ display: "none" }}
-            />
-          </IconButton>
-        </Tooltip>
+        <PhotoIcon
+          inputFileRef={inputFileRef}
+          refCallback={ref}
+          restRegisterParams={restRegisterParams}
+        />
         <CardContent>
           <ValidatedTextField
             name="description"
