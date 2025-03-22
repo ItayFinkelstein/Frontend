@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Post } from "./types/Post";
 import { User } from "./types/User";
 import PostCard from "./PostCard";
@@ -40,6 +40,10 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
     props.updatePost(updatedPost);
   };
 
+  useEffect(() => {
+    console.log("displayedPosts", displayedPosts);
+  }, [displayedPosts]);
+
   return postToShowComments === null && postToEdit === null ? (
     <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
       {props.userToFilterBy && (
@@ -60,6 +64,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
             setUserToFilterBy={props.setUserToFilterBy}
             showPostComments={() => setPostToShowComments(post)}
             editPost={() => setPostToEdit(post)}
+            updatePost={props.updatePost}
           />
         ))}
         {hasMore && (
@@ -79,6 +84,7 @@ const PostPage: React.FC<PostPageProps> = (props: PostPageProps) => {
       post={postToShowComments}
       closeCommentsForm={() => setPostToShowComments(null)}
       isCurrentUserPost={actualUser?._id === postToShowComments.owner}
+      updatePost={props.updatePost}
     />
   ) : (
     postToEdit && (

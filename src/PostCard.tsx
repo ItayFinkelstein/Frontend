@@ -28,6 +28,7 @@ type PostCardProps = {
   editPost: () => void;
   isClickableIcon?: boolean;
   setUserToFilterBy: (user: User | undefined) => void;
+  updatePost: (post: Post) => void;
 };
 
 const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
@@ -97,7 +98,7 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
                 },
                 () => {
                   setIsLiked((curr) => !curr);
-                  /** todo: once post-get-paging gets merged, update the user in users list */
+                  props.updatePost(updatedPost);
                 }
               );
             }

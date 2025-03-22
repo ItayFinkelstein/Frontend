@@ -10,8 +10,6 @@ class PostService extends HttpService<Post> {
     super(ENDPOINTS.POST);
   }
   getWithPaging(page: number, userId?: string) {
-    console.trace("getWithPaging called", page);
-    // console.trace("stack trace:");
     const controller = new AbortController();
     const response = apiClient.get(`${this.endpoint}/paging`, {
       signal: controller.signal,
