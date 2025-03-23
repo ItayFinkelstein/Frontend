@@ -10,10 +10,10 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Box } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme";
 import Navbar from "./Navbar";
-import UserPage from "./UserPage";
+import UserPage from "./pages/user/UserPage";
 import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
 import postService, { CanceledError } from "./http-connections/postService";
@@ -202,6 +202,7 @@ export type SharedProps = {
   addPost: (post: Post) => void;
   actualUser: User | undefined;
   setActualUser: (user: User | undefined) => void;
+  fetchUserPosts: () => void;
 };
 const AppContent: React.FC<
   {
@@ -214,7 +215,6 @@ const AppContent: React.FC<
     fetchPosts: () => void;
     userPosts: Post[];
     hasMoreUserPosts: boolean;
-    fetchUserPosts: () => void;
   } & SharedProps
 > = ({
   toggleTheme,
@@ -226,7 +226,6 @@ const AppContent: React.FC<
   fetchPosts,
   userPosts,
   hasMoreUserPosts,
-  fetchUserPosts,
   ...sharedProps
 }) => {
   const locationRoute = useLocation();
@@ -267,10 +266,20 @@ const AppContent: React.FC<
           fetchPosts={fetchPosts}
           userPosts={userPosts}
           hasMoreUserPosts={hasMoreUserPosts}
-          fetchUserPosts={fetchUserPosts}
           {...sharedProps}
         />
       </div>
+      {!isAuthPage && (
+        <Box
+          component="img"
+          src={
+            isDarkMode
+              ? "/src/assets/logo_dark_name.png"
+              : "/src/assets/logo_light_name.png"
+          }
+          sx={{ width: "10rem", height: "2rem", mx: "auto" }}
+        />
+      )}
     </div>
   );
 };

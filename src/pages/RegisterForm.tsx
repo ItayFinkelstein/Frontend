@@ -4,18 +4,18 @@ import { Box, Button, Grid, Link, Avatar } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ValidatedTextField from "./ValidatedTextField";
-import { register } from "./http-connections/authService";
-import { uploadImage } from "./http-connections/userService";
+import ValidatedTextField from "../ValidatedTextField";
+import { register } from "../http-connections/authService";
+import { uploadImage } from "../http-connections/userService";
 import avatar from "./assets/avatar.png";
-import PhotoIcon from "./PhotoIcon";
-import { User } from "./types/User";
+import PhotoIcon from "../PhotoIcon";
+import { User } from "../types/User";
 
 const schema = z.object({
   name: z
     .string()
     .min(2, "Name must be at least 2 characters")
-    .max(20, "Name must be at most 20 characters"),
+    .max(60, "Name must be at most 60 characters"),
   email: z.string().email("Invalid email address"),
   password: z.string().min(4, "Password must be at least 4 characters"),
   img: z.instanceof(FileList).optional(),

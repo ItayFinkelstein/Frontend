@@ -11,15 +11,15 @@ import FavoriteUnselectedIcon from "@mui/icons-material/FavoriteBorder";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
-import { User } from "./types/User";
-import { Post } from "./types/Post";
-import UserIcon from "./UserIcon";
-import { GenericIconButton } from "./GenericIconButton";
-import useUsers from "./data_hooks/useUsers";
-import { getDateAsString } from "./Utils";
-import postService from "./http-connections/postService";
+import { User } from "../../types/User";
+import { Post } from "../../types/Post";
+import UserIcon from "../user/UserIcon";
+import { GenericIconButton } from "../../GenericIconButton";
+import useUsers from "../../data_hooks/useUsers";
+import { getDateAsString } from "../../Utils";
+import postService from "../../http-connections/postService";
 import classes from "./PostCard.module.css";
-import usePosts from "./data_hooks/usePosts";
+import usePosts from "../../data_hooks/usePosts";
 
 type PostCardProps = {
   deletePost: (id: string) => void;
@@ -43,9 +43,9 @@ const PostCard: React.FC<PostCardProps> = (props: PostCardProps) => {
     setIsLiked(props.post.likes.some((like) => like === props.actualUser?._id));
   }, [props.actualUser, props.post]);
 
-  const user: User | undefined = users.find(
-    (userToCheck: User) => userToCheck._id === props.post.owner
-  );
+  const user: User | undefined = isActualUser
+    ? props.actualUser
+    : users.find((userToCheck: User) => userToCheck._id === props.post.owner);
 
   async function onDelete() {
     await postService.delete(props.post._id);

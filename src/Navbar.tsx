@@ -1,12 +1,11 @@
 import React from "react";
-import { AppBar, Toolbar, Typography, IconButton } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { WbSunny, Brightness2, Home } from "@mui/icons-material";
-import UserIcon from "./UserIcon";
+import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { WbSunny, Brightness2 } from "@mui/icons-material";
+import UserIcon from "./pages/user/UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
 import { ENDPOINTS } from "./endpoints";
-
 
 interface NavbarProps {
   toggleTheme: () => void;
@@ -21,7 +20,7 @@ const Navbar: React.FC<NavbarProps> = ({
   isDarkMode,
   setUserToFilterBy,
   actualUser,
-  setActualUser
+  setActualUser,
 }) => {
   const navigate = useNavigate();
 
@@ -43,12 +42,13 @@ const Navbar: React.FC<NavbarProps> = ({
   return (
     <AppBar position="fixed" color="primary">
       <Toolbar>
-        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-          TastyTalks
-        </Typography>
-        <IconButton color="inherit" component={RouterLink} to="/">
-          <Home />
-        </IconButton>
+        <Box
+          component="img"
+          src="/src/assets/logo_with_name.svg"
+          alt="InstaBurger Logo"
+          sx={{ height: "60px" }}
+        />
+        <Box sx={{ flexGrow: 1 }} />
         <IconButton
           color="inherit"
           onClick={toggleTheme}

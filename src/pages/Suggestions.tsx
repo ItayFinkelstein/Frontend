@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Typography, Paper } from "@mui/material";
-import useUsers from "./data_hooks/useUsers";
-import UserData from "./UserData";
-import { User } from "./types/User";
+import useUsers from "../data_hooks/useUsers";
+import UserData from "./user/UserData";
+import { User } from "../types/User";
 
 type SuggestionsProps = {
   userToDisplay?: User | undefined;
@@ -40,7 +40,7 @@ const Suggestions: React.FC<SuggestionsProps> = (props: SuggestionsProps) => {
               props.actualUser?._id !== user._id
           )
           .map((user) => (
-            <Box key={user._id} sx={{ mb: 2 }}>
+            <Box key={user._id} sx={{ mb: 2, cursor: "pointer" }}>
               <UserData
                 userToDisplay={user!}
                 setUserToDisplay={props.setUserToDisplay}

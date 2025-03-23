@@ -6,12 +6,14 @@ type PhotoIconProps = {
   inputFileRef: React.MutableRefObject<HTMLInputElement | null>;
   refCallback: (item: HTMLInputElement | null) => void;
   restRegisterParams: Record<string, any>;
+  onClick?: () => void;
 };
 
 export default function PhotoIcon({
   inputFileRef,
   refCallback,
   restRegisterParams,
+  onClick,
 }: PhotoIconProps) {
   return (
     <Tooltip title={"Upload photo"} arrow>
@@ -21,9 +23,10 @@ export default function PhotoIcon({
         sx={{
           mb: 2,
           "&:hover": {
-            color: "blue",
+            color: "#F1C618",
           },
         }}
+        onClick={onClick}
       >
         <FontAwesomeIcon icon={faImage} />
         <input

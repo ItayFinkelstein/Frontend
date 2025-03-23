@@ -4,6 +4,7 @@ import { setLoginTokens } from "./http-connections/authService";
 import { useNavigate } from "react-router-dom";
 import { SERVER_BASE_URL } from "./config";
 import { User } from "./types/User";
+import { ENDPOINTS } from "./endpoints";
 
 type GoogleLoginButtonProps = {
   setActualUser: (user: User | undefined) => void;
@@ -14,7 +15,7 @@ export default function GoogleLoginButton({
   const navigate = useNavigate();
   const googleResponseMessage = async (response: CredentialResponse) => {
     try {
-      const res = await axios.post(SERVER_BASE_URL + "/auth/google", {
+      const res = await axios.post(SERVER_BASE_URL + ENDPOINTS.GOOGLE, {
         credential: response.credential,
       });
       setLoginTokens({

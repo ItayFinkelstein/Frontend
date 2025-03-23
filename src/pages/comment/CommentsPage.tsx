@@ -1,5 +1,5 @@
 import Card from "@mui/material/Card";
-import { Post } from "./types/Post";
+import { Post } from "../../types/Post";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
@@ -9,15 +9,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import CloseIcon from "@mui/icons-material/Close";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SendIcon from "@mui/icons-material/Send";
-import { GenericIconButton } from "./GenericIconButton";
-import commentService from "./http-connections/commentService";
-import useComments from "./data_hooks/useComment";
-import useUsers from "./data_hooks/useUsers";
-import { User } from "./types/User";
-import { Comment } from "./types/Comment";
-import UserIcon from "./UserIcon";
+import { GenericIconButton } from "../../GenericIconButton";
+import commentService from "../../http-connections/commentService";
+import useComments from "../../data_hooks/useComment";
+import useUsers from "../../data_hooks/useUsers";
+import { User } from "../../types/User";
+import { Comment } from "../../types/Comment";
+import UserIcon from "../user/UserIcon";
 import { IconButton, TextField } from "@mui/material";
-import { getDateAsString } from "./Utils";
+import { getDateAsString } from "../../Utils";
 
 type CommentsPageProps = {
   post: Post;
@@ -65,7 +65,7 @@ export default function CommentsPage(props: CommentsPageProps) {
       publishDate: new Date().toISOString(),
     });
     const commentFromResponse: Comment = (await response).data;
-    setComments([...comments, commentFromResponse]);
+    setComments([commentFromResponse, ...comments]);
     props.updatePost({
       ...props.post,
       commentAmount: props.post.commentAmount + 1,
@@ -108,7 +108,21 @@ export default function CommentsPage(props: CommentsPageProps) {
                 "& .MuiOutlinedInput-notchedOutline": { border: "1" },
               }}
             />
-            <IconButton type="submit" sx={{ alignSelf: "center" }}>
+            <IconButton
+              type="submit"
+              sx={{
+                alignSelf: "center",
+                outline: "none",
+                border: "none",
+                "&:focus": {
+                  outline: "none",
+                },
+                "&:hover": {
+                  outline: "none",
+                  border: "none",
+                },
+              }}
+            >
               <SendIcon />
             </IconButton>
           </Box>

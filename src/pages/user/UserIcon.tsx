@@ -1,5 +1,5 @@
 import Avatar from "@mui/material/Avatar/Avatar";
-import { User } from "./types/User";
+import { User } from "../../types/User";
 import Box from "@mui/material/Box/Box";
 import UserMenu from "./UserMenu";
 
@@ -29,7 +29,7 @@ export default function UserIcon(props: UserIconProps) {
   const avatar = (
     <Avatar
       sx={{
-        bgcolor: "primary.main",
+        bgcolor: "#eb9f1c",
         fontSize: props.style?.width
           ? `calc(${props.style.width} / 2.5)`
           : "1rem",

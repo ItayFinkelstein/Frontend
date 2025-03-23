@@ -1,18 +1,19 @@
-import { Paper, Box, Typography, Avatar, IconButton } from "@mui/material";
+import { Paper, Box, Typography } from "@mui/material";
 import UserIcon from "./UserIcon";
 import EditIcon from "@mui/icons-material/Edit";
-import SendIcon from "@mui/icons-material/Send";
+import SendIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import ValidatedTextField from "./ValidatedTextField";
+import ValidatedTextField from "../../ValidatedTextField";
 import { useState, useEffect, useRef } from "react";
-import { GenericIconButton } from "./GenericIconButton";
-import userService, { uploadImage } from "./http-connections/userService";
-import { User } from "./types/User";
-import useUsers from "./data_hooks/useUsers";
-import PhotoIcon from "./PhotoIcon";
+import { GenericIconButton } from "../../GenericIconButton";
+import userService, { uploadImage } from "../../http-connections/userService";
+import { User } from "../../types/User";
+import useUsers from "../../data_hooks/useUsers";
+import PhotoIcon from "../../PhotoIcon";
+import { useTheme } from "@mui/material/styles";
 
 export interface UserToDisplayProps {
   userToDisplay: User;
@@ -37,7 +38,7 @@ export default function UserData(
     name: z
       .string()
       .min(1, { message: "Name is required" })
-      .max(20, { message: "Name must be no more than 20 characters" }),
+      .max(60, { message: "Name must be no more than 60 characters" }),
     img: z.instanceof(FileList).optional(),
   });
 
@@ -94,16 +95,30 @@ export default function UserData(
   };
 
   const { ref, ...restRegisterParams } = register("img");
+  const theme = useTheme();
 
   return (
     <Paper
-      elevation={3}
+      elevation={props.isSuggestion ? 0 : 3}
       sx={{
         padding: "20px",
         display: "flex",
         alignItems: "center",
         gap: props.isSuggestion ? "1rem" : "3rem",
         width: props.isSuggestion ? "95%" : "100%",
+        boxShadow: props.isSuggestion
+          ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
+          : undefined,
+        "&:hover": {
+          backgroundColor: props.isSuggestion
+            ? theme.palette.background.default
+            : "",
+        },
+      }}
+      onClick={() => {
+        if (props.isSuggestion) {
+          props.setUserToDisplay(props.userToDisplay);
+        }
       }}
     >
       <Box sx={{ position: "relative" }}>
@@ -138,7 +153,7 @@ export default function UserData(
                 error={errors.name}
               />
               <GenericIconButton
-                title="Send"
+                title="Save"
                 icon={<SendIcon />}
                 onClick={handleSubmit(onSubmit)}
               />
