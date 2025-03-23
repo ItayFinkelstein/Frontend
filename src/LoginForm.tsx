@@ -39,12 +39,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ setActualUser }) => {
         name: loggedInUser.name,
       });
 
-      Swal.fire({
-        title: "Welcome!",
-        text: "You have successfully logged in",
-        icon: "success",
-      });
-
       navigate("/");
     } catch (error) {
       Swal.fire({
