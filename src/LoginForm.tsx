@@ -8,6 +8,7 @@ import ValidatedTextField from "./ValidatedTextField";
 import { login } from "./http-connections/authService";
 import GoogleLoginButton from "./GoogleLoginButton";
 import { User } from "./types/User";
+import Swal from "sweetalert2";
 
 const schema = z.object({
   email: z.string().email("Invalid email address"),
@@ -38,8 +39,19 @@ const LoginForm: React.FC<LoginFormProps> = ({ setActualUser }) => {
         name: loggedInUser.name,
       });
 
+      Swal.fire({
+        title: "Welcome!",
+        text: "You have successfully logged in",
+        icon: "success",
+      });
+
       navigate("/");
     } catch (error) {
+      Swal.fire({
+        title: "user not found",
+        text: "Please check your email and password",
+        icon: "error",
+      });
       console.error("There was an error logging in!", error);
     }
   };

@@ -10,7 +10,7 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
+import { CssBaseline, Box } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme";
 import Navbar from "./Navbar";
 import UserPage from "./UserPage";
@@ -269,6 +269,17 @@ const AppContent: React.FC<
           {...sharedProps}
         />
       </div>
+      {!isAuthPage && (
+        <Box
+          component="img"
+          src={
+            isDarkMode
+              ? "/src/assets/logo_dark_name.png"
+              : "/src/assets/logo_light_name.png"
+          }
+          sx={{ width: "10rem", height: "2rem", mx: "auto" }}
+        />
+      )}
     </div>
   );
 };
