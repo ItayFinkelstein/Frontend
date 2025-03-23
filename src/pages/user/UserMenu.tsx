@@ -1,5 +1,5 @@
 import { Box, Menu, MenuItem } from "@mui/material";
-import { useMenu } from "./useMenu";
+import { useMenu } from "../../useMenu";
 import { useRef } from "react";
 
 type UserMenuProps = {

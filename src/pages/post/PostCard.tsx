@@ -13,7 +13,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { User } from "../../types/User";
 import { Post } from "../../types/Post";
-import UserIcon from "../../UserIcon";
+import UserIcon from "../user/UserIcon";
 import { GenericIconButton } from "../../GenericIconButton";
 import useUsers from "../../data_hooks/useUsers";
 import { getDateAsString } from "../../Utils";

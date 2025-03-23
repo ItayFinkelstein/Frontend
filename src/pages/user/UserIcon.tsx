@@ -1,5 +1,5 @@
 import Avatar from "@mui/material/Avatar/Avatar";
-import { User } from "./types/User";
+import { User } from "../../types/User";
 import Box from "@mui/material/Box/Box";
 import UserMenu from "./UserMenu";
 

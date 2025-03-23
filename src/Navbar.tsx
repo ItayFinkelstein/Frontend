@@ -2,7 +2,7 @@ import React from "react";
 import { AppBar, Toolbar, IconButton, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { WbSunny, Brightness2 } from "@mui/icons-material";
-import UserIcon from "./UserIcon";
+import UserIcon from "./pages/user/UserIcon";
 import { User } from "./types/User";
 import { logout } from "./http-connections/authService";
 import { ENDPOINTS } from "./endpoints";

@@ -6,13 +6,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import ValidatedTextField from "./ValidatedTextField";
+import ValidatedTextField from "../../ValidatedTextField";
 import { useState, useEffect, useRef } from "react";
-import { GenericIconButton } from "./GenericIconButton";
-import userService, { uploadImage } from "./http-connections/userService";
-import { User } from "./types/User";
-import useUsers from "./data_hooks/useUsers";
-import PhotoIcon from "./PhotoIcon";
+import { GenericIconButton } from "../../GenericIconButton";
+import userService, { uploadImage } from "../../http-connections/userService";
+import { User } from "../../types/User";
+import useUsers from "../../data_hooks/useUsers";
+import PhotoIcon from "../../PhotoIcon";
 import { useTheme } from "@mui/material/styles";
 
 export interface UserToDisplayProps {

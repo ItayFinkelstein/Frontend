@@ -8,7 +8,7 @@ import CommentsPage from "../comment/CommentsPage";
 import PostCardForm from "./PostCardForm";
 import postService from "../../http-connections/postService";
 import { SharedProps } from "../../App";
-import UserData from "../../UserData";
+import UserData from "../user/UserData";
 
 type PostPageProps = {
   posts: Post[];

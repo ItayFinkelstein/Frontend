@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, Paper } from "@mui/material";
 import useUsers from "./data_hooks/useUsers";
-import UserData from "./UserData";
+import UserData from "./pages/user/UserData";
 import { User } from "./types/User";
 
 type SuggestionsProps = {

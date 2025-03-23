@@ -13,7 +13,7 @@ import {
 import { CssBaseline, Box } from "@mui/material";
 import { lightTheme, darkTheme } from "./theme";
 import Navbar from "./Navbar";
-import UserPage from "./UserPage";
+import UserPage from "./pages/user/UserPage";
 import { User } from "./types/User";
 import { ENDPOINTS } from "./endpoints";
 import postService, { CanceledError } from "./http-connections/postService";

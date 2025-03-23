@@ -1,10 +1,10 @@
 import { Grid, Box, Container } from "@mui/material";
 import React from "react";
-import PostPage from "./pages/post/PostPage";
-import { Post } from "./types/Post";
-import { User } from "./types/User";
-import Suggestions from "./Suggestions";
-import { SharedProps } from "./App";
+import PostPage from "../post/PostPage";
+import { Post } from "../../types/Post";
+import { User } from "../../types/User";
+import Suggestions from "../../Suggestions";
+import { SharedProps } from "../../App";
 
 type UserPageProps = {
   posts: Post[];

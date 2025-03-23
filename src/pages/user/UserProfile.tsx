@@ -1,5 +1,5 @@
-import UserData from "./UserData";
-import { User } from "./types/User";
+import UserData from "../../UserData";
+import { User } from "../../types/User";
 
 interface UserProfileProps {
   userToDisplay: User;

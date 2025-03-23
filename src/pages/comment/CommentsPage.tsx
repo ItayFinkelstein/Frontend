@@ -15,7 +15,7 @@ import useComments from "../../data_hooks/useComment";
 import useUsers from "../../data_hooks/useUsers";
 import { User } from "../../types/User";
 import { Comment } from "../../types/Comment";
-import UserIcon from "../../UserIcon";
+import UserIcon from "../user/UserIcon";
 import { IconButton, TextField } from "@mui/material";
 import { getDateAsString } from "../../Utils";
 
