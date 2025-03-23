@@ -4,12 +4,12 @@ import { Box, Button, Grid, Link, Avatar } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ValidatedTextField from "./ValidatedTextField";
-import { register } from "./http-connections/authService";
-import { uploadImage } from "./http-connections/userService";
+import ValidatedTextField from "../ValidatedTextField";
+import { register } from "../http-connections/authService";
+import { uploadImage } from "../http-connections/userService";
 import avatar from "./assets/avatar.png";
-import PhotoIcon from "./PhotoIcon";
-import { User } from "./types/User";
+import PhotoIcon from "../PhotoIcon";
+import { User } from "../types/User";
 
 const schema = z.object({
   name: z

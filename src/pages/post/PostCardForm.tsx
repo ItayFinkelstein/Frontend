@@ -9,7 +9,7 @@ import { Box, Button } from "@mui/material";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ValidatedTextField from "../../ValidatedTextField";
-import EnhanceCaption from "../../EnhanceCaption";
+import EnhanceCaption from "./EnhanceCaption";
 import { uploadImage } from "../../http-connections/userService";
 import PhotoIcon from "../../PhotoIcon";
 

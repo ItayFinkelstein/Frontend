@@ -1,6 +1,6 @@
 import React from "react";
 import FormLayout from "./FormLayout";
-import RegisterForm from "../RegisterForm";
+import RegisterForm from "./RegisterForm";
 import { User } from "../types/User";
 
 const Register: React.FC<{

@@ -3,7 +3,7 @@ import React from "react";
 import PostPage from "../post/PostPage";
 import { Post } from "../../types/Post";
 import { User } from "../../types/User";
-import Suggestions from "../../Suggestions";
+import Suggestions from "../Suggestions";
 import { SharedProps } from "../../App";
 
 type UserPageProps = {

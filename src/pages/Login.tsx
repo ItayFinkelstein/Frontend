@@ -1,6 +1,6 @@
 import React from "react";
 import FormLayout from "./FormLayout";
-import LoginForm from "../LoginForm";
+import LoginForm from "./LoginForm";
 import { User } from "../types/User";
 
 const Login: React.FC<{ setActualUser: (user: User | undefined) => void }> = ({
