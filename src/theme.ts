@@ -4,25 +4,25 @@ const lightTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#C1272D', // Deep Tomato Red
+      main: '#EA8224',
     },
     secondary: {
-      main: '#FFB400', // Amber Gold
+      main: '#FAA51A',
     },
     background: {
-      default: '#F8EDE3', // Toasted Beige
-      paper: '#ffffff',
+      default: '#F8EDE3',
+      paper: '#FFFFFF',
     },
     text: {
-      primary: '#2C2C2C', // Charcoal Black
+      primary: '#23211D',
     },
-    
+
   },
   components: {
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#C1272D',
+          backgroundColor: '#EA8224',
         },
       },
     },
@@ -42,10 +42,10 @@ const lightTheme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            color: 'inherit',
+            color: '#F1C618',
           },
           '&:active': {
-            color: 'inherit',
+            color: '#F1C618',
           },
         },
       },
@@ -57,38 +57,38 @@ const darkTheme = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#8A1B23', // Dark Crimson
+      main: '#EA8224',
     },
     secondary: {
-      main: '#FF9F00', // Warm Amber
+      main: '#FAA51A',
     },
     background: {
-      default: '#2C2C2C', // Dark Charcoal
-      paper: '#2C2C2C',
+      default: '#23211D',
+      paper: '#23211D',
     },
     text: {
-      primary: '#E0E0E0', // Light Gray
+      primary: '#FFFFFF',
     },
   },
   components: {
     MuiPaper: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2C2C2C', // Dark Charcoal
+          backgroundColor: '#23211D',
         },
       },
     },
     MuiTextField: {
       styleOverrides: {
         root: {
-          backgroundColor: '#2C2C2C', // Dark Charcoal
+          backgroundColor: '#23211D',
         },
       },
     },
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#8A1B23',
+          backgroundColor: '#EA8224',
         },
       },
     },
@@ -108,10 +108,10 @@ const darkTheme = createTheme({
       styleOverrides: {
         root: {
           '&:hover': {
-            color: 'inherit',
+            color: '#F1C618',
           },
           '&:active': {
-            color: 'inherit',
+            color: '#F1C618',
           },
         },
       },

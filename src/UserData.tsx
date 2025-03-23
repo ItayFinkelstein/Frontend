@@ -13,6 +13,7 @@ import userService, { uploadImage } from "./http-connections/userService";
 import { User } from "./types/User";
 import useUsers from "./data_hooks/useUsers";
 import PhotoIcon from "./PhotoIcon";
+import { useTheme } from "@mui/material/styles";
 
 export interface UserToDisplayProps {
   userToDisplay: User;
@@ -94,6 +95,7 @@ export default function UserData(
   };
 
   const { ref, ...restRegisterParams } = register("img");
+  const theme = useTheme();
 
   return (
     <Paper
@@ -108,12 +110,14 @@ export default function UserData(
           ? "0px 4px 8px rgba(0, 0, 0, 0.1)"
           : undefined,
         "&:hover": {
-          backgroundColor: props.isSuggestion ? "lightyellow" : "",
+          backgroundColor: props.isSuggestion
+            ? theme.palette.background.default
+            : "",
         },
       }}
       onClick={() => {
         if (props.isSuggestion) {
-          props.setUserToDisplay(props.userToDisplay); // Example: Set the user to display
+          props.setUserToDisplay(props.userToDisplay);
         }
       }}
     >

@@ -140,7 +140,7 @@ export default function PostCardForm(props: PostCardForm) {
             <Button
               type="submit"
               variant="contained"
-              sx={{ mt: 2, height: "2.3vw" }}
+              sx={{ mt: 2, maxHeight: "2.5rem" }}
             >
               Submit
             </Button>
